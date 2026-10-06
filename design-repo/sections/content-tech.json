@@ -1,0 +1,562 @@
+{
+  "id": "content.tech",
+  "kind": "section",
+  "category": "content",
+  "purpose": "The shared section.tech inner-page body. ONE real CSS section type serving four routes in three genuinely different shapes, so it is modelled as one section with three VARIANTS and a polymorphic content contract.",
+  "content": {
+    "type": "object",
+    "oneOf": [
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "title": "legal-prose",
+        "description": "The long-form legal page body. DOM scaffolding measured against the live original; the PROSE ITSELF IS DELIBERATE PLACEHOLDER FILLER. Paragraph slots therefore carry NO maxWords: a budget derived from filler would be a fabricated measurement dressed up as a measured one.",
+        "properties": {
+          "titleLines": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "maxWords": 4
+            },
+            "note": "1-2 lines separated by a <br/>. Measured: /privacy-policy has 2 lines, \"FOURMULA AI\" (2) and \"PRIVACY & COOKIES POLICY\" (3); /terms-of-service has 1 line, \"TERMS OF USE\" (3)."
+          },
+          "introParagraph": {
+            "type": "string",
+            "note": "UNBUDGETED - placeholder filler. Measured as one short line on both pages."
+          },
+          "anchorIndexHeading": {
+            "type": "string",
+            "maxWords": 4,
+            "note": "Measured: 3 words, \"Table of Contents\", as an h3. Present on /privacy-policy; /terms-of-service has 1 h3 as well."
+          },
+          "anchorIndex": {
+            "type": "array",
+            "minItems": 12,
+            "maxItems": 16,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "maxWords": 10
+                },
+                "slug": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]*$"
+                }
+              },
+              "required": [
+                "label",
+                "slug"
+              ]
+            },
+            "note": "Measured: 12 entries on /privacy-policy, 16 on /terms-of-service, one per h2."
+          },
+          "sections": {
+            "type": "array",
+            "minItems": 12,
+            "maxItems": 16,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "heading": {
+                  "type": "string",
+                  "maxWords": 10,
+                  "note": "Measured: a numbered h2, 2-7 words including the leading number."
+                },
+                "slug": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]*$"
+                },
+                "anchorPattern": {
+                  "type": "string",
+                  "enum": [
+                    "div-embed-only",
+                    "div-embed-and-h2-id"
+                  ],
+                  "note": "REAL DIFFERENCE between the two legal pages: /terms-of-service uses 16 <div id> embed targets and puts NO id on its h2 elements (div-embed-only), while /privacy-policy duplicates each slug onto BOTH the <div id> embed AND the h2 (div-embed-and-h2-id). Both are valid Webflow rich-text anchor patterns and both are reproduced verbatim."
+                },
+                "paragraphs": {
+                  "type": "array",
+                  "minItems": 0,
+                  "maxItems": 12,
+                  "items": {
+                    "type": "string"
+                  },
+                  "note": "UNBUDGETED - placeholder filler."
+                },
+                "lists": {
+                  "type": "array",
+                  "minItems": 0,
+                  "maxItems": 6,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "ordered": {
+                        "type": "boolean"
+                      },
+                      "items": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 20,
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "ordered",
+                      "items"
+                    ]
+                  }
+                },
+                "tables": {
+                  "type": "array",
+                  "minItems": 0,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "headerCells": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 6,
+                        "items": {
+                          "type": "string",
+                          "maxWords": 6
+                        }
+                      },
+                      "rowCount": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 30
+                      }
+                    },
+                    "required": [
+                      "headerCells",
+                      "rowCount"
+                    ]
+                  },
+                  "note": "Measured: 2 tables on /privacy-policy (25 tr, 105 td in total), 0 on /terms-of-service."
+                },
+                "subHeadings": {
+                  "type": "array",
+                  "minItems": 0,
+                  "maxItems": 4,
+                  "items": {
+                    "type": "string",
+                    "maxWords": 10
+                  }
+                }
+              },
+              "required": [
+                "heading",
+                "slug",
+                "anchorPattern"
+              ]
+            }
+          }
+        },
+        "required": [
+          "titleLines",
+          "anchorIndex",
+          "sections"
+        ]
+      },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "title": "onboarding-cta",
+        "description": "The /start stand-in. COMPOSED, NOT MEASURED - there was no source page to transcribe. Its word budgets are the lengths of this project's OWN composed copy, not measurements of fourmula.ai.",
+        "properties": {
+          "titleLines": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "maxWords": 3
+            },
+            "note": "Exactly 2 lines; the second sits in a .u-fonts-50 span. Composed: \"Get started\" (2) and \"with Fourmula\" (2)."
+          },
+          "body": {
+            "type": "string",
+            "maxWords": 26,
+            "note": "Composed: 24 words. NOT a measured copy budget.",
+            "bodyCopy": true
+          },
+          "ctas": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "maxWords": 3
+                },
+                "style": {
+                  "type": "string",
+                  "enum": [
+                    "primary",
+                    "outline"
+                  ]
+                },
+                "href": {
+                  "type": "string",
+                  "format": "route-or-inert-hash"
+                },
+                "hoverStagger": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "label",
+                "style",
+                "href"
+              ]
+            },
+            "note": "Exactly 2: \"Sign in\" (primary, -> /auth) and \"Back to site\" (outline, -> /)."
+          }
+        },
+        "required": [
+          "titleLines",
+          "body",
+          "ctas"
+        ]
+      },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "title": "auth-form",
+        "description": "The /auth stand-in. COMPOSED, NOT MEASURED. It carries the project's single <form>, which is DELIBERATELY INERT and is pinned to the auth-inert-form asset role.",
+        "properties": {
+          "titleLines": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "string",
+              "maxWords": 3
+            },
+            "note": "Exactly 2 lines; the second sits in a .u-fonts-50 span. Composed: \"Sign in\" (2) and \"to continue\" (2)."
+          },
+          "body": {
+            "type": "string",
+            "maxWords": 13,
+            "note": "Composed: 11 words. NOT a measured copy budget.",
+            "bodyCopy": true
+          },
+          "form": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "assetRole": {
+                "type": "string",
+                "enum": [
+                  "auth-inert-form"
+                ],
+                "note": "PINNED to exactly this role. assets/asset-roles.json pins its generationPolicy to must-not-wire-up, and extraction/verify_all.py check [j] compares the VALUE, not just enum membership."
+              },
+              "ariaLabel": {
+                "type": "string",
+                "maxWords": 4,
+                "note": "Composed: \"Inert placeholder form\" (3 words)."
+              },
+              "fields": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "maxWords": 2,
+                      "note": "Composed: 1 word, \"Email\"."
+                    },
+                    "inputType": {
+                      "type": "string",
+                      "enum": [
+                        "text"
+                      ],
+                      "note": "The source uses type=\"text\", NOT type=\"email\". Reproduced verbatim."
+                    },
+                    "placeholder": {
+                      "type": "string",
+                      "maxWords": 2,
+                      "note": "Composed: \"you@company.com\" (1 token)."
+                    },
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9][a-z0-9-]*$"
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "inputType",
+                    "id"
+                  ]
+                },
+                "note": "Exactly 1 field."
+              },
+              "submitLabel": {
+                "type": "string",
+                "maxWords": 2,
+                "note": "Composed: 1 word, \"Continue\"."
+              },
+              "inert": {
+                "type": "boolean",
+                "const": true,
+                "note": "MUST be true. The form has no action, no handler beyond onSubmit={(e) => e.preventDefault()}, no state, no network call, and nothing is read from or stored for the field. A generator must never give it a destination, a handler, state, storage or an analytics event."
+              }
+            },
+            "required": [
+              "assetRole",
+              "fields",
+              "submitLabel",
+              "inert"
+            ]
+          },
+          "ctas": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "maxWords": 3
+                },
+                "style": {
+                  "type": "string",
+                  "enum": [
+                    "primary",
+                    "outline"
+                  ]
+                },
+                "href": {
+                  "type": "string",
+                  "format": "route-or-inert-hash"
+                },
+                "hoverStagger": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "label",
+                "style",
+                "href"
+              ]
+            },
+            "note": "Exactly 1: \"Back to site\" (outline, -> /)."
+          }
+        },
+        "required": [
+          "titleLines",
+          "body",
+          "form",
+          "ctas"
+        ]
+      }
+    ],
+    "note": "POLYMORPHIC. Deliberately a oneOf of THREE FULLY INDEPENDENT schemas, each with its own complete properties / required / additionalProperties:false - NOT a shared base plus allOf patches. In JSON Schema draft-07 additionalProperties:false on a shared base is evaluated only against that base's own `properties` and cannot see properties a sibling allOf branch adds, so the shared-base shape would silently accept fields from the wrong variant."
+  },
+  "contentMaxWordsTotal": null,
+  "contentMaxWordsTotalNote": "No section-wide total is declared: the legal-prose variant's body is unbudgeted placeholder filler, so any total would be meaningless for it. Per-field maxWords still apply on every budgeted field in all three variants.",
+  "usedOn": [
+    "/privacy-policy",
+    "/terms-of-service",
+    "/start",
+    "/auth"
+  ],
+  "evidence": {
+    "note": "EVIDENCE LEVEL DIFFERS PER VARIANT AND IS NEVER FLATTENED.",
+    "perVariant": {
+      "legal-prose": "DOM SCAFFOLDING measured against the live original (independently re-counted from the real JSX: /privacy-policy h1:1 h2:12 h3:2 p:39 li:31 a:15 table:2 tr:25 td:105; /terms-of-service h1:1 h2:16 h3:1 p:63 li:30 a:21 - both match exactly). THE BODY PROSE IS DELIBERATE PLACEHOLDER FILLER, not the original's copy, because shipping another company's policy text is a liability. Any word budget derived from these pages measures the filler, NOT a measured copy budget.",
+      "onboarding-cta": "COMPOSED, NOT MEASURED. There was no source to measure: app.fourmula.ai is a Next.js app that emits BAILOUT_TO_CLIENT_SIDE_RENDERING and an empty shell (11-18 characters of body text, zero forms, zero inputs). This page is an ORIGINAL COMPOSITION assembled from this project's own design system (section.tech, the u-* type scale, btn-primary / btn-outline). Its structure and copy are NOT evidence about fourmula.ai.",
+      "auth-form": "COMPOSED, NOT MEASURED. There was no source to measure: app.fourmula.ai is a Next.js app that emits BAILOUT_TO_CLIENT_SIDE_RENDERING and an empty shell (11-18 characters of body text, zero forms, zero inputs). This page is an ORIGINAL COMPOSITION assembled from this project's own design system (section.tech, the u-* type scale, btn-primary / btn-outline). Its structure and copy are NOT evidence about fourmula.ai."
+    },
+    "perRoute": {
+      "/privacy-policy": "measured-scaffolding-placeholder-prose",
+      "/terms-of-service": "measured-scaffolding-placeholder-prose",
+      "/start": "composed-not-measured",
+      "/auth": "composed-not-measured"
+    }
+  },
+  "bodyCopyFields": [
+    "body"
+  ],
+  "variants": {
+    "legal-prose": {
+      "routes": [
+        "/privacy-policy",
+        "/terms-of-service"
+      ],
+      "traits": "h1 title, a short intro line, an h3 'Table of Contents' anchor index, then 12-16 numbered h2 sections of prose, lists and (privacy only) tables",
+      "evidenceLevel": "measured-scaffolding-placeholder-prose",
+      "contentBranch": "legal-prose"
+    },
+    "onboarding-cta": {
+      "routes": [
+        "/start"
+      ],
+      "traits": "two-line h1, one composed paragraph, two CTAs",
+      "evidenceLevel": "composed-not-measured",
+      "contentBranch": "onboarding-cta"
+    },
+    "auth-form": {
+      "routes": [
+        "/auth"
+      ],
+      "traits": "two-line h1, one composed paragraph, ONE INERT single-field form, one CTA",
+      "evidenceLevel": "composed-not-measured",
+      "contentBranch": "auth-form"
+    }
+  },
+  "constraints": {
+    "onePerPage": true,
+    "maxPerPage": 1,
+    "mustBeFirstInBody": true,
+    "verification": "Checked against all 5 real templates: content.tech is the single body node of `legal`, `app-onboarding` and `app-auth`, immediately after chrome.menu, and it appears in no other template. Derived by running extraction/classify_routes.py against the real JSX."
+  },
+  "shapeDecision": {
+    "question": "Do /privacy-policy, /terms-of-service, /start and /auth share one page shape?",
+    "howItWasDecided": "By running a real classifier (extraction/classify_routes.py) over the actual JSX rather than by inspecting the grouping. All four routes produce the IDENTICAL node list [chrome.cookie-consent, chrome.header, chrome.menu, content.tech, chrome.footer, chrome.awards-badge], so a node-list-only grouping collapses 6 routes into 3 shapes. The classifier then compares STRUCTURAL SLOTS, which is what actually decides shape.",
+    "result": {
+      "/privacy-policy + /terms-of-service": "slots {longFormProse, anchorIndex} -> ONE shared template `legal`. They differ only in tag COUNTS (12 vs 16 h2, 2 vs 0 tables), which is instance content, not shape.",
+      "/start": "slots {ctaRow} -> its own template `app-onboarding`.",
+      "/auth": "slots {ctaRow, inertForm} -> its own template `app-auth`. NOT merged with /start: it carries a real <form> node that /start does not, which is a different content contract and a compliance-relevant one."
+    },
+    "conclusion": "6 routes -> 5 templates. Only /privacy-policy and /terms-of-service genuinely share one.",
+    "secondReasonNotToMerge": "Even if the slots had matched, /privacy-policy and /terms-of-service are measured-scaffolding while /start and /auth are composed-not-measured. Merging them would launder the composed pages' evidence level into the measured pages' (MASTER-GUIDE 3.17)."
+  },
+  "media": {
+    "inertForm": {
+      "assetRole": [
+        "auth-inert-form"
+      ],
+      "policy": "must-not-wire-up",
+      "pinned": true,
+      "variants": [
+        "auth-form"
+      ]
+    }
+  },
+  "motion": {
+    "pattern": "static",
+    "detail": "section.tech has no motion hook of its own: no data-flash, no data-hero-text, no ScrollTrigger. The only motion on these four routes is the global chrome (header, menu, footer, cookie banner). The hover-stagger sweep applies to the CTAs through primitive.button-primary / -outline.",
+    "reducedMotionFallback": "Unchanged - this section has no motion of its own; only the CTA hover sweep is suppressed.",
+    "reducedMotionFallbackKind": "design-rule (the source ships NO prefers-reduced-motion handling for this section, so the fallback is prescribed by this repository, not mirrored)"
+  },
+  "responsive": {
+    "structured": true,
+    "breakpoint": "991px / 767px",
+    "base": "single column, 8rem top offset, 2rem side gutters; the .tech__title override renders the .u-h3 element at type.h1 (5.5rem)",
+    "max-991px": "the overridden title drops 5.5rem -> 4.5rem and body.lead stays 1.125rem",
+    "max-767px": "the overridden title drops to 2.5rem and body.lead to 1rem"
+  },
+  "tokens": [
+    "heading.sub",
+    "heading.page",
+    "body.lead",
+    "label.secondary",
+    "text.primary",
+    "text.secondary",
+    "text.muted",
+    "component.table.cell-border",
+    "component.table.head-fill",
+    "component.table.head-border",
+    "component.button.primary.fill",
+    "component.button.primary.text",
+    "component.button.outline.border",
+    "component.button.outline.text",
+    "layout.tech.padding-top",
+    "layout.tech.padding-x",
+    "radius.control",
+    "space.snug",
+    "motion.hover-stagger.step"
+  ],
+  "composes": [
+    "component.rich-text-block",
+    "primitive.button-primary",
+    "primitive.button-outline",
+    "primitive.text-link",
+    "primitive.text-input"
+  ],
+  "measuredFrom": [
+    {
+      "id": "cit-sec-tech-privacy",
+      "source": "src/pages/PrivacyContent.jsx:4-5",
+      "quote": "<section className=\"tech\">"
+    },
+    {
+      "id": "cit-sec-tech-privacy-title",
+      "source": "src/pages/PrivacyContent.jsx:5-5",
+      "quote": "FOURMULA AI <br />PRIVACY & COOKIES POLICY"
+    },
+    {
+      "id": "cit-sec-tech-privacy-anchor",
+      "source": "src/pages/PrivacyContent.jsx:36-36",
+      "quote": "className=\"tech__rich-anchor\""
+    },
+    {
+      "id": "cit-sec-tech-terms",
+      "source": "src/pages/TermsContent.jsx:5-5",
+      "quote": "TERMS OF USE"
+    },
+    {
+      "id": "cit-sec-tech-start",
+      "source": "src/pages/Start.jsx:16-21",
+      "quote": "tech__title u-h3 u-fonts-100"
+    },
+    {
+      "id": "cit-sec-tech-start-doc",
+      "source": "src/pages/Start.jsx:3-12",
+      "quote": "BAILOUT_TO_CLIENT_SIDE_RENDERING"
+    },
+    {
+      "id": "cit-sec-tech-auth",
+      "source": "src/pages/Auth.jsx:18-27",
+      "quote": "<section className=\"tech\">"
+    },
+    {
+      "id": "cit-sec-tech-auth-form",
+      "source": "src/pages/Auth.jsx:28-46",
+      "quote": "onSubmit={(e) => e.preventDefault()}"
+    },
+    {
+      "id": "cit-sec-tech-auth-doc",
+      "source": "src/pages/Auth.jsx:11-13",
+      "quote": "The form is deliberately INERT"
+    },
+    {
+      "id": "cit-sec-tech-css",
+      "source": "src/styles/fourmula-base.css:4658-4662",
+      "quote": "padding-top: 8rem;"
+    },
+    {
+      "id": "cit-sec-tech-title-override",
+      "source": "src/styles/fourmula-base.css:4664-4666",
+      "quote": "font-size: var(--_fonts---h1);"
+    }
+  ],
+  "notes": "/start and /auth pass NO preloader prop, so they inherit Layout's `preloader = false` default and have NO preloader. The docstring table in src/layout/Layout.jsx:14-18 lists only /, /privacy-policy, /terms-of-service and 404 - it omits /start and /auth entirely, which is why their preloader state had to be read from the real call sites (src/pages/Start.jsx:15, src/pages/Auth.jsx:17) rather than from the table. This corrects a claim in the build groundwork.",
+  "unbudgetedFields": [
+    "content.tech/oneOf[0].introParagraph",
+    "content.tech/oneOf[0].sections[].paragraphs[]",
+    "content.tech/oneOf[0].sections[].lists[].items[]"
+  ],
+  "unbudgetedFieldsNote": "These three fields are DELIBERATELY unbudgeted and extraction/verify_all.py check [p] exempts them by name. They are the legal pages' body prose, which is deliberate PLACEHOLDER FILLER rather than the original's copy. A maxWords derived from filler would be a fabricated measurement presented as a measured one, so no budget is stated. Every other text field in all three variants IS budgeted, including the headings, the anchor-index labels and the table header cells."
+}

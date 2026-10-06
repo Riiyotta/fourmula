@@ -1,0 +1,18 @@
+section,category,templates,routes,Homepage,Legal document,App entry,Auth entry,Not found
+shell.cookie-consent,SHELL,5,6,x,x,x,x,x
+shell.header,SHELL,5,6,x,x,x,x,x
+shell.awards-badge,SHELL,5,6,x,x,x,x,x
+shell.menu-overlay,SHELL,4,5,x,x,x,x,
+shell.footer,SHELL,4,5,x,x,x,x,
+shell.preloader,SHELL,2,2,x,,,,x
+content.legal-document,CONTENT,1,2,,x,,,
+hero.catalog,HERO,1,1,x,,,,
+hero.not-found,HERO,1,1,,,,,x
+value.capability-statement,VALUE,1,1,x,,,,
+value.photoshoot-showcase,VALUE,1,1,x,,,,
+value.how-it-works,VALUE,1,1,x,,,,
+process.four-steps,PROCESS,1,1,x,,,,
+support.faq,SUPPORT,1,1,x,,,,
+content.start-panel,CONTENT,1,1,,,x,,
+content.auth-panel,CONTENT,1,1,,,,x,
+ROUTE COUNT,,,6,1,2,1,1,1

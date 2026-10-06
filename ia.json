@@ -1,0 +1,221 @@
+{
+  "$comment": "Derived from the real codebase (src/App.jsx routes, src/layout/Layout.jsx chrome flags, src/components/*.jsx, src/pages/*.jsx), cross-checked against CLONE_SPEC.md. Where the two disagreed, the code won: CLONE_SPEC.md's chrome matrix listed a preloader on /start and /auth, but both pages pass no `preloader` prop and Layout defaults it to false.",
+  "meta": {
+    "source": "fourmula-clone — pixel-verified clone of fourmula.ai (React 18 + Vite, react-router-dom)",
+    "mirror": "Homepage/404 transcribed from a saved copy of the original; legal pages from live fetch. See CLONE_SPEC.md.",
+    "status": "measured-from-codebase",
+    "productionApproved": false,
+    "totalRoutes": 6,
+    "totalTemplates": 5,
+    "generatedBy": "ia-builder skill, from direct source inspection"
+  },
+  "categories": {
+    "SHELL": "Chrome composed by src/layout/Layout.jsx and toggled per route: preloader, consent banner, header, menu overlay, footer, fixed badge.",
+    "HERO": "The page-opening block that sets a route's premise.",
+    "VALUE": "Product explanation — what the tool makes and how it behaves.",
+    "PROCESS": "Step-through of the product flow from input to finished assets.",
+    "SUPPORT": "Objection handling and reference answers.",
+    "CONTENT": "The substantive body of an inner route."
+  },
+  "sections": {
+    "shell.preloader": {
+      "category": "SHELL",
+      "description": "Full-viewport entry overlay: a stepped spinner, a counting percentage readout and a stack of preloading images, gated by an `is-loading` class on documentElement and torn down by the site's own GSAP script.",
+      "scope": "Present on 2 routes — the homepage and the not-found page. Every other template omits it.",
+      "implementedBy": "src/components/Preloader.jsx"
+    },
+    "shell.cookie-consent": {
+      "category": "SHELL",
+      "description": "Finsweet-driven consent banner plus a settings modal with per-category toggles. Carries its own accent color, distinct from the brand palette.",
+      "scope": "Present on all 6 routes.",
+      "implementedBy": "src/components/Cookies.jsx"
+    },
+    "shell.header": {
+      "category": "SHELL",
+      "description": "Fixed top bar: brand mark, a burger that drives the menu overlay, a scroll-progress readout, a theme toggle, and sign-in plus get-started actions.",
+      "scope": "Present on all 6 routes; marks the brand link as current only on the homepage.",
+      "implementedBy": "src/components/Header.jsx"
+    },
+    "shell.menu-overlay": {
+      "category": "SHELL",
+      "description": "Collapsed pill that expands into a full navigation panel on burger click, with staggered link reveals and a hand-rolled text scramble on the trigger label. Closed state has zero height, so its links are not hit-testable until opened.",
+      "scope": "Present on 5 routes; the not-found template drops it entirely.",
+      "implementedBy": "src/components/Menu.jsx"
+    },
+    "shell.footer": {
+      "category": "SHELL",
+      "description": "Closing chrome: brand mark, grouped navigation, legal links, social link and registration detail, plus the interactive dot field that the homepage motion scripts animate.",
+      "scope": "Present on 5 routes; the not-found template drops it entirely, which is also why that route has no dot field.",
+      "implementedBy": "src/components/Footer.jsx"
+    },
+    "shell.awards-badge": {
+      "category": "SHELL",
+      "description": "Fixed vertical badge pinned to the right edge, mounted at body level outside the page wrapper so it is unaffected by page transforms. Its outbound link is deliberately inert.",
+      "scope": "Present on all 6 routes.",
+      "implementedBy": "src/components/AwwwardsBadge.jsx"
+    },
+    "hero.catalog": {
+      "category": "HERO",
+      "description": "Homepage opener: the catalog headline with a per-word opacity reveal, a continuously rotating image carousel with counter-rotated frames, a vertical marquee of output types, and a drag-and-drop upload affordance.",
+      "scope": "Homepage only — 1 route.",
+      "implementedBy": "src/components/Hero.jsx"
+    },
+    "hero.not-found": {
+      "category": "HERO",
+      "description": "Not-found opener: a two-line broken-formula headline, a get-started action, and a looping theme-paired image that swaps with the active theme.",
+      "scope": "Not-found route only — 1 route.",
+      "implementedBy": "src/pages/NotFoundContent.jsx"
+    },
+    "value.capability-statement": {
+      "category": "VALUE",
+      "description": "Short two-part statement block: a small eyebrow label beside a large headline whose words flash in on scroll. Carries no imagery or actions.",
+      "scope": "Homepage only — 1 route.",
+      "implementedBy": "src/components/What.jsx"
+    },
+    "value.photoshoot-showcase": {
+      "category": "VALUE",
+      "description": "The heaviest media block: a studio-quality pitch over a grid of product stills and autoplaying background videos with poster fallbacks, honouring reduced-motion and Save-Data, plus its own call to action.",
+      "scope": "Homepage only — 1 route.",
+      "implementedBy": "src/components/AiSection.jsx"
+    },
+    "value.how-it-works": {
+      "category": "VALUE",
+      "description": "How-it-works block built from CSS marquees — a horizontally scrolling bottom row and vertically scrolling columns — with a rotating set of claim titles and a single get-started action.",
+      "scope": "Homepage only — 1 route.",
+      "implementedBy": "src/components/How.jsx"
+    },
+    "process.four-steps": {
+      "category": "PROCESS",
+      "description": "Scroll-driven sequence taking the reader from product input to finished assets, as stacked slides over gradient backdrops with a pinned, perspective-based transition.",
+      "scope": "Homepage only — 1 route.",
+      "implementedBy": "src/components/ListSection.jsx"
+    },
+    "support.faq": {
+      "category": "SUPPORT",
+      "description": "Accordion of product questions, one open at a time, each toggling an `active` class and rotating its indicator.",
+      "scope": "Homepage only — 1 route.",
+      "implementedBy": "src/components/Faq.jsx"
+    },
+    "content.legal-document": {
+      "category": "CONTENT",
+      "description": "Legal document body in the inner-page `.tech` shell: an oversized title above a rich-text block of numbered sections, a table-of-contents anchor list, and nested lists. The privacy instance additionally carries a multi-row cookie data table that the terms instance has no equivalent of.",
+      "scope": "Carried by the legal template across 2 routes, as two separately authored page-local components rather than one shared body component.",
+      "implementedBy": "src/pages/PrivacyContent.jsx, src/pages/TermsContent.jsx"
+    },
+    "content.start-panel": {
+      "category": "CONTENT",
+      "description": "Onboarding entry panel in the `.tech` shell: title, a short explanatory paragraph, and a pair of actions leading to sign-in and back to the site. Composed from this project's own design system — the real target renders client-side only, so nothing was measured for it.",
+      "scope": "Start route only — 1 route.",
+      "implementedBy": "src/pages/Start.jsx"
+    },
+    "content.auth-panel": {
+      "category": "CONTENT",
+      "description": "Sign-in stand-in in the `.tech` shell: title, explanatory paragraph, a single-field form and a return action. The form is deliberately inert — no action, no handler beyond preventDefault, no state and no network — and must not be wired up. Composed, not measured.",
+      "scope": "Auth route only — 1 route.",
+      "implementedBy": "src/pages/Auth.jsx"
+    }
+  },
+  "templates": [
+    {
+      "id": "template.home",
+      "name": "Homepage",
+      "routeCount": 1,
+      "routes": [
+        "/"
+      ],
+      "routePattern": null,
+      "chrome": "full",
+      "evidence": "measured — pixel audit matched 1382/1382 elements at 1440px and 962/962 at 390px against the live original",
+      "sections": [
+        "shell.preloader",
+        "shell.cookie-consent",
+        "shell.header",
+        "shell.menu-overlay",
+        "hero.catalog",
+        "value.capability-statement",
+        "value.photoshoot-showcase",
+        "value.how-it-works",
+        "process.four-steps",
+        "support.faq",
+        "shell.footer",
+        "shell.awards-badge"
+      ]
+    },
+    {
+      "id": "template.legal",
+      "name": "Legal document",
+      "routeCount": 2,
+      "routes": [
+        "/privacy-policy",
+        "/terms-of-service"
+      ],
+      "routePattern": null,
+      "chrome": "full",
+      "evidence": "structure measured against the live pages; body prose is deliberate placeholder filler, so copy budgets derived from these routes measure filler, not the original's copy",
+      "sections": [
+        "shell.cookie-consent",
+        "shell.header",
+        "shell.menu-overlay",
+        "content.legal-document",
+        "shell.footer",
+        "shell.awards-badge"
+      ]
+    },
+    {
+      "id": "template.app-entry",
+      "name": "App entry",
+      "routeCount": 1,
+      "routes": [
+        "/start"
+      ],
+      "routePattern": null,
+      "chrome": "full",
+      "evidence": "composed, not measured — the real target is a client-rendered app shell with no server-rendered markup",
+      "sections": [
+        "shell.cookie-consent",
+        "shell.header",
+        "shell.menu-overlay",
+        "content.start-panel",
+        "shell.footer",
+        "shell.awards-badge"
+      ]
+    },
+    {
+      "id": "template.auth",
+      "name": "Auth entry",
+      "routeCount": 1,
+      "routes": [
+        "/auth"
+      ],
+      "routePattern": null,
+      "chrome": "full",
+      "evidence": "composed, not measured — stands in for a gated sign-in screen; its form is intentionally inert",
+      "sections": [
+        "shell.cookie-consent",
+        "shell.header",
+        "shell.menu-overlay",
+        "content.auth-panel",
+        "shell.footer",
+        "shell.awards-badge"
+      ]
+    },
+    {
+      "id": "template.not-found",
+      "name": "Not found",
+      "routeCount": 1,
+      "routes": [
+        "*"
+      ],
+      "routePattern": null,
+      "chrome": "reduced",
+      "evidence": "measured — transcribed from the original's own 404 page, which is also its catch-all for unknown paths",
+      "sections": [
+        "shell.preloader",
+        "shell.cookie-consent",
+        "shell.header",
+        "hero.not-found",
+        "shell.awards-badge"
+      ]
+    }
+  ]
+}

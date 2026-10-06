@@ -1,0 +1,263 @@
+{
+  "$description": "Rhythm and position rules JSON Schema cannot express. Every rule carries severity error|warn and its named exceptions. Each rule id is implemented by a function of the same name in schema/semantic_validate.py's RULES dict; extraction/verify_all.py check [h] fails if the two sets ever diverge in either direction. EVERY rule below was verified against templates/templates.json's REAL node sequences at the moment it was written, by the build script that emitted this file - it refuses to write on any mismatch (MASTER-GUIDE 3.18). Rules read the PageSpec node order, which follows src/layout/Layout.jsx's own composition order.",
+  "version": "1.0.0",
+  "verifiedAgainst": {
+    "file": "templates/templates.json",
+    "sequences": {
+      "home": [
+        "chrome.preloader",
+        "chrome.cookie-consent",
+        "chrome.header",
+        "chrome.menu",
+        "hero.home",
+        "content.what-intro",
+        "showcase.ai-capabilities",
+        "marquee.how-trusted",
+        "steps.pinned-list",
+        "faq.accordion",
+        "chrome.footer",
+        "chrome.awards-badge"
+      ],
+      "legal": [
+        "chrome.cookie-consent",
+        "chrome.header",
+        "chrome.menu",
+        "content.tech",
+        "chrome.footer",
+        "chrome.awards-badge"
+      ],
+      "app-onboarding": [
+        "chrome.cookie-consent",
+        "chrome.header",
+        "chrome.menu",
+        "content.tech",
+        "chrome.footer",
+        "chrome.awards-badge"
+      ],
+      "app-auth": [
+        "chrome.cookie-consent",
+        "chrome.header",
+        "chrome.menu",
+        "content.tech",
+        "chrome.footer",
+        "chrome.awards-badge"
+      ],
+      "not-found": [
+        "chrome.preloader",
+        "chrome.cookie-consent",
+        "chrome.header",
+        "hero.not-found",
+        "chrome.awards-badge"
+      ]
+    },
+    "heroCategorySections": [
+      "hero.home",
+      "hero.not-found"
+    ],
+    "homeOnlySections": [
+      "content.what-intro",
+      "faq.accordion",
+      "hero.home",
+      "marquee.how-trusted",
+      "showcase.ai-capabilities",
+      "steps.pinned-list"
+    ],
+    "note": "These are the exact sequences every rule above was checked against."
+  },
+  "notEvidenced": {
+    "motionBudget": "No MOTION_BUDGET rule is defined. The home page genuinely runs many concurrent animations at once (three 24s CSS marquees, a 32s carousel ring plus counter-rotation, a 728-dot idle wave with cursor proximity, five image cross-fades, three background videos and four pinned 3D slides), so there is no evidence of any cap to encode. Per-node motion is instead constrained by the schema, which const-locks each section's motion.pattern and requires reducedMotionFallback.",
+    "noConsecutiveScrollStages": "Not defined. Only one section is a scroll stage (steps.pinned-list) and it is onePerPage, so two scroll stages can never be adjacent.",
+    "sectionVariantKeying": "Structural rules key on (section, variant) wherever a section has variants. Only content.tech does, and it is onePerPage on every template that uses it, so no rule currently needs to distinguish two instances of one section by variant. The validator nonetheless keys on the pair so that a future repeating section does not silently false-positive."
+  },
+  "rules": [
+    {
+      "id": "TEMPLATE_SERVES_ROUTE",
+      "severity": "error",
+      "description": "The PageSpec's `route` must be one of the routes its declared `template` serves (templates/templates.json `routes`). Verified: the 6 routes map 1:1 onto the 5 templates with no gaps and no double-assignment.",
+      "exceptions": []
+    },
+    {
+      "id": "TEMPLATE_NODE_MATCH",
+      "severity": "error",
+      "description": "The node list must match the declared template's REAL node list: same order, every required node present, no extra nodes. No template marks any node repeatable (verified against templates.json: zero repeatable:true), so every section appears exactly once. Where a template node fixes a `variant`, the PageSpec node's variant must equal it. This rule is what stops a PageSpec contradicting its own template - it is checked against the declared template, never against nodes[] in isolation.",
+      "exceptions": []
+    },
+    {
+      "id": "ONE_HERO_PER_PAGE",
+      "severity": "error",
+      "description": "Exactly one node whose section is in the `hero` category (hero.home, hero.not-found). Verified against all 5 real sequences: home has exactly one (hero.home), not-found exactly one (hero.not-found), and the three inner templates have ZERO - so they need named exceptions, listed below.",
+      "exceptions": [
+        {
+          "template": "legal",
+          "reason": "A legal prose page has no hero at all. Verified: templates.json legal nodes contain no hero-category section."
+        },
+        {
+          "template": "app-onboarding",
+          "reason": "The /start stand-in has no hero. Verified against templates.json."
+        },
+        {
+          "template": "app-auth",
+          "reason": "The /auth stand-in has no hero. Verified against templates.json."
+        }
+      ]
+    },
+    {
+      "id": "COOKIE_CONSENT_ONCE",
+      "severity": "error",
+      "description": "chrome.cookie-consent appears exactly once on every page. No exceptions: src/layout/Layout.jsx:39 renders <Cookies /> unconditionally with no flag, and all 5 real sequences carry it exactly once.",
+      "exceptions": []
+    },
+    {
+      "id": "HEADER_ONCE_AFTER_COOKIES",
+      "severity": "error",
+      "description": "chrome.header appears exactly once and is the node immediately after chrome.cookie-consent. No exceptions: Layout.jsx:41 renders <Header /> unconditionally as the first child of section.page, and this holds in all 5 real sequences (home 1->2, legal 0->1, app-onboarding 0->1, app-auth 0->1, not-found 1->2).",
+      "exceptions": []
+    },
+    {
+      "id": "PRELOADER_FIRST_WHEN_PRESENT",
+      "severity": "error",
+      "description": "When chrome.preloader is present it must be node index 0. Verified: present in home (index 0) and not-found (index 0); absent elsewhere, where the rule is vacuous, so no exception is needed.",
+      "exceptions": []
+    },
+    {
+      "id": "PRELOADER_ABSENT_ON_INNER_ROUTES",
+      "severity": "error",
+      "description": "chrome.preloader must NOT appear on /privacy-policy, /terms-of-service, /start or /auth. Verified against templates.json: none of legal, app-onboarding or app-auth contains it. /start and /auth pass no preloader prop at all (src/pages/Start.jsx:15, src/pages/Auth.jsx:17), so they inherit Layout's `preloader = false` default. Layout.jsx's own docstring table omits both routes, which is why this had to be read from the real call sites.",
+      "exceptions": [],
+      "restrictedRoutes": [
+        "/privacy-policy",
+        "/terms-of-service",
+        "/start",
+        "/auth"
+      ]
+    },
+    {
+      "id": "BADGE_LAST",
+      "severity": "error",
+      "description": "chrome.awards-badge appears exactly once and is the LAST node. No exceptions: Layout.jsx:46 renders <AwwwardsBadge /> after the closing </section> of section.page, unconditionally, and it is last in all 5 real sequences.",
+      "exceptions": []
+    },
+    {
+      "id": "MENU_FOLLOWS_HEADER",
+      "severity": "error",
+      "description": "When chrome.menu is present it must be the node immediately after chrome.header. Verified in home (2->3), legal (1->2), app-onboarding (1->2) and app-auth (1->2). not-found has no menu, so the rule is vacuous there and needs no exception.",
+      "exceptions": [
+        {
+          "template": "not-found",
+          "reason": "DOCUMENTARY, not an exemption: not-found has no chrome.menu (src/pages/NotFound.jsx:7 passes menu={false}), so there is nothing for this rule to position. Listed so the absence is not mistaken for an oversight."
+        }
+      ]
+    },
+    {
+      "id": "FOOTER_PRESENT_AND_PRECEDES_BADGE",
+      "severity": "error",
+      "description": "chrome.footer must be present exactly once and be the node immediately before chrome.awards-badge. Verified in home (10->11), legal, app-onboarding and app-auth (4->5). not-found genuinely violates the presence half of this rule, so it carries a NAMED EXCEPTION - without it the rule would reject the real, correct 404 page.",
+      "exceptions": [
+        {
+          "template": "not-found",
+          "reason": "src/pages/NotFound.jsx:7 passes footer={false}, so the 404 has no chrome.footer. This is also why #dotsField is absent from the 404 - and why #progress is NOT, since that lives in chrome.header."
+        }
+      ]
+    },
+    {
+      "id": "NO_EXTERNAL_LINKS",
+      "severity": "error",
+      "description": "No href, assetRef or any other URL-bearing field may contain a remote URL (http:, https:), a protocol-relative // URL, a mailto: or tel: scheme, or a path containing '..'. Links may only be '#', '/#', a '#anchor' or '/#anchor' in-page anchor, or one of the 6 real routes; asset paths may only be local absolute paths. This encodes the project's ZERO-EXTERNAL-LINKS build constraint: grep -rhoE '(href|src)=\"https?://\" src --include=*.jsx' returns ZERO matches, and formerly-external links became local routes (/start, /auth) or inert hashes on purpose. No exceptions on any template.",
+      "exceptions": [],
+      "evidence": "cit-constraint-no-external",
+      "knownSourceExceptionsOutsideThisRule": {
+        "finding": "The zero-external-links claim is exactly true for http: and https: in href/src, but it is NOT true for every scheme. Two mailto: hrefs survive in the source: src/pages/TermsContent.jsx:168 (mailto:support@fourmula.ai, link text \"Typography.\") and src/pages/PrivacyContent.jsx:273 (mailto:infot@fourmeta.com, link text \"Body.\"). Both sit inside the legal pages' placeholder filler prose and both have nonsense link text, so they are filler artifacts rather than real contact links - and the second points at an unrelated domain (fourmeta.com) with a malformed local part.",
+        "consequence": "Neither reaches a PageSpec: the legal-prose content branch has no href field at all, because its prose is unbudgeted placeholder filler. So this rule can reject mailto: outright without rejecting any real, correct structure. Generated output must not reproduce either address.",
+        "evidence": [
+          "cit-constraint-mailto-terms",
+          "cit-constraint-mailto-privacy"
+        ]
+      },
+      "onlyRemainingHttpStrings": "Two: the SVG xmlns namespace http://www.w3.org/2000/svg, and the commented-out cdnjs ScrambleTextPlugin URL in src/loadSite.js:5 which documents the original's 404ing script. Neither is a fetched reference."
+    },
+    {
+      "id": "NO_ADJACENT_SAME_SECTION",
+      "severity": "error",
+      "description": "The same section id must not appear in two adjacent positions. Verified against all 5 real sequences: no section repeats anywhere, adjacent or not, so no named exception is needed. Note that the four step slides and the three .ai capability blocks are CONTENT INSIDE one section element each, not repeated section nodes.",
+      "exceptions": []
+    },
+    {
+      "id": "HOME_ONLY_SECTIONS",
+      "severity": "error",
+      "description": "Six sections may appear only on '/': hero.home, content.what-intro, showcase.ai-capabilities, marquee.how-trusted, steps.pinned-list, faq.accordion. Verified by cross-referencing each section contract's `usedOn` against all 5 template sequences: each of the six appears in `home` and in no other template.",
+      "exceptions": [],
+      "sections": [
+        "content.what-intro",
+        "faq.accordion",
+        "hero.home",
+        "marquee.how-trusted",
+        "showcase.ai-capabilities",
+        "steps.pinned-list"
+      ]
+    },
+    {
+      "id": "NOT_FOUND_ONLY_SECTIONS",
+      "severity": "error",
+      "description": "hero.not-found may appear only on '/404'. Verified: it appears in the not-found template and nowhere else.",
+      "exceptions": [],
+      "sections": [
+        "hero.not-found"
+      ]
+    },
+    {
+      "id": "TECH_VARIANT_MATCHES_ROUTE",
+      "severity": "error",
+      "description": "content.tech's variant is pinned per route: legal-prose on /privacy-policy and /terms-of-service, onboarding-cta on /start, auth-form on /auth. Verified against templates.json's own node variants (legal -> legal-prose, app-onboarding -> onboarding-cta, app-auth -> auth-form).",
+      "exceptions": [],
+      "perRoute": {
+        "/privacy-policy": "legal-prose",
+        "/terms-of-service": "legal-prose",
+        "/start": "onboarding-cta",
+        "/auth": "auth-form"
+      }
+    },
+    {
+      "id": "INERT_FORM_ONLY_ON_AUTH",
+      "severity": "error",
+      "description": "The auth-form variant of content.tech - the only content branch with a `form` slot - may appear only on '/auth'. Verified: app-auth is the only template whose content.tech node fixes variant auth-form. The form's assetRole is additionally pinned to auth-inert-form with generationPolicy must-not-wire-up, enforced by extraction/verify_all.py check [j] as a VALUE comparison, not an enum-membership check.",
+      "exceptions": []
+    },
+    {
+      "id": "ROUTE_RESTRICTED_SECTIONS",
+      "severity": "error",
+      "description": "Every section node must be admitted on the PageSpec's route by that section contract's own `usedOn` list. This is the generic form of HOME_ONLY_SECTIONS and NOT_FOUND_ONLY_SECTIONS and also covers content.tech, which is admitted on the four inner routes and NOT on '/' or '/404'.",
+      "exceptions": []
+    },
+    {
+      "id": "SECTION_CONTRACT_CONSTRAINTS",
+      "severity": "error",
+      "description": "The onePerPage / maxPerPage / mustBeFirst / mustBeLast / mustBeFirstInBody / mustBeLastInBody / mustFollowHeader / mustPrecedeBadge / noConsecutive constraints declared in each sections/*.json are enforced per instance. Position semantics: for a chrome.* section mustBeFirst/mustBeLast are ABSOLUTE node positions; for any other section the *InBody variants are relative to the page body, i.e. the nodes between chrome.header (or chrome.menu where present) and chrome.footer.",
+      "exceptions": []
+    },
+    {
+      "id": "VARIANT_MATCHES_ROUTE",
+      "severity": "error",
+      "description": "A node's `variant` must be one of its section contract's declared variant keys, and that variant's own `routes` list must admit the PageSpec's route. Only content.tech declares variants; every other section has an empty variants object, so a variant on any other node is rejected.",
+      "exceptions": []
+    },
+    {
+      "id": "COMPOSED_EVIDENCE_DISCLOSED",
+      "severity": "warn",
+      "description": "NON-FATAL NOTICE. A PageSpec built on a template whose evidenceLevel is 'composed-not-measured' (app-onboarding, app-auth) is flagged, because that template's structure and copy are an original composition from this design system and are NOT evidence about fourmula.ai. The warning exists so a generator never cites those two pages as measured fact. It is a warning, not an error, because generating them is legitimate.",
+      "exceptions": [
+        {
+          "template": "home",
+          "reason": "evidenceLevel measured."
+        },
+        {
+          "template": "legal",
+          "reason": "evidenceLevel measured-scaffolding-placeholder-prose - the scaffolding IS measured."
+        },
+        {
+          "template": "not-found",
+          "reason": "evidenceLevel measured."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "$description": "Icon dimensions are expressed as SVG viewBoxes, not pixel tokens: every glyph in this site is an INLINE <svg> inside a .w-embed wrapper with width=\"100%\" height=\"100%\", so the rendered size comes from the wrapper's CSS and the viewBox fixes only the aspect ratio. 21 standalone .svg files also exist under public/assets/svg/ but NOTHING references them - they are extraction leftovers (see assets/asset-roles.json publicInventory).",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "tokens": {
+    "icon-size.header-logo": {
+      "$type": "other",
+      "$value": "58x54 viewBox",
+      "role": "src/components/Header.jsx:9 inline SVG, width/height 100%",
+      "evidence": [
+        "cit-icon-viewbox"
+      ]
+    },
+    "icon-size.preloader-logo": {
+      "$type": "other",
+      "$value": "57x56 viewBox",
+      "role": "src/components/Preloader.jsx:8",
+      "evidence": [
+        "cit-icon-viewbox"
+      ]
+    },
+    "icon-size.preloader-loader": {
+      "$type": "other",
+      "$value": "56x56 viewBox",
+      "role": "src/components/Preloader.jsx:11",
+      "evidence": [
+        "cit-icon-viewbox"
+      ]
+    },
+    "icon-size.ui-glyph-16": {
+      "$type": "other",
+      "$value": "16x16 viewBox",
+      "role": "sign-in and moon glyphs (Header.jsx:19, Header.jsx:27)",
+      "evidence": [
+        "cit-icon-viewbox"
+      ]
+    },
+    "icon-size.ui-glyph-20": {
+      "$type": "other",
+      "$value": "20x20 viewBox",
+      "role": "sun glyph (Header.jsx:21)",
+      "evidence": [
+        "cit-icon-viewbox"
+      ]
+    },
+    "icon-size.ui-glyph-24": {
+      "$type": "other",
+      "$value": "24x24 viewBox",
+      "role": "close and grid-arrow glyphs (Cookies.jsx:9, AiSection.jsx:24)",
+      "evidence": [
+        "cit-icon-viewbox"
+      ]
+    },
+    "icon-size.ai-btn-glyph": {
+      "$type": "other",
+      "$value": "32x32 viewBox",
+      "role": "the .ai__btn glyph, three occurrences (AiSection.jsx:9, 49, 80)",
+      "evidence": [
+        "cit-icon-viewbox"
+      ]
+    },
+    "icon-size.trusted-logo": {
+      "$type": "other",
+      "$value": "104x24 viewBox",
+      "role": "all 11 third-party logos in .how__bottom-item, twice each (How.jsx:36-94)",
+      "evidence": [
+        "cit-icon-viewbox"
+      ]
+    },
+    "icon-size.awwwards-badge": {
+      "$type": "other",
+      "$value": "53.08x171.358",
+      "role": "the fixed body-level badge SVG (AwwwardsBadge.jsx:6)",
+      "evidence": [
+        "cit-icon-viewbox"
+      ]
+    }
+  },
+  "wrapperSizes": {
+    "$description": "The real rendered sizes come from CSS on the wrapper classes; see tokens/20-component/component.json.",
+    "evidence": [
+      "cit-icon-wrapper"
+    ]
+  }
+}

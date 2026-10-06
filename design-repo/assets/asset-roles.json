@@ -1,0 +1,382 @@
+{
+  "$description": "CLOSED assetRole vocabulary, derived from real usage sites (every <img>, <video>, inline <svg>, CSS url() and @font-face src in src/**, index.html and public/). A generated PageSpec may use only these ids; an unlisted role is invalid. One role (auth-inert-form) describes a BEHAVIOUR slot rather than a file - see its entry.",
+  "assetRoleEnum": [
+    "hero-carousel-photo",
+    "preloader-photo",
+    "product-shot-photo",
+    "step-artwork",
+    "showcase-video",
+    "not-found-artwork",
+    "brand-wordmark",
+    "trusted-partner-logo",
+    "ui-icon-glyph",
+    "form-control-checkmark",
+    "favicon",
+    "brand-typeface-file",
+    "og-banner",
+    "auth-inert-form"
+  ],
+  "closed": true,
+  "generationPolicyEnum": [
+    "may-generate-new",
+    "must-reuse-exact",
+    "must-not-fabricate",
+    "must-not-redistribute",
+    "must-not-wire-up"
+  ],
+  "generationPolicyMeaning": {
+    "may-generate-new": "A generator may create a NEW original asset for this role. It must not copy an existing file and must not present the result as fourmula.ai's own or as a third party's.",
+    "must-reuse-exact": "The asset is fourmula.ai's own brand asset or a vendored component asset. A generator may only reference the existing local file (or the existing inline SVG) by exact path. It must not recreate, redraw, re-trace, recolour, crop or 'improve' it.",
+    "must-not-fabricate": "The asset depicts real people, real third-party brands, or fourmula.ai's own real product and marketing imagery. A generator must NEVER create, redraw, approximate, restyle or AI-render it. Only an exact reference to a file that already exists under public/ is allowed. If the slot needs a different real asset, leave it an explicit placeholder for a human to supply with rights confirmed.",
+    "must-not-redistribute": "The asset is commercially licensed to a third party (Apple's SF Pro Display; GreenSock's paid SplitText plugin). It may be referenced where it already lives. It must never be regenerated, converted, subset, re-hosted or copied into a new package or into generated output.",
+    "must-not-wire-up": "The slot is a deliberately INERT interactive control. A generator must reproduce it as layout only and must never give it a destination, a handler, state, storage or a network call. Grounded in exactly one real slot: the /auth sign-in form."
+  },
+  "policyNote": "Exactly five policies, each grounded in a real asset class in this project: may-generate-new (generic glyphs), must-reuse-exact (brand marks and vendored component assets), must-not-fabricate (real people, real third-party logos, real product imagery), must-not-redistribute (Apple's SF Pro Display and GreenSock's paid SplitText) and must-not-wire-up (the inert /auth form).",
+  "pinnedPolicyMechanism": "Every role with complianceCritical=true carries pinnedPolicy equal to its generationPolicy. extraction/verify_all.py check [j] asserts generationPolicy == pinnedPolicy for exactly those roles. Membership in the five-value enum is NOT sufficient: may-generate-new is a valid enum member that would be wrong for every pinned role. The check is proven by mutations to a DIFFERENT-BUT-VALID policy value in schema/tests/adversarial_test.py and extraction/prove_drift.py (MASTER-GUIDE 3.23).",
+  "pinnedRoles": [
+    "hero-carousel-photo",
+    "preloader-photo",
+    "product-shot-photo",
+    "step-artwork",
+    "showcase-video",
+    "not-found-artwork",
+    "brand-wordmark",
+    "trusted-partner-logo",
+    "favicon",
+    "brand-typeface-file",
+    "og-banner",
+    "auth-inert-form"
+  ],
+  "unpinnedRoles": [
+    "ui-icon-glyph",
+    "form-control-checkmark"
+  ],
+  "globalRules": {
+    "realCompany": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy.",
+    "noExternalRequests": "Every asset reference in this project is a LOCAL absolute path. grep -rhoE '(href|src)=\"https?://' src --include='*.jsx' returns ZERO matches. A generated PageSpec must never reference a remote URL, a protocol-relative // URL, or a path containing '..' - the schema's pattern and the semantic validator both reject all three.",
+    "noOutboundLinks": "Links in a PageSpec may only be '#' (inert), a '/#anchor' in-page anchor, or one of the six real routes. Formerly-external links became local routes (/start, /auth) or inert hashes on purpose; a generator must never reintroduce an outbound link. Enforced by the NO_EXTERNAL_LINKS graph rule and proven by an adversarial case.",
+    "licensingReview": "Do not publish or make this repository public without the owner's licence review."
+  },
+  "publicInventory": {
+    "$description": "Everything under public/assets/, counted from disk, with reference status.",
+    "filesOnDisk": {
+      "avif": 42,
+      "svg": 23,
+      "mp4": 3,
+      "png": 3,
+      "webp": 2,
+      "otf": 2,
+      "total": 75
+    },
+    "referencedFromSource": {
+      "avif": 41,
+      "mp4": 3,
+      "otf": 2,
+      "svg": 2,
+      "webp": 2,
+      "png": 1,
+      "total": 51
+    },
+    "allReferencesResolve": true,
+    "remoteReferences": 0,
+    "unreferencedOnDisk": {
+      "count": 24,
+      "items": [
+        "/assets/6936ee0edf9718feab43ebcb_banner.avif",
+        "/assets/6936ee5cb7400fe6aa2b2ee8_01-favicon-1.png",
+        "/assets/6936ee5f6ce3231be8430947_01-favicon.png",
+        "/assets/svg/footer-logo.svg",
+        "/assets/svg/header-logo.svg",
+        "/assets/svg/icon-ai-btn.svg",
+        "/assets/svg/icon-arrow-right.svg",
+        "/assets/svg/icon-close.svg",
+        "/assets/svg/icon-signin.svg",
+        "/assets/svg/icon-theme-moon.svg",
+        "/assets/svg/icon-theme-sun.svg",
+        "/assets/svg/preloader-loader.svg",
+        "/assets/svg/preloader-logo.svg",
+        "/assets/svg/trusted-logo-01.svg",
+        "/assets/svg/trusted-logo-02.svg",
+        "/assets/svg/trusted-logo-03.svg",
+        "/assets/svg/trusted-logo-04.svg",
+        "/assets/svg/trusted-logo-05.svg",
+        "/assets/svg/trusted-logo-06.svg",
+        "/assets/svg/trusted-logo-07.svg",
+        "/assets/svg/trusted-logo-08.svg",
+        "/assets/svg/trusted-logo-09.svg",
+        "/assets/svg/trusted-logo-10.svg",
+        "/assets/svg/trusted-logo-11.svg"
+      ],
+      "explanation": "The 21 files under public/assets/svg/ are extraction leftovers: every glyph, logo and wordmark is INLINED as <svg> in the JSX instead. They still carry the same brand and third-party marks, so they inherit the same generationPolicy as their inline twins and must not be treated as free-to-use icon files."
+    },
+    "videoBytes": {
+      "total": "approximately 47 MB across 3 files",
+      "note": "18.8 MB + 22.6 MB + 5.7 MB."
+    },
+    "correctionToCloneSpec": "CLONE_SPEC.md:142-144 states \"41 images ... 49/49 references resolve\". The real figure is 51 local references, all of which resolve, across 43 images (41 .avif + 2 .webp), 3 videos, 2 fonts, 2 SVGs and 1 favicon; and there are 75 files on disk, 24 of them unreferenced.",
+    "evidence": [
+      "cit-asset-inventory",
+      "cit-asset-unreferenced",
+      "cit-asset-no-remote"
+    ]
+  },
+  "roles": [
+    {
+      "id": "hero-carousel-photo",
+      "description": "The eight fashion photographs that ride the 8-position rotating ring in the home hero (.hero__carousel__0deg .. .hero__carousel__315deg). Every one depicts a real, identifiable person.",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-not-fabricate",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-fabricate",
+      "usageCitations": [
+        "src/components/Hero.jsx:59",
+        "src/components/Hero.jsx:79"
+      ],
+      "observedDistinctFiles": 8,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy. These eight frames show real people; they must never be replaced with synthetic or AI-generated likenesses, nor described as stock photography.",
+      "exampleLocalPaths": [
+        "/assets/6939a23c78d0b447681dd9f5_hero-load-08.avif"
+      ]
+    },
+    {
+      "id": "preloader-photo",
+      "description": "The four stacked images inside .preloader__images, revealed by public/motion/m21.js. Each ships a Webflow -p-500 srcset variant alongside the 796w original.",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-not-fabricate",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-fabricate",
+      "usageCitations": [
+        "src/components/Preloader.jsx:14",
+        "src/components/Preloader.jsx:17"
+      ],
+      "observedDistinctFiles": 8,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy.",
+      "exampleLocalPaths": [
+        "/assets/6941633274e43deb343482c1_image-pre-01.avif"
+      ],
+      "srcsetNote": "4 base images + 4 -p-500 variants = 8 files; sizes=\"(max-width: 796px) 100vw, 796px\"."
+    },
+    {
+      "id": "product-shot-photo",
+      "description": "Product photography across the three .ai section blocks: the two-up theme-paired grid, the six mobile grid tiles, and the five .ai__grid-small collage images each of which has an -upd twin that public/motion/m28.js cross-fades. The bottles carry invented brand names (FOURMULA, 4MLA Arkena, 4MLA SILVANE, Aurexon 4MLA) which are still fourmula.ai's own brand expression.",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-not-fabricate",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-fabricate",
+      "usageCitations": [
+        "src/components/AiSection.jsx:21",
+        "src/components/AiSection.jsx:56",
+        "src/components/AiSection.jsx:70"
+      ],
+      "observedDistinctFiles": 20,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy. The on-pack wordmarks are brand marks. Do not regenerate these images or invent new products under these names.",
+      "exampleLocalPaths": [
+        "/assets/693937f3690e191b2167d7bb_grid-01.avif",
+        "/assets/6945380ffd909e695e6958fb_grid-01-dark.avif"
+      ],
+      "themePairing": "grid-01 and grid-02 ship as -dark/-light pairs carrying .theme-dark/.theme-light; public/motion/m11.js swaps them. The -dark-suffixed file is the one shown in the DEFAULT (light) rendering - see tokens/themes/light.json imageInversion."
+    },
+    {
+      "id": "step-artwork",
+      "description": "One illustration per pinned step slide (list-art-01..04), sitting under the .list__main__bottom-gradient scrim.",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-not-fabricate",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-fabricate",
+      "usageCitations": [
+        "src/components/ListSection.jsx:43",
+        "src/components/ListSection.jsx:143"
+      ],
+      "observedDistinctFiles": 4,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy.",
+      "exampleLocalPaths": [
+        "/assets/695285eb1a7c1e461a8e3489_2959bc51690633d518682e82d0869c44_list-art-01.avif"
+      ]
+    },
+    {
+      "id": "showcase-video",
+      "description": "Three looping, muted, autoplaying background videos in the .ai video block, each inside a .w-background-video wrapper with the video file doubling as its own poster. ~47MB total.",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-not-fabricate",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-fabricate",
+      "usageCitations": [
+        "src/components/AiSection.jsx:94",
+        "src/components/AiSection.jsx:98",
+        "src/components/AiSection.jsx:102"
+      ],
+      "observedDistinctFiles": 3,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy. These are fourmula.ai's own produced footage.",
+      "exampleLocalPaths": [
+        "/assets/video/69456b3ff768a79ef91d6909_FLORA-original-1594ecae.mp4"
+      ],
+      "reducedMotion": "public/motion/m27.js gates autoplay on prefers-reduced-motion AND on navigator.connection.saveData. This is the ONLY slot in the whole site whose reducedMotionFallback mirrors real behaviour rather than prescribing it."
+    },
+    {
+      "id": "not-found-artwork",
+      "description": "The theme-paired 404 artwork looped by .hero__404__loop (a dot-matrix display reading 4:01).",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-not-fabricate",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-fabricate",
+      "usageCitations": [
+        "src/pages/NotFoundContent.jsx:13",
+        "src/pages/NotFoundContent.jsx:14"
+      ],
+      "observedDistinctFiles": 2,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy.",
+      "exampleLocalPaths": [
+        "/assets/695e65c8242e6ffef2ecf9f1_img-404.webp",
+        "/assets/695e6aac65485c8ff151906f_img-404-light.webp"
+      ],
+      "note": "The ONLY two .webp files in the project; everything else raster is .avif."
+    },
+    {
+      "id": "brand-wordmark",
+      "description": "The fourmula.ai mark, shipped as an INLINE <svg> in three places (header 58x54, footer, preloader 57x56) each inside a .w-embed wrapper with an .u-hidden-copy \"fourmula.ai\" text alternative.",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-reuse-exact",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-reuse-exact",
+      "usageCitations": [
+        "src/components/Header.jsx:9",
+        "src/components/Footer.jsx:11",
+        "src/components/Preloader.jsx:8"
+      ],
+      "observedDistinctFiles": 3,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy. This is fourmula.ai's registered brand mark. Reference the existing inline SVG verbatim. Never redraw, re-trace, recolour, re-letter or 'modernise' it, and never generate a new wordmark that resembles it.",
+      "exampleLocalPaths": [
+        "(inline SVG - no file path)"
+      ],
+      "standaloneFiles": "public/assets/svg/header-logo.svg, footer-logo.svg and preloader-logo.svg hold the same marks as files, but NOTHING in src/ references them."
+    },
+    {
+      "id": "trusted-partner-logo",
+      "description": "Eleven REAL THIRD-PARTY COMPANY LOGOS in the .how__bottom 'Trusted By' marquee, each an inline <svg> on a 104x24 viewBox, duplicated across two identical rows to make the 24s marquee seamless.",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-not-fabricate",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-fabricate",
+      "usageCitations": [
+        "src/components/How.jsx:36",
+        "src/components/How.jsx:94"
+      ],
+      "observedDistinctFiles": 11,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy. These marks belong to OTHER companies. They are the single highest-risk assets in this repository. A generator must never reproduce, redraw, approximate or invent them, must never place a real company's mark in a 'trusted by' slot, and must never imply an endorsement. If a logo slot is needed in generated output, leave it an explicit placeholder for a human to fill with rights confirmed.",
+      "exampleLocalPaths": [
+        "(inline SVG - no file path)"
+      ],
+      "standaloneFiles": "public/assets/svg/trusted-logo-01.svg .. trusted-logo-11.svg hold the same marks as files; nothing in src/ references them.",
+      "duplication": "22 inline occurrences = 11 distinct marks x 2 rows."
+    },
+    {
+      "id": "ui-icon-glyph",
+      "description": "Generic interface glyphs, all inline SVG: the sign-in person, the theme moon and sun, the close X, the grid arrow, the .ai__btn glyph and the preloader spinner.",
+      "realCompanyAssets": false,
+      "generationPolicy": "may-generate-new",
+      "complianceCritical": false,
+      "usageCitations": [
+        "src/components/Header.jsx:19",
+        "src/components/Header.jsx:27",
+        "src/components/Cookies.jsx:9",
+        "src/components/AiSection.jsx:24"
+      ],
+      "observedDistinctFiles": 7,
+      "licensing": "These are generic UI affordances with no brand content. A generator may draw a NEW original glyph in the same flat single-colour currentColor style. It must not copy an existing file and must not present a new glyph as fourmula.ai's own.",
+      "exampleLocalPaths": [
+        "(inline SVG - no file path)"
+      ]
+    },
+    {
+      "id": "form-control-checkmark",
+      "description": "The two raster-less checkmark SVGs used as background-image on form controls: the Webflow custom checkbox and the Finsweet cookie-preference radio. These are the ONLY two .svg FILES anything references, and both are referenced from CSS, not from JSX.",
+      "realCompanyAssets": false,
+      "generationPolicy": "must-reuse-exact",
+      "complianceCritical": false,
+      "usageCitations": [
+        "src/styles/fourmula-base.css:2163",
+        "src/styles/fourmula-base.css:4408"
+      ],
+      "observedDistinctFiles": 2,
+      "licensing": "Vendored Webflow / Finsweet component assets. Reference the existing paths; do not redraw.",
+      "exampleLocalPaths": [
+        "/assets/custom-checkbox-checkmark.svg",
+        "/assets/radio__checkmark.svg"
+      ]
+    },
+    {
+      "id": "favicon",
+      "description": "The site favicon and apple-touch-icon, both pointing at the same file.",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-reuse-exact",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-reuse-exact",
+      "usageCitations": [
+        "index.html:12",
+        "index.html:13"
+      ],
+      "observedDistinctFiles": 1,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy. The favicon is a brand mark.",
+      "exampleLocalPaths": [
+        "/assets/favicon.png"
+      ],
+      "unreferencedTwins": "public/assets/6936ee5cb7400fe6aa2b2ee8_01-favicon-1.png and 6936ee5f6ce3231be8430947_01-favicon.png also exist on disk and are referenced by nothing."
+    },
+    {
+      "id": "brand-typeface-file",
+      "description": "The two self-hosted SF Pro Display font files, declared as @font-face with font-display: swap.",
+      "realCompanyAssets": false,
+      "generationPolicy": "must-not-redistribute",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-redistribute",
+      "usageCitations": [
+        "src/styles/fourmula-base.css:2080",
+        "src/styles/fourmula-base.css:2088"
+      ],
+      "observedDistinctFiles": 2,
+      "licensing": "SF Pro Display is APPLE-LICENSED. Apple's licence does not permit redistribution or public web serving of these files. They may be referenced where they already sit for local work. They must never be copied into generated output, re-hosted, converted, subset or packaged. Separately: public/vendor/SplitText.min.js is a PAID Club GreenSock plugin under the same restriction.",
+      "exampleLocalPaths": [
+        "/assets/fonts/SF-Pro-Display-Regular.otf",
+        "/assets/fonts/SF-Pro-Display-Medium.otf"
+      ],
+      "relatedPaidDependency": "public/vendor/SplitText.min.js - Club GreenSock, paid licence, not redistributable. Loaded by src/loadSite.js:11."
+    },
+    {
+      "id": "og-banner",
+      "description": "A social/open-graph banner image that exists on disk but is referenced by nothing: index.html declares no og:image meta tag.",
+      "realCompanyAssets": true,
+      "generationPolicy": "must-not-fabricate",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-fabricate",
+      "usageCitations": [
+        "(no usage site - unreferenced on disk)"
+      ],
+      "observedDistinctFiles": 1,
+      "licensing": "fourmula.ai is a REAL, LIVE COMPANY. Nothing in this repository grants any right to its copy, brand marks, product imagery or the likeness of any person appearing in its assets. A generator must never reproduce, redraw, recolour, re-render, approximate or AI-regenerate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's photograph or video, any real third-party company logo, or its real marketing copy.",
+      "exampleLocalPaths": [
+        "/assets/6936ee0edf9718feab43ebcb_banner.avif"
+      ],
+      "status": "unreferenced-on-disk"
+    },
+    {
+      "id": "auth-inert-form",
+      "description": "NOT AN IMAGE. The behaviour role of the sign-in form on /auth. The form is DELIBERATELY INERT: it has no action attribute, no handler beyond onSubmit={(e) => e.preventDefault()}, no React state, no network call, and nothing is read from or stored for the email field. It stands in for a real sign-in screen purely as layout.",
+      "realCompanyAssets": false,
+      "generationPolicy": "must-not-wire-up",
+      "complianceCritical": true,
+      "pinnedPolicy": "must-not-wire-up",
+      "usageCitations": [
+        "src/pages/Auth.jsx:28",
+        "src/pages/Auth.jsx:29",
+        "src/pages/Auth.jsx:36",
+        "src/pages/Auth.jsx:43"
+      ],
+      "licensing": "COMPLIANCE-RELEVANT. Generated output must keep this slot inert. It must not be given an action, a submit handler, a fetch/XHR call, an analytics event, a state binding, local or session storage, a cookie, or any third-party auth SDK. A credential field that looks real but goes somewhere undisclosed is a phishing surface; a credential field that goes somewhere real is a security surface the owner has not approved. Both are out of scope for a generated page.",
+      "exampleLocalPaths": [
+        "(behaviour role - no asset path)"
+      ],
+      "pinnedValueRationale": "Membership in the five-value generationPolicy enum is NOT sufficient for this role: may-generate-new and must-reuse-exact are both valid enum members and both WRONG here. extraction/verify_all.py check [j] therefore compares generationPolicy against pinnedPolicy for this role specifically (MASTER-GUIDE 3.23), and the adversarial suite mutates it to a DIFFERENT-BUT-VALID value to prove the check catches it.",
+      "schemaWiring": "sections/content-tech.json binds this role to the auth-form variant's `form.assetRole` slot with enum [\"auth-inert-form\"], so a PageSpec cannot put any other role there."
+    }
+  ]
+}

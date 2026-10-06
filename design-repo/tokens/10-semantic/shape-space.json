@@ -1,0 +1,137 @@
+{
+  "$description": "Semantic radius and spacing roles. Both tiers are rem-based on a fluid root font-size.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "tokens": {
+    "radius.control": {
+      "$type": "dimension",
+      "$ref": "radius.pill",
+      "rationale": "Every button: .btn-primary, .btn-outline, .btn-primary-stb, .ai__btn and the tag pills.",
+      "evidence": [
+        "cit-sem-radius-pill"
+      ]
+    },
+    "radius.card": {
+      "$type": "dimension",
+      "$ref": "radius.md",
+      "rationale": "The most used radius (9 site-authored uses): large cards and panels.",
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.panel": {
+      "$type": "dimension",
+      "$ref": "radius.sm",
+      "rationale": "Mid-size panels and image frames (7 uses).",
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.inset": {
+      "$type": "dimension",
+      "$ref": "radius.xs",
+      "rationale": "Small inset elements (5 uses).",
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.block": {
+      "$type": "dimension",
+      "$ref": "radius.s",
+      "rationale": "Block-level corners (5 uses), including the left-only 2rem shorthand variant.",
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.indicator": {
+      "$type": "dimension",
+      "$ref": "radius.circle",
+      "rationale": "The footer .dot and the .ai__dot.",
+      "evidence": [
+        "cit-radius-dot"
+      ]
+    },
+    "space.hairline": {
+      "$type": "dimension",
+      "$ref": "spacing.0p25",
+      "rationale": "Tightest real step (17 uses).",
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "space.tight": {
+      "$type": "dimension",
+      "$ref": "spacing.0p5",
+      "rationale": "Third most used step (45 uses).",
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "space.snug": {
+      "$type": "dimension",
+      "$ref": "spacing.0p75",
+      "rationale": "25 uses; also the inline gap on the composed /start and /auth button rows.",
+      "evidence": [
+        "cit-space-histogram",
+        "cit-sem-start-gap"
+      ]
+    },
+    "space.stack": {
+      "$type": "dimension",
+      "$ref": "spacing.1",
+      "rationale": "The single most used spacing value (93 uses) and the desktop dots-field dot size and gap.",
+      "evidence": [
+        "cit-space-histogram",
+        "cit-radius-dot"
+      ]
+    },
+    "space.gutter": {
+      "$type": "dimension",
+      "$ref": "spacing.2",
+      "rationale": "Second most used (71 uses); the horizontal page padding on section.tech.",
+      "evidence": [
+        "cit-space-histogram",
+        "cit-sem-tech-padding"
+      ]
+    },
+    "space.block": {
+      "$type": "dimension",
+      "$ref": "spacing.3",
+      "rationale": "20 uses: block separation inside sections.",
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "space.section": {
+      "$type": "dimension",
+      "$ref": "spacing.5",
+      "rationale": "16 uses: section-level padding.",
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "space.page-top": {
+      "$type": "dimension",
+      "$ref": "spacing.8",
+      "rationale": "padding-top on section.tech - the only top offset the four tech pages use.",
+      "evidence": [
+        "cit-sem-tech-padding"
+      ]
+    },
+    "space.page-break": {
+      "$type": "dimension",
+      "$ref": "spacing.10",
+      "rationale": "10 uses: the largest regular rhythm step.",
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "space.pull-up": {
+      "$type": "dimension",
+      "$ref": "spacing.neg-1p5",
+      "rationale": "Most used negative step (5 uses): overlapping blocks.",
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    }
+  }
+}

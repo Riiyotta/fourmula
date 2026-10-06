@@ -1,0 +1,86 @@
+{
+  "$description": "Layout tokens: the structural decisions that are neither colour, type, space nor motion.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "tokens": {
+    "layout.page.shell": {
+      "$type": "other",
+      "$value": "flex column, min-height 100svh, overflow hidden",
+      "note": "section.page - the wrapper that holds header, menu, page content and footer. It is a WRAPPER, not a content section, so it has no section contract.",
+      "evidence": [
+        "cit-layout-page"
+      ]
+    },
+    "layout.tech.padding-top": {
+      "$type": "dimension",
+      "$ref": "space.page-top",
+      "note": "8rem on section.tech, the only top offset on the four tech routes.",
+      "evidence": [
+        "cit-sem-tech-padding"
+      ]
+    },
+    "layout.tech.padding-x": {
+      "$type": "dimension",
+      "$ref": "space.gutter",
+      "note": "2rem left and right on section.tech.",
+      "evidence": [
+        "cit-sem-tech-padding"
+      ]
+    },
+    "layout.dots-field.width": {
+      "$type": "dimension",
+      "$value": "103rem",
+      "note": "52 columns x 1rem + 51 gaps x 1rem = 103rem exactly, which is why 103rem appears 8 times in the stylesheet. It is NOT a content max-width: its other 7 uses are all .hero__404__* layers.",
+      "evidence": [
+        "cit-layout-dots-width"
+      ]
+    },
+    "layout.dots-field.grid": {
+      "$type": "other",
+      "$value": "repeat(52, var(--dot-size)) at >=992px, 24 at >=768px, 22 below",
+      "note": "Rebuilt in JS by public/motion/m07.js; ROWS is always 14, so 728 / 336 / 308 dots.",
+      "evidence": [
+        "cit-dots-m07"
+      ]
+    },
+    "layout.hero.slider-axis": {
+      "$type": "other",
+      "$value": "vertical (--ty-end: -100%) at min-width 992px, horizontal (--tx-end: -100%) at max-width 991px",
+      "note": "The only min-width:992px query in the project.",
+      "evidence": [
+        "cit-bp-min992"
+      ]
+    },
+    "layout.menu.panel-closed": {
+      "$type": "other",
+      "$value": "15rem x 2.7rem, translateY(2rem), padding 0",
+      "note": "The closed menu panel ships as inline style on .menu__wrap and as a head <style> override.",
+      "evidence": [
+        "cit-layout-menu-closed"
+      ]
+    },
+    "layout.step-slide.viewport": {
+      "$type": "other",
+      "$value": "perspective 250vw on .list__main__content__wrap; .list__main__content is position absolute inset 0",
+      "note": "The original ships `transform-style: preserve-3d` with NO semicolon before `transform-origin: 50% 10%`, so browsers discard BOTH declarations. They are kept commented out in src/styles/fourmula-head.css:150-159 to match real rendering. DO NOT 'FIX' THIS.",
+      "evidence": [
+        "cit-layout-preserve3d-bug"
+      ]
+    },
+    "layout.trusted-marquee.row": {
+      "$type": "other",
+      "$value": "two identical 11-item rows, each animated 24s linear infinite translateX 0 -> -100%",
+      "note": "The duplication is what makes the marquee seamless.",
+      "evidence": [
+        "cit-layout-trusted-rows"
+      ]
+    },
+    "layout.how-column.loop": {
+      "$type": "other",
+      "$value": "two identical 3-item columns, each animated 24s linear infinite translateY 0 -> -100%",
+      "evidence": [
+        "cit-motion-columnanima",
+        "cit-layout-how-columns"
+      ]
+    }
+  }
+}

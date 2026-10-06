@@ -1,0 +1,66 @@
+{
+  "id": "component.media-image",
+  "kind": "component",
+  "category": "media",
+  "purpose": "An <img> with the project's two real image conventions: a Webflow srcset pair, and a theme-paired twin swapped at runtime.",
+  "props": {
+    "assetRef": "a local absolute path under /assets/ - never a remote URL",
+    "themePairRef": "optional - the twin shown in the other palette",
+    "alt": "required; the source ships descriptive alt on every content image and alt=\"\" on the four decorative preloader images",
+    "loading": "lazy on every image in the project"
+  },
+  "conventions": {
+    "srcset": "only the four preloader images carry one: a -p-500.avif 500w variant plus the 796w original, with sizes=\"(max-width: 796px) 100vw, 796px\".",
+    "themePair": "a pair of <img> siblings carrying .theme-dark and .theme-light. The .theme-dark member ships style={{display:\"flex\"}} and .theme-light ships display:\"none\", and public/motion/m11.js swaps them. INVERTED: the visible-by-default member is the one classed .theme-dark and named -dark.avif, even though the page renders LIGHT. Four real pairs: two in .ai__grid and two on the 404.",
+    "crossFadeTwin": "the five .ai__grid-small images each have an -upd twin carrying .is-img-anima-1..5, which public/motion/m28.js cross-fades on a 0.8-1.5s repeating loop. Four ship filter:blur(0px) inline and the fifth (is-img-anima-5) ships filter:blur(6px)."
+  },
+  "tokens": [
+    "radius.panel",
+    "radius.card",
+    "elevation.blur-image-anima",
+    "motion.image-anima.min",
+    "motion.image-anima.max"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "the .ai section shows the two-up .ai__grid",
+    "max-991px": "no documented change",
+    "max-767px": "the .ai__grid is replaced by the six-tile .ai__grid-alt mobile collage - a different element set, not a reflow of the same one"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-img-srcset",
+      "source": "src/components/Preloader.jsx:14-14",
+      "quote": "srcSet=\"/assets/69416332c761b96e289cac9a_image-pre-04-p-500.avif 500w"
+    },
+    {
+      "id": "cit-comp-img-themepair",
+      "source": "src/components/AiSection.jsx:21-22",
+      "quote": "ai__grid-asset theme-dark"
+    },
+    {
+      "id": "cit-comp-img-404pair",
+      "source": "src/pages/NotFoundContent.jsx:13-14",
+      "quote": "hero__404__loop-img theme-dark"
+    },
+    {
+      "id": "cit-comp-img-anima",
+      "source": "src/components/AiSection.jsx:67-68",
+      "quote": "is-img-anima-5"
+    },
+    {
+      "id": "cit-comp-img-alt",
+      "source": "src/components/Hero.jsx:59-59",
+      "quote": "alt=\"Woman with dark hair wearing a soft blue scarf"
+    }
+  ],
+  "allowedAssetRoles": [
+    "hero-carousel-photo",
+    "preloader-photo",
+    "product-shot-photo",
+    "step-artwork",
+    "not-found-artwork"
+  ],
+  "allowedAssetRolesNote": "Machine-checkable list of the assetRole ids this contract may carry, replacing the prose it previously held ('one of hero-carousel-photo, preloader-photo, product-shot-photo, step-artwork, not-found-artwork'). extraction/verify_all.py check [j] resolves every string under an assetRole key against the closed registry, so a prose sentence there would be - and was - reported as an unlisted role."
+}

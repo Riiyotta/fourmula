@@ -1,0 +1,1271 @@
+{
+  "$description": "What is referenceable. The category keys under `categories` are the EXACT key names tokens/llm/token-policy.json's rawValueRestrictions uses, so a drift check can resolve one against the other (MASTER-GUIDE 3.21). status \"defined-unused-in-markup\" means the value really exists in the stylesheet but no element in src/ carries it.",
+  "catalogVersion": "1.0.0",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "fluidRootWarning": "Every dimension token in this catalog is a rem on a FLUID root font-size. Read tokens/00-foundation/typography.json ROOT_FONT_SIZE_IS_FLUID before converting any of them to px: the measured real root is 13.3084px at a 1440px viewport and 16.1237px at 390px.",
+  "themeNote": "Two themes exist and the class names are INVERTED: .body carries the DARK palette, .body.dark carries the LIGHT palette, and the app ships <body class=\"body dark\">, so the DEFAULT rendered theme is LIGHT. See tokens/themes/light.json.",
+  "counts": {
+    "color": 43,
+    "typography": 19,
+    "spacing": 47,
+    "radius": 17,
+    "breakpoint": 7,
+    "elevation": 12,
+    "iconSize": 9,
+    "motion": 19,
+    "semanticColor": 26,
+    "semanticTypography": 19,
+    "semanticShapeSpace": 16,
+    "component": 26,
+    "layout": 10
+  },
+  "referenceableByGenerators": {
+    "color": "via semantic roles only (text.*, surface.*, border.*, accent.*, vendor.*)",
+    "others": "see tokens/llm/token-policy.json"
+  },
+  "categories": {
+    "color": {
+      "tier": "foundation",
+      "count": 43,
+      "sourceFile": "tokens/00-foundation/color.json",
+      "tokens": [
+        {
+          "id": "color.accent-hover",
+          "status": "used"
+        },
+        {
+          "id": "color.dots-pattern-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.dots-pattern-light",
+          "status": "used"
+        },
+        {
+          "id": "color.flash-amber",
+          "status": "used"
+        },
+        {
+          "id": "color.flash-orange",
+          "status": "used"
+        },
+        {
+          "id": "color.flash-white",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-100-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-100-light",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-20-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-20-light",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-30-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-30-light",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-50-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-50-light",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-64-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.fonts-64-light",
+          "status": "used"
+        },
+        {
+          "id": "color.grad-fourth-start",
+          "status": "used"
+        },
+        {
+          "id": "color.grad-second-start",
+          "status": "used"
+        },
+        {
+          "id": "color.grad-third-mid",
+          "status": "used"
+        },
+        {
+          "id": "color.grad-third-start",
+          "status": "used"
+        },
+        {
+          "id": "color.ink-black",
+          "status": "used"
+        },
+        {
+          "id": "color.lines-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.lines-light",
+          "status": "used"
+        },
+        {
+          "id": "color.mainbg-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.mainbg-gradient-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.mainbg-gradient-light",
+          "status": "used"
+        },
+        {
+          "id": "color.mainbg-light",
+          "status": "used"
+        },
+        {
+          "id": "color.menu-colors",
+          "status": "used"
+        },
+        {
+          "id": "color.menu-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.menu-light",
+          "status": "used"
+        },
+        {
+          "id": "color.paper-white",
+          "status": "used"
+        },
+        {
+          "id": "color.secondbg-dark",
+          "status": "used"
+        },
+        {
+          "id": "color.secondbg-light",
+          "status": "used"
+        },
+        {
+          "id": "color.step-scrim",
+          "status": "used"
+        },
+        {
+          "id": "color.step-scrim-transparent",
+          "status": "used"
+        },
+        {
+          "id": "color.table-cell-border",
+          "status": "used"
+        },
+        {
+          "id": "color.table-head-border",
+          "status": "used"
+        },
+        {
+          "id": "color.table-head-fill",
+          "status": "used"
+        },
+        {
+          "id": "color.theme-toggle-hover-border",
+          "status": "used"
+        },
+        {
+          "id": "color.vendor-finsweet-accent",
+          "status": "used"
+        },
+        {
+          "id": "color.vendor-finsweet-accent-soft",
+          "status": "used"
+        },
+        {
+          "id": "color.vendor-finsweet-hairline",
+          "status": "used"
+        },
+        {
+          "id": "color.vendor-finsweet-surface",
+          "status": "used"
+        }
+      ]
+    },
+    "typography": {
+      "tier": "foundation",
+      "count": 19,
+      "sourceFile": "tokens/00-foundation/typography.json",
+      "tokens": [
+        {
+          "id": "font.family.sans",
+          "status": "used"
+        },
+        {
+          "id": "font.weight.medium",
+          "status": "used"
+        },
+        {
+          "id": "font.weight.regular",
+          "status": "used"
+        },
+        {
+          "id": "type.body-1",
+          "status": "used"
+        },
+        {
+          "id": "type.body-2",
+          "status": "used"
+        },
+        {
+          "id": "type.body-3",
+          "status": "used"
+        },
+        {
+          "id": "type.btn",
+          "status": "used"
+        },
+        {
+          "id": "type.h1",
+          "status": "used"
+        },
+        {
+          "id": "type.h2",
+          "status": "used"
+        },
+        {
+          "id": "type.h2-5",
+          "status": "used"
+        },
+        {
+          "id": "type.h3",
+          "status": "used"
+        },
+        {
+          "id": "type.h4",
+          "status": "used"
+        },
+        {
+          "id": "type.small-text-1",
+          "status": "used"
+        },
+        {
+          "id": "type.small-text-2",
+          "status": "used"
+        },
+        {
+          "id": "type.tag",
+          "status": "used"
+        },
+        {
+          "id": "type.tag-small",
+          "status": "used"
+        },
+        {
+          "id": "type.title-1",
+          "status": "used"
+        },
+        {
+          "id": "type.title-2",
+          "status": "used"
+        },
+        {
+          "id": "type.title-3",
+          "status": "used"
+        }
+      ]
+    },
+    "spacing": {
+      "tier": "foundation",
+      "count": 47,
+      "sourceFile": "tokens/00-foundation/spacing.json",
+      "tokens": [
+        {
+          "id": "spacing.0p125",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p15",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p2",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p25",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p3",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p35",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p4",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p55",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p65",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p75",
+          "status": "used"
+        },
+        {
+          "id": "spacing.0p875",
+          "status": "used"
+        },
+        {
+          "id": "spacing.1",
+          "status": "used"
+        },
+        {
+          "id": "spacing.10",
+          "status": "used"
+        },
+        {
+          "id": "spacing.12",
+          "status": "used"
+        },
+        {
+          "id": "spacing.1p1",
+          "status": "used"
+        },
+        {
+          "id": "spacing.1p2",
+          "status": "used"
+        },
+        {
+          "id": "spacing.1p25",
+          "status": "used"
+        },
+        {
+          "id": "spacing.1p35",
+          "status": "used"
+        },
+        {
+          "id": "spacing.1p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.1p75",
+          "status": "used"
+        },
+        {
+          "id": "spacing.2",
+          "status": "used"
+        },
+        {
+          "id": "spacing.2p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.3",
+          "status": "used"
+        },
+        {
+          "id": "spacing.3p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.4",
+          "status": "used"
+        },
+        {
+          "id": "spacing.4p8",
+          "status": "used"
+        },
+        {
+          "id": "spacing.5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.5p25",
+          "status": "used"
+        },
+        {
+          "id": "spacing.5p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.6",
+          "status": "used"
+        },
+        {
+          "id": "spacing.6p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.7p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.8",
+          "status": "used"
+        },
+        {
+          "id": "spacing.9",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-0p25",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-0p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-1",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-10",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-12",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-15",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-1p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-2",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-2p25",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-6p5",
+          "status": "used"
+        },
+        {
+          "id": "spacing.neg-8",
+          "status": "used"
+        }
+      ]
+    },
+    "radius": {
+      "tier": "foundation",
+      "count": 17,
+      "sourceFile": "tokens/00-foundation/radius.json",
+      "tokens": [
+        {
+          "id": "radius.circle",
+          "status": "used"
+        },
+        {
+          "id": "radius.hairline",
+          "status": "used"
+        },
+        {
+          "id": "radius.left-0p5rem",
+          "status": "used"
+        },
+        {
+          "id": "radius.left-2rem",
+          "status": "used"
+        },
+        {
+          "id": "radius.lg",
+          "status": "used"
+        },
+        {
+          "id": "radius.md",
+          "status": "used"
+        },
+        {
+          "id": "radius.odd",
+          "status": "used"
+        },
+        {
+          "id": "radius.pill",
+          "status": "used"
+        },
+        {
+          "id": "radius.s",
+          "status": "used"
+        },
+        {
+          "id": "radius.s-alt",
+          "status": "used"
+        },
+        {
+          "id": "radius.sm",
+          "status": "used"
+        },
+        {
+          "id": "radius.sm-alt",
+          "status": "used"
+        },
+        {
+          "id": "radius.tiny",
+          "status": "used"
+        },
+        {
+          "id": "radius.xs",
+          "status": "used"
+        },
+        {
+          "id": "radius.xs-alt",
+          "status": "used"
+        },
+        {
+          "id": "radius.xxs",
+          "status": "used"
+        },
+        {
+          "id": "radius.xxs-alt",
+          "status": "used"
+        }
+      ]
+    },
+    "breakpoint": {
+      "tier": "foundation",
+      "count": 7,
+      "sourceFile": "tokens/00-foundation/breakpoint.json",
+      "tokens": [
+        {
+          "id": "breakpoint.desktop-min",
+          "status": "used"
+        },
+        {
+          "id": "breakpoint.mobile",
+          "status": "used"
+        },
+        {
+          "id": "breakpoint.mobile-small",
+          "status": "used"
+        },
+        {
+          "id": "breakpoint.root-1728",
+          "status": "used"
+        },
+        {
+          "id": "breakpoint.root-2560",
+          "status": "used"
+        },
+        {
+          "id": "breakpoint.tablet",
+          "status": "used"
+        },
+        {
+          "id": "breakpoint.tablet-min",
+          "status": "used"
+        }
+      ]
+    },
+    "elevation": {
+      "tier": "foundation",
+      "count": 12,
+      "sourceFile": "tokens/00-foundation/elevation.json",
+      "tokens": [
+        {
+          "id": "elevation.blur-image-anima",
+          "status": "used"
+        },
+        {
+          "id": "elevation.blur-preloader",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-awwwards-badge",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-base",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-close-button",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-cookie-banner",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-dropzone",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-header",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-menu",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-overlay",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-preloader",
+          "status": "used"
+        },
+        {
+          "id": "elevation.z-raised",
+          "status": "used"
+        }
+      ]
+    },
+    "iconSize": {
+      "tier": "foundation",
+      "count": 9,
+      "sourceFile": "tokens/00-foundation/icon-size.json",
+      "tokens": [
+        {
+          "id": "icon-size.ai-btn-glyph",
+          "status": "used"
+        },
+        {
+          "id": "icon-size.awwwards-badge",
+          "status": "used"
+        },
+        {
+          "id": "icon-size.header-logo",
+          "status": "used"
+        },
+        {
+          "id": "icon-size.preloader-loader",
+          "status": "used"
+        },
+        {
+          "id": "icon-size.preloader-logo",
+          "status": "used"
+        },
+        {
+          "id": "icon-size.trusted-logo",
+          "status": "used"
+        },
+        {
+          "id": "icon-size.ui-glyph-16",
+          "status": "used"
+        },
+        {
+          "id": "icon-size.ui-glyph-20",
+          "status": "used"
+        },
+        {
+          "id": "icon-size.ui-glyph-24",
+          "status": "used"
+        }
+      ]
+    },
+    "motion": {
+      "tier": "foundation",
+      "count": 19,
+      "sourceFile": "tokens/00-foundation/motion.json",
+      "tokens": [
+        {
+          "id": "motion.burger.rotate",
+          "status": "used"
+        },
+        {
+          "id": "motion.carousel.rotation",
+          "status": "used"
+        },
+        {
+          "id": "motion.chrome.reveal",
+          "status": "used"
+        },
+        {
+          "id": "motion.cookies.reveal",
+          "status": "used"
+        },
+        {
+          "id": "motion.dots.proximity",
+          "status": "used"
+        },
+        {
+          "id": "motion.easing.webflow-quad",
+          "status": "used"
+        },
+        {
+          "id": "motion.flash.reveal-in",
+          "status": "used"
+        },
+        {
+          "id": "motion.flash.settle",
+          "status": "used"
+        },
+        {
+          "id": "motion.flash.step",
+          "status": "used"
+        },
+        {
+          "id": "motion.hover-stagger.step",
+          "status": "used"
+        },
+        {
+          "id": "motion.image-anima.max",
+          "status": "used"
+        },
+        {
+          "id": "motion.image-anima.min",
+          "status": "used"
+        },
+        {
+          "id": "motion.marquee.duration",
+          "status": "used"
+        },
+        {
+          "id": "motion.menu.open",
+          "status": "used"
+        },
+        {
+          "id": "motion.preloader.counter",
+          "status": "used"
+        },
+        {
+          "id": "motion.preloader.spin",
+          "status": "used"
+        },
+        {
+          "id": "motion.transition.fast",
+          "status": "used"
+        },
+        {
+          "id": "motion.transition.instant",
+          "status": "used"
+        },
+        {
+          "id": "motion.transition.poster-fade",
+          "status": "used"
+        }
+      ]
+    },
+    "semanticColor": {
+      "tier": "semantic",
+      "count": 26,
+      "sourceFile": "tokens/10-semantic/color.json",
+      "tokens": [
+        {
+          "id": "accent.flash-end",
+          "status": "used",
+          "resolvesTo": "color.flash-white"
+        },
+        {
+          "id": "accent.flash-mid",
+          "status": "used",
+          "resolvesTo": "color.flash-amber"
+        },
+        {
+          "id": "accent.flash-start",
+          "status": "used",
+          "resolvesTo": "color.flash-orange"
+        },
+        {
+          "id": "accent.hover",
+          "status": "used",
+          "resolvesTo": "color.accent-hover"
+        },
+        {
+          "id": "accent.menu",
+          "status": "used",
+          "resolvesTo": "color.menu-colors"
+        },
+        {
+          "id": "border.hairline",
+          "status": "used"
+        },
+        {
+          "id": "border.table-cell",
+          "status": "used",
+          "resolvesTo": "color.table-cell-border"
+        },
+        {
+          "id": "border.table-head",
+          "status": "used",
+          "resolvesTo": "color.table-head-border"
+        },
+        {
+          "id": "border.toggle-hover",
+          "status": "used",
+          "resolvesTo": "color.theme-toggle-hover-border"
+        },
+        {
+          "id": "surface.dots",
+          "status": "used"
+        },
+        {
+          "id": "surface.invert-pill",
+          "status": "used",
+          "resolvesTo": "color.paper-white"
+        },
+        {
+          "id": "surface.menu",
+          "status": "used"
+        },
+        {
+          "id": "surface.page",
+          "status": "used"
+        },
+        {
+          "id": "surface.page-fade",
+          "status": "used"
+        },
+        {
+          "id": "surface.raised",
+          "status": "used"
+        },
+        {
+          "id": "surface.table-head",
+          "status": "used",
+          "resolvesTo": "color.table-head-fill"
+        },
+        {
+          "id": "text.faint",
+          "status": "used"
+        },
+        {
+          "id": "text.ghost",
+          "status": "used"
+        },
+        {
+          "id": "text.muted",
+          "status": "used"
+        },
+        {
+          "id": "text.on-invert-pill",
+          "status": "used",
+          "resolvesTo": "color.ink-black"
+        },
+        {
+          "id": "text.primary",
+          "status": "used"
+        },
+        {
+          "id": "text.secondary",
+          "status": "used"
+        },
+        {
+          "id": "vendor.cookie-accent",
+          "status": "used",
+          "resolvesTo": "color.vendor-finsweet-accent"
+        },
+        {
+          "id": "vendor.cookie-accent-soft",
+          "status": "used",
+          "resolvesTo": "color.vendor-finsweet-accent-soft"
+        },
+        {
+          "id": "vendor.cookie-hairline",
+          "status": "used",
+          "resolvesTo": "color.vendor-finsweet-hairline"
+        },
+        {
+          "id": "vendor.cookie-surface",
+          "status": "used",
+          "resolvesTo": "color.vendor-finsweet-surface"
+        }
+      ]
+    },
+    "semanticTypography": {
+      "tier": "semantic",
+      "count": 19,
+      "sourceFile": "tokens/10-semantic/typography.json",
+      "tokens": [
+        {
+          "id": "body.default",
+          "status": "used",
+          "resolvesTo": "type.body-2"
+        },
+        {
+          "id": "body.large",
+          "status": "used",
+          "resolvesTo": "type.body-3"
+        },
+        {
+          "id": "body.lead",
+          "status": "used",
+          "resolvesTo": "type.body-1"
+        },
+        {
+          "id": "caption.small",
+          "status": "used",
+          "resolvesTo": "type.small-text-1"
+        },
+        {
+          "id": "caption.xsmall",
+          "status": "used",
+          "resolvesTo": "type.small-text-2"
+        },
+        {
+          "id": "font.body",
+          "status": "used",
+          "resolvesTo": "font.family.sans"
+        },
+        {
+          "id": "heading.display",
+          "status": "used",
+          "resolvesTo": "type.h2"
+        },
+        {
+          "id": "heading.minor",
+          "status": "defined-unused-in-markup",
+          "resolvesTo": "type.h4"
+        },
+        {
+          "id": "heading.page",
+          "status": "used",
+          "resolvesTo": "type.h1"
+        },
+        {
+          "id": "heading.step",
+          "status": "used",
+          "resolvesTo": "type.h2-5"
+        },
+        {
+          "id": "heading.sub",
+          "status": "used",
+          "resolvesTo": "type.h3"
+        },
+        {
+          "id": "label.button",
+          "status": "used",
+          "resolvesTo": "type.btn"
+        },
+        {
+          "id": "label.emphasis",
+          "status": "used",
+          "resolvesTo": "type.title-3"
+        },
+        {
+          "id": "label.primary",
+          "status": "used",
+          "resolvesTo": "type.title-1"
+        },
+        {
+          "id": "label.secondary",
+          "status": "used",
+          "resolvesTo": "type.title-2"
+        },
+        {
+          "id": "label.tag",
+          "status": "used",
+          "resolvesTo": "type.tag"
+        },
+        {
+          "id": "label.tag-small",
+          "status": "defined-unused-in-markup",
+          "resolvesTo": "type.tag-small"
+        },
+        {
+          "id": "weight.medium",
+          "status": "used",
+          "resolvesTo": "font.weight.medium"
+        },
+        {
+          "id": "weight.regular",
+          "status": "used",
+          "resolvesTo": "font.weight.regular"
+        }
+      ]
+    },
+    "semanticShapeSpace": {
+      "tier": "semantic",
+      "count": 16,
+      "sourceFile": "tokens/10-semantic/shape-space.json",
+      "tokens": [
+        {
+          "id": "radius.block",
+          "status": "used",
+          "resolvesTo": "radius.s"
+        },
+        {
+          "id": "radius.card",
+          "status": "used",
+          "resolvesTo": "radius.md"
+        },
+        {
+          "id": "radius.control",
+          "status": "used",
+          "resolvesTo": "radius.pill"
+        },
+        {
+          "id": "radius.indicator",
+          "status": "used",
+          "resolvesTo": "radius.circle"
+        },
+        {
+          "id": "radius.inset",
+          "status": "used",
+          "resolvesTo": "radius.xs"
+        },
+        {
+          "id": "radius.panel",
+          "status": "used",
+          "resolvesTo": "radius.sm"
+        },
+        {
+          "id": "space.block",
+          "status": "used",
+          "resolvesTo": "spacing.3"
+        },
+        {
+          "id": "space.gutter",
+          "status": "used",
+          "resolvesTo": "spacing.2"
+        },
+        {
+          "id": "space.hairline",
+          "status": "used",
+          "resolvesTo": "spacing.0p25"
+        },
+        {
+          "id": "space.page-break",
+          "status": "used",
+          "resolvesTo": "spacing.10"
+        },
+        {
+          "id": "space.page-top",
+          "status": "used",
+          "resolvesTo": "spacing.8"
+        },
+        {
+          "id": "space.pull-up",
+          "status": "used",
+          "resolvesTo": "spacing.neg-1p5"
+        },
+        {
+          "id": "space.section",
+          "status": "used",
+          "resolvesTo": "spacing.5"
+        },
+        {
+          "id": "space.snug",
+          "status": "used",
+          "resolvesTo": "spacing.0p75"
+        },
+        {
+          "id": "space.stack",
+          "status": "used",
+          "resolvesTo": "spacing.1"
+        },
+        {
+          "id": "space.tight",
+          "status": "used",
+          "resolvesTo": "spacing.0p5"
+        }
+      ]
+    },
+    "component": {
+      "tier": "component",
+      "count": 26,
+      "sourceFile": "tokens/20-component/component.json",
+      "tokens": [
+        {
+          "id": "component.ai-pill.fill",
+          "status": "used",
+          "resolvesTo": "surface.invert-pill"
+        },
+        {
+          "id": "component.ai-pill.fill-hover",
+          "status": "used",
+          "resolvesTo": "accent.hover"
+        },
+        {
+          "id": "component.ai-pill.text",
+          "status": "used",
+          "resolvesTo": "text.on-invert-pill"
+        },
+        {
+          "id": "component.button.outline.border",
+          "status": "used",
+          "resolvesTo": "border.hairline"
+        },
+        {
+          "id": "component.button.outline.fill-cookies",
+          "status": "used",
+          "resolvesTo": "surface.dots"
+        },
+        {
+          "id": "component.button.outline.text",
+          "status": "used",
+          "resolvesTo": "text.primary"
+        },
+        {
+          "id": "component.button.primary.fill",
+          "status": "used",
+          "resolvesTo": "text.primary"
+        },
+        {
+          "id": "component.button.primary.fill-hover",
+          "status": "used",
+          "resolvesTo": "accent.hover"
+        },
+        {
+          "id": "component.button.primary.radius",
+          "status": "used",
+          "resolvesTo": "radius.control"
+        },
+        {
+          "id": "component.button.primary.text",
+          "status": "used",
+          "resolvesTo": "surface.page"
+        },
+        {
+          "id": "component.cookie-modal.accent",
+          "status": "used",
+          "resolvesTo": "vendor.cookie-accent"
+        },
+        {
+          "id": "component.cookie-modal.accent-soft",
+          "status": "used",
+          "resolvesTo": "vendor.cookie-accent-soft"
+        },
+        {
+          "id": "component.cookie-modal.hairline",
+          "status": "used",
+          "resolvesTo": "vendor.cookie-hairline"
+        },
+        {
+          "id": "component.cookie-modal.tray-fill",
+          "status": "used",
+          "resolvesTo": "vendor.cookie-surface"
+        },
+        {
+          "id": "component.dots-field.dot-fill",
+          "status": "used",
+          "resolvesTo": "text.primary"
+        },
+        {
+          "id": "component.dots-field.dot-size",
+          "status": "used",
+          "resolvesTo": "space.stack"
+        },
+        {
+          "id": "component.flash-word.sequence",
+          "status": "used"
+        },
+        {
+          "id": "component.step-slide.gradient-first",
+          "status": "used"
+        },
+        {
+          "id": "component.step-slide.gradient-fourth",
+          "status": "used"
+        },
+        {
+          "id": "component.step-slide.gradient-second",
+          "status": "used"
+        },
+        {
+          "id": "component.step-slide.gradient-third",
+          "status": "used"
+        },
+        {
+          "id": "component.step-slide.scrim",
+          "status": "used"
+        },
+        {
+          "id": "component.table.cell-border",
+          "status": "used",
+          "resolvesTo": "border.table-cell"
+        },
+        {
+          "id": "component.table.head-border",
+          "status": "used",
+          "resolvesTo": "border.table-head"
+        },
+        {
+          "id": "component.table.head-fill",
+          "status": "used",
+          "resolvesTo": "surface.table-head"
+        },
+        {
+          "id": "component.theme-toggle.border-hover",
+          "status": "used",
+          "resolvesTo": "border.toggle-hover"
+        }
+      ]
+    },
+    "layout": {
+      "tier": "layout",
+      "count": 10,
+      "sourceFile": "tokens/30-layout/layout.json",
+      "tokens": [
+        {
+          "id": "layout.dots-field.grid",
+          "status": "used"
+        },
+        {
+          "id": "layout.dots-field.width",
+          "status": "used"
+        },
+        {
+          "id": "layout.hero.slider-axis",
+          "status": "used"
+        },
+        {
+          "id": "layout.how-column.loop",
+          "status": "used"
+        },
+        {
+          "id": "layout.menu.panel-closed",
+          "status": "used"
+        },
+        {
+          "id": "layout.page.shell",
+          "status": "used"
+        },
+        {
+          "id": "layout.step-slide.viewport",
+          "status": "used"
+        },
+        {
+          "id": "layout.tech.padding-top",
+          "status": "used",
+          "resolvesTo": "space.page-top"
+        },
+        {
+          "id": "layout.tech.padding-x",
+          "status": "used",
+          "resolvesTo": "space.gutter"
+        },
+        {
+          "id": "layout.trusted-marquee.row",
+          "status": "used"
+        }
+      ]
+    }
+  }
+}

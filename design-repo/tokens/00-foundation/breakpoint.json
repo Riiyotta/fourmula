@@ -1,0 +1,102 @@
+{
+  "$description": "Webflow's standard breakpoint set plus two root-font-size-only stops. Counts are occurrences of each @media width condition across ALL THREE CSS sources: src/styles/fourmula-base.css, src/styles/fourmula-head.css and the inline <style> block inside src/components/Footer.jsx.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "tokens": {
+    "breakpoint.tablet": {
+      "$type": "dimension",
+      "$value": "991px",
+      "query": "max-width: 991px",
+      "usageTotal": 5,
+      "role": "Primary layout switch: the type scale drops a tier, the hero slider marquee flips from vertical to horizontal, the menu panel resizes.",
+      "evidence": [
+        "cit-bp-991"
+      ]
+    },
+    "breakpoint.mobile": {
+      "$type": "dimension",
+      "$value": "767px",
+      "query": "max-width: 767px",
+      "usageTotal": 5,
+      "role": "Second type tier, dots-field dot size drops 1rem -> 0.5rem.",
+      "evidence": [
+        "cit-bp-767"
+      ]
+    },
+    "breakpoint.mobile-small": {
+      "$type": "dimension",
+      "$value": "479px",
+      "query": "max-width: 479px",
+      "usageTotal": 4,
+      "role": "Smallest Webflow tier. No type-scale change; layout-only adjustments.",
+      "evidence": [
+        "cit-bp-479"
+      ]
+    },
+    "breakpoint.desktop-min": {
+      "$type": "dimension",
+      "$value": "992px",
+      "query": "min-width: 992px",
+      "usageTotal": 1,
+      "role": "Sets the hero slider marquee axis to vertical (--tx/--ty custom properties).",
+      "evidence": [
+        "cit-bp-min992"
+      ]
+    },
+    "breakpoint.tablet-min": {
+      "$type": "dimension",
+      "$value": "768px",
+      "query": "min-width: 768px",
+      "usageTotal": 2,
+      "role": "Two uses: Webflow lightbox CSS in fourmula-base.css, and the dots-field 1rem dot size in Footer.jsx's inline <style>.",
+      "evidence": [
+        "cit-bp-min768-lightbox",
+        "cit-bp-min768-dots"
+      ]
+    },
+    "breakpoint.root-2560": {
+      "$type": "dimension",
+      "$value": "2560px",
+      "query": "max-width:2560px",
+      "usageTotal": 1,
+      "role": "Root font-size stop ONLY. No layout rule uses it.",
+      "evidence": [
+        "cit-type-fluid-media"
+      ]
+    },
+    "breakpoint.root-1728": {
+      "$type": "dimension",
+      "$value": "1728px",
+      "query": "max-width:1728px",
+      "usageTotal": 1,
+      "role": "Root font-size stop ONLY. No layout rule uses it.",
+      "evidence": [
+        "cit-type-fluid-media"
+      ]
+    }
+  },
+  "jsBreakpoints": {
+    "$description": "public/motion/m07.js rebuilds the footer dots field at its OWN breakpoints, which are min-width thresholds in JS, not CSS queries.",
+    "desktop": {
+      "minWidth": 992,
+      "cols": 52,
+      "rows": 14,
+      "dots": 728
+    },
+    "tablet": {
+      "minWidth": 768,
+      "cols": 24,
+      "rows": 14,
+      "dots": 336
+    },
+    "mobile": {
+      "maxWidth": 767,
+      "cols": 22,
+      "rows": 14,
+      "dots": 308
+    },
+    "evidence": [
+      "cit-dots-m07"
+    ]
+  },
+  "correctionToGroundwork": "An earlier count gave 991px=5, 767px=4, 479px=4, min-768px=1. Re-counting across all three CSS sources gives 767px=5 and min-width:768px=2: the inline <style> block inside src/components/Footer.jsx adds one of each for the dots field. 991px=5, 479px=4 and min-width:992px=1 are confirmed unchanged."
+}

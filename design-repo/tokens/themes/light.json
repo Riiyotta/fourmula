@@ -1,0 +1,268 @@
+{
+  "$description": "The light palette, resolving every semantic role to exactly one foundation token. THIS IS THE DEFAULT RENDERED THEME, and it is selected by the CSS class `.body.dark`. Read inversionWarning before using this file.",
+  "themeId": "light",
+  "isDefault": true,
+  "selectedByCssClass": ".body.dark",
+  "canvas": "white",
+  "themes": {
+    "light": "tokens/themes/light.json",
+    "dark": "tokens/themes/dark.json"
+  },
+  "inversionWarning": "LOAD-BEARING AND COUNTER-INTUITIVE. The CSS class names for the two palettes are INVERTED:\n  .body            carries the DARK values  (src/styles/fourmula-base.css:2248-2265)\n  .body.dark       carries the LIGHT values (src/styles/fourmula-base.css:2273-2286)\nand the app ships <body class=\"body dark\"> (index.html:16). So the class literally named \"dark\" selects the LIGHT palette, and the DEFAULT RENDERED THEME IS LIGHT (white canvas). public/motion/m10.js reinforces this: it toggles the class 'dark', defaults to true, stores localStorage['isDarkMode'] and sets data-theme-state=\"dark\" on the toggle - all while the page renders light. A generator that treats '.body.dark' as the dark theme inverts the entire palette.",
+  "imageInversion": "The inversion repeats at TWO MORE layers, and both matter. (1) Image classes: .theme-dark images ship visible (display:flex) and .theme-light images ship hidden, while the page renders LIGHT. (2) Asset filenames: the file shown in the default light rendering is the one whose name ends -dark.avif. public/motion/m11.js swaps the pair.",
+  "observedAsymmetry": "public/motion/m11.js:20 initialises with document.body.classList.contains(\"light\"), but public/motion/m10.js only ever toggles the class 'dark' and never 'light', so that expression is always false. Its theme:changed listener (m11.js:22-24) uses the real boolean instead. The effect is a first-paint vs post-toggle asymmetry in which image of a theme pair is shown. The motion scripts are byte-identical copies of the original site's own scripts and are READ-ONLY, so this is recorded, not fixed.",
+  "evidence": [
+    "cit-theme-body-dark-palette",
+    "cit-theme-body-dark-light-palette",
+    "cit-theme-index-html",
+    "cit-theme-m10-toggle",
+    "cit-theme-m11-images",
+    "cit-theme-asset-suffix"
+  ],
+  "resolutions": {
+    "text.primary": {
+      "resolvesTo": "color.fonts-100-light",
+      "value": "#020108"
+    },
+    "text.secondary": {
+      "resolvesTo": "color.fonts-64-light",
+      "value": "#020108a3"
+    },
+    "text.muted": {
+      "resolvesTo": "color.fonts-50-light",
+      "value": "#02010880"
+    },
+    "text.faint": {
+      "resolvesTo": "color.fonts-30-light",
+      "value": "#0201084d"
+    },
+    "text.ghost": {
+      "resolvesTo": "color.fonts-20-light",
+      "value": "#02010833"
+    },
+    "surface.page": {
+      "resolvesTo": "color.mainbg-light",
+      "value": "white"
+    },
+    "surface.page-fade": {
+      "resolvesTo": "color.mainbg-gradient-light",
+      "value": "#fff0"
+    },
+    "surface.raised": {
+      "resolvesTo": "color.secondbg-light",
+      "value": "#f7f7f7"
+    },
+    "surface.menu": {
+      "resolvesTo": "color.menu-light",
+      "value": "#020108"
+    },
+    "surface.dots": {
+      "resolvesTo": "color.dots-pattern-light",
+      "value": "#d9d9d9"
+    },
+    "border.hairline": {
+      "resolvesTo": "color.lines-light",
+      "value": "#d7d7d6"
+    },
+    "accent.menu": {
+      "resolvesTo": "color.menu-colors",
+      "value": "#fff3"
+    },
+    "accent.hover": {
+      "resolvesTo": "color.accent-hover",
+      "value": "#ff6b02"
+    },
+    "accent.flash-start": {
+      "resolvesTo": "color.flash-orange",
+      "value": "#F94A00"
+    },
+    "accent.flash-mid": {
+      "resolvesTo": "color.flash-amber",
+      "value": "#FD7B03"
+    },
+    "accent.flash-end": {
+      "resolvesTo": "color.flash-white",
+      "value": "#FFFFFF"
+    },
+    "surface.invert-pill": {
+      "resolvesTo": "color.paper-white",
+      "value": "#fff"
+    },
+    "text.on-invert-pill": {
+      "resolvesTo": "color.ink-black",
+      "value": "#000"
+    },
+    "border.toggle-hover": {
+      "resolvesTo": "color.theme-toggle-hover-border",
+      "value": "#ffffffa6"
+    },
+    "border.table-cell": {
+      "resolvesTo": "color.table-cell-border",
+      "value": "#00000026"
+    },
+    "surface.table-head": {
+      "resolvesTo": "color.table-head-fill",
+      "value": "#0000000a"
+    },
+    "border.table-head": {
+      "resolvesTo": "color.table-head-border",
+      "value": "#00000040"
+    },
+    "vendor.cookie-accent": {
+      "resolvesTo": "color.vendor-finsweet-accent",
+      "value": "#146ef5"
+    },
+    "vendor.cookie-accent-soft": {
+      "resolvesTo": "color.vendor-finsweet-accent-soft",
+      "value": "#468df7"
+    },
+    "vendor.cookie-surface": {
+      "resolvesTo": "color.vendor-finsweet-surface",
+      "value": "#f8f8f8"
+    },
+    "vendor.cookie-hairline": {
+      "resolvesTo": "color.vendor-finsweet-hairline",
+      "value": "#0000001a"
+    },
+    "heading.display": {
+      "resolvesTo": "type.h2",
+      "value": "7.5rem"
+    },
+    "heading.page": {
+      "resolvesTo": "type.h1",
+      "value": "5.5rem"
+    },
+    "heading.step": {
+      "resolvesTo": "type.h2-5",
+      "value": "4rem"
+    },
+    "heading.sub": {
+      "resolvesTo": "type.h3",
+      "value": "3.25rem"
+    },
+    "heading.minor": {
+      "resolvesTo": "type.h4",
+      "value": "2.25rem"
+    },
+    "body.lead": {
+      "resolvesTo": "type.body-1",
+      "value": "1.125rem"
+    },
+    "body.default": {
+      "resolvesTo": "type.body-2",
+      "value": "1rem"
+    },
+    "body.large": {
+      "resolvesTo": "type.body-3",
+      "value": "1.25rem"
+    },
+    "label.tag": {
+      "resolvesTo": "type.tag",
+      "value": "1.125rem"
+    },
+    "label.tag-small": {
+      "resolvesTo": "type.tag-small",
+      "value": "1.125rem"
+    },
+    "label.primary": {
+      "resolvesTo": "type.title-1",
+      "value": "1rem"
+    },
+    "label.secondary": {
+      "resolvesTo": "type.title-2",
+      "value": "0.875rem"
+    },
+    "label.button": {
+      "resolvesTo": "type.btn",
+      "value": "1.0625rem"
+    },
+    "caption.small": {
+      "resolvesTo": "type.small-text-1",
+      "value": "0.75rem"
+    },
+    "caption.xsmall": {
+      "resolvesTo": "type.small-text-2",
+      "value": "0.625rem"
+    },
+    "font.body": {
+      "resolvesTo": "font.family.sans",
+      "value": "\"Sf Pro Display\", Arial, sans-serif"
+    },
+    "weight.regular": {
+      "resolvesTo": "font.weight.regular",
+      "value": 400
+    },
+    "weight.medium": {
+      "resolvesTo": "font.weight.medium",
+      "value": 500
+    },
+    "label.emphasis": {
+      "resolvesTo": "type.title-3",
+      "value": "1.5rem"
+    },
+    "radius.control": {
+      "resolvesTo": "radius.pill",
+      "value": "99rem"
+    },
+    "radius.card": {
+      "resolvesTo": "radius.md",
+      "value": "3rem"
+    },
+    "radius.panel": {
+      "resolvesTo": "radius.sm",
+      "value": "1.5rem"
+    },
+    "radius.inset": {
+      "resolvesTo": "radius.xs",
+      "value": "0.5rem"
+    },
+    "radius.block": {
+      "resolvesTo": "radius.s",
+      "value": "2rem"
+    },
+    "radius.indicator": {
+      "resolvesTo": "radius.circle",
+      "value": "50%"
+    },
+    "space.hairline": {
+      "resolvesTo": "spacing.0p25",
+      "value": "0.25rem"
+    },
+    "space.tight": {
+      "resolvesTo": "spacing.0p5",
+      "value": "0.5rem"
+    },
+    "space.snug": {
+      "resolvesTo": "spacing.0p75",
+      "value": "0.75rem"
+    },
+    "space.stack": {
+      "resolvesTo": "spacing.1",
+      "value": "1rem"
+    },
+    "space.gutter": {
+      "resolvesTo": "spacing.2",
+      "value": "2rem"
+    },
+    "space.block": {
+      "resolvesTo": "spacing.3",
+      "value": "3rem"
+    },
+    "space.section": {
+      "resolvesTo": "spacing.5",
+      "value": "5rem"
+    },
+    "space.page-top": {
+      "resolvesTo": "spacing.8",
+      "value": "8rem"
+    },
+    "space.page-break": {
+      "resolvesTo": "spacing.10",
+      "value": "10rem"
+    },
+    "space.pull-up": {
+      "resolvesTo": "spacing.neg-1p5",
+      "value": "-1.5rem"
+    }
+  }
+}

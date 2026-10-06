@@ -1,0 +1,232 @@
+{
+  "id": "chrome.header",
+  "kind": "section",
+  "category": "chrome",
+  "purpose": "The fixed top bar: brand mark, burger + Menu word, theme toggle, live scroll-progress readout, sign-in glyph and the primary CTA. Rendered unconditionally on EVERY route.",
+  "content": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "logo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assetRole": {
+            "type": "string",
+            "enum": [
+              "brand-wordmark"
+            ]
+          },
+          "accessibleLabel": {
+            "type": "string",
+            "maxWords": 2,
+            "note": "Measured: \"fourmula.ai\" (1 word) in a .u-hidden-copy sibling."
+          },
+          "href": {
+            "type": "string",
+            "format": "route-or-inert-hash"
+          }
+        },
+        "required": [
+          "assetRole",
+          "href"
+        ]
+      },
+      "menuLabel": {
+        "type": "string",
+        "maxWords": 2,
+        "note": "Measured: 1 word, \"Menu\"."
+      },
+      "themeToggle": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ariaPressed": {
+            "type": "boolean"
+          },
+          "dataThemeState": {
+            "type": "string",
+            "enum": [
+              "dark",
+              "light"
+            ]
+          }
+        },
+        "required": [
+          "ariaPressed",
+          "dataThemeState"
+        ],
+        "note": "INVERTED: the real markup ships ariaPressed true and dataThemeState \"dark\" while the page renders LIGHT. Do not normalise."
+      },
+      "progressInitial": {
+        "type": "string",
+        "maxWords": 2,
+        "note": "Measured: \"0%\" (1 token). public/motion/m12.js overwrites it every animation frame."
+      },
+      "signin": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assetRole": {
+            "type": "string",
+            "enum": [
+              "ui-icon-glyph"
+            ]
+          },
+          "accessibleLabel": {
+            "type": "string",
+            "maxWords": 4,
+            "note": "Measured: \"Fourmula app account\" (3 words)."
+          },
+          "href": {
+            "type": "string",
+            "format": "route-or-inert-hash"
+          }
+        },
+        "required": [
+          "assetRole",
+          "href"
+        ]
+      },
+      "cta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "maxWords": 3,
+            "note": "Measured: 2 words, \"Get started\"."
+          },
+          "href": {
+            "type": "string",
+            "format": "route-or-inert-hash"
+          },
+          "hoverStagger": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "href"
+        ]
+      }
+    },
+    "required": [
+      "logo",
+      "menuLabel",
+      "themeToggle",
+      "progressInitial",
+      "signin",
+      "cta"
+    ]
+  },
+  "contentMaxWordsTotal": 10,
+  "usedOn": [
+    "/",
+    "/privacy-policy",
+    "/terms-of-service",
+    "/start",
+    "/auth",
+    "/404"
+  ],
+  "evidence": {
+    "structure": "Structure, layout and motion measured against the live original. A pixel audit verified 1382/1382 elements at a 1440px viewport and 962/962 at 390px with zero deltas. Copy is the original's own.",
+    "copy": "a-exact"
+  },
+  "bodyCopyFields": [],
+  "variants": {},
+  "constraints": {
+    "onePerPage": true,
+    "maxPerPage": 1,
+    "verification": "src/layout/Layout.jsx:41 renders <Header /> unconditionally. Checked against all 5 real templates: present exactly once in every one, and it is the first node inside the section.page shell."
+  },
+  "media": {
+    "logo": {
+      "assetRole": [
+        "brand-wordmark"
+      ],
+      "policy": "must-reuse-exact"
+    },
+    "glyphs": {
+      "assetRole": [
+        "ui-icon-glyph"
+      ],
+      "policy": "may-generate-new"
+    }
+  },
+  "motion": {
+    "pattern": "chrome-reveal",
+    "detail": "public/motion/m15.js reveals .header over 0.2s power2.out; m20.js rotates the two .header__menu-line elements +/-45 degrees over 0.25s power2.out; m12.js updates #progress on requestAnimationFrame; m10.js binds the theme toggle.",
+    "reducedMotionFallback": "Render the header at its final position with no reveal, show the burger in its resting cross-free state, and keep the progress readout updating (it is information, not decoration).",
+    "reducedMotionFallbackKind": "design-rule (the source ships NO prefers-reduced-motion handling for this section, so the fallback is prescribed by this repository, not mirrored)"
+  },
+  "responsive": {
+    "structured": true,
+    "breakpoint": "none",
+    "base": "three groups (left / main / right) at z-index 999",
+    "max-991px": "no documented change in the stylesheet",
+    "max-767px": "no documented change in the stylesheet"
+  },
+  "tokens": [
+    "label.button",
+    "text.primary",
+    "border.hairline",
+    "component.theme-toggle.border-hover",
+    "component.button.primary.fill",
+    "component.button.primary.text",
+    "component.button.primary.fill-hover",
+    "elevation.z-header",
+    "elevation.z-raised",
+    "icon-size.header-logo",
+    "icon-size.ui-glyph-16",
+    "icon-size.ui-glyph-20",
+    "motion.chrome.reveal",
+    "motion.burger.rotate",
+    "motion.hover-stagger.step"
+  ],
+  "composes": [
+    "primitive.inline-icon",
+    "primitive.theme-toggle",
+    "primitive.progress-readout",
+    "primitive.button-primary"
+  ],
+  "measuredFrom": [
+    {
+      "id": "cit-sec-hdr-root",
+      "source": "src/components/Header.jsx:5-6",
+      "quote": "<section className=\"header\">"
+    },
+    {
+      "id": "cit-sec-hdr-logo",
+      "source": "src/components/Header.jsx:7-10",
+      "quote": "header__left-link w-inline-block"
+    },
+    {
+      "id": "cit-sec-hdr-menu",
+      "source": "src/components/Header.jsx:12-16",
+      "quote": "header__menu-txt u-btn"
+    },
+    {
+      "id": "cit-sec-hdr-toggle",
+      "source": "src/components/Header.jsx:17-17",
+      "quote": "data-theme-toggle=\"\""
+    },
+    {
+      "id": "cit-sec-hdr-progress",
+      "source": "src/components/Header.jsx:23-23",
+      "quote": "id=\"progress\""
+    },
+    {
+      "id": "cit-sec-hdr-cta",
+      "source": "src/components/Header.jsx:29-31",
+      "quote": "btn-primary u-btn is-header-btn"
+    },
+    {
+      "id": "cit-sec-hdr-layout",
+      "source": "src/layout/Layout.jsx:41-41",
+      "quote": "<Header current={current} />"
+    }
+  ],
+  "notes": "#progress LIVES HERE, not in the footer. That means the scroll-progress readout IS present on the 404, even though the 404 has no footer. Only #dotsField (chrome.footer) is genuinely absent from the 404. This corrects a claim in the build groundwork.",
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 15, which was unreachable."
+}

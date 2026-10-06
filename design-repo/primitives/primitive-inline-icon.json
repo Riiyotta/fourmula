@@ -1,0 +1,62 @@
+{
+  "id": "primitive.inline-icon",
+  "kind": "primitive",
+  "category": "media",
+  "purpose": "An inline <svg> glyph inside a .w-embed wrapper at width=100% height=100%, so the wrapper's CSS sets the rendered size and the viewBox fixes only the aspect ratio.",
+  "cssClasses": [
+    ".w-embed",
+    "wrappers: .header__logo, .header__theme-night, .header__theme-day, .header_signin-icon, .footer__logo-in, .preloader__logo, .preloader__loader, .ai__btn-icon, .ai__grid-arrow, .how__bottom-logo, .cookies__modal__close-icon"
+  ],
+  "props": {
+    "viewBox": "16x16, 20x20, 24x24, 32x32, 56x56, 57x56, 58x54 or 104x24",
+    "fill": "currentColor on every path, so the glyph inherits the themed text colour"
+  },
+  "states": {
+    "rest": "currentColor",
+    "hover": "inherits the parent's hover colour",
+    "focus": "n/a"
+  },
+  "tokens": [
+    "icon-size.header-logo",
+    "icon-size.preloader-logo",
+    "icon-size.preloader-loader",
+    "icon-size.ui-glyph-16",
+    "icon-size.ui-glyph-20",
+    "icon-size.ui-glyph-24",
+    "icon-size.ai-btn-glyph",
+    "icon-size.trusted-logo",
+    "text.primary",
+    "text.faint"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "sized by its wrapper class",
+    "max-991px": "wrapper-driven",
+    "max-767px": "wrapper-driven"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-icon-wrapper",
+      "source": "src/components/Header.jsx:8-9",
+      "quote": "header__logo w-embed"
+    },
+    {
+      "id": "cit-prim-icon-currentcolor",
+      "source": "src/components/Header.jsx:9-9",
+      "quote": "fill=\"currentColor\""
+    },
+    {
+      "id": "cit-prim-icon-trusted",
+      "source": "src/components/How.jsx:35-36",
+      "quote": "how__bottom-logo w-embed"
+    }
+  ],
+  "notes": "Every glyph is inline; the 21 .svg files under public/assets/svg/ are unreferenced duplicates (assets/asset-roles.json publicInventory). A .u-hidden-copy sibling div supplies the text alternative for the logo and sign-in glyphs; the purely decorative glyphs have none.",
+  "allowedAssetRoles": [
+    "brand-wordmark",
+    "trusted-partner-logo",
+    "ui-icon-glyph"
+  ],
+  "allowedAssetRolesNote": "Machine-checkable list of the assetRole ids this contract may carry, replacing the prose it previously held ('one of brand-wordmark, trusted-partner-logo, ui-icon-glyph'). extraction/verify_all.py check [j] resolves every string under an assetRole key against the closed registry, so a prose sentence there would be - and was - reported as an unlisted role."
+}

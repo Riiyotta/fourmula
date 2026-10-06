@@ -1,0 +1,51 @@
+{
+  "id": "component.carousel-ring",
+  "kind": "component",
+  "category": "motion",
+  "purpose": "The eight-photograph ring that rotates behind the home hero. One instance.",
+  "cssClasses": [
+    ".hero__carousel__wrap",
+    ".hero__carousel__in",
+    ".hero__carousel__item",
+    ".hero__carousel__img",
+    "position classes: .hero__carousel__0deg, __45deg, __90deg, __135deg, __180deg, __225deg, __270deg, __315deg"
+  ],
+  "geometry": "exactly 8 positions at 45-degree intervals, one image each.",
+  "behaviour": "public/motion/m17.js rotates .hero__carousel__in by 360 degrees over 32s with ease none and repeat -1; m18.js counter-rotates each .hero__carousel__img on the same 32s/none/-1 timing so the photographs stay upright while the ring turns.",
+  "props": {
+    "images": "exactly 8 component.media-image, assetRole hero-carousel-photo",
+    "positions": "the 8 fixed degree classes"
+  },
+  "tokens": [
+    "motion.carousel.rotation",
+    "elevation.z-overlay",
+    "radius.panel"
+  ],
+  "composes": [
+    "component.media-image"
+  ],
+  "responsive": {
+    "structured": true,
+    "base": "8-position ring",
+    "max-991px": "no documented change",
+    "max-767px": "no documented change"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-ring-markup",
+      "source": "src/components/Hero.jsx:55-80",
+      "quote": "hero__carousel__0deg"
+    },
+    {
+      "id": "cit-comp-ring-m17",
+      "source": "public/motion/m17.js:1-10",
+      "quote": "hero__carousel__in"
+    },
+    {
+      "id": "cit-comp-ring-m18",
+      "source": "public/motion/m18.js:1-10",
+      "quote": "hero__carousel__img"
+    }
+  ],
+  "notes": "Every one of the 8 photographs depicts a real, identifiable person. assetRole hero-carousel-photo is pinned must-not-fabricate."
+}

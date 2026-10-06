@@ -1,0 +1,57 @@
+{
+  "id": "component.background-video",
+  "kind": "component",
+  "category": "media",
+  "purpose": "A Webflow background-video block. Three instances, all in the .ai video showcase.",
+  "cssClasses": [
+    ".w-background-video",
+    ".w-background-video-atom",
+    ".video-poster",
+    ".bg-video",
+    ".video-faded",
+    ".video__asset"
+  ],
+  "props": {
+    "assetRef": "a local absolute path under /assets/video/",
+    "poster": "the SAME mp4 path is used as the poster attribute and as the .video-poster background-image - the source has no separate poster still"
+  },
+  "attributes": "playsInline, webkit-playsinline, muted, loop, preload=\"none\", data-autoplay=\"true\", data-poster, poster, plus a <source type=\"video/mp4\" data-src>",
+  "behaviour": "public/motion/m27.js drives these. It reads prefers-reduced-motion AND navigator.connection.saveData, forces muted/playsInline/loop/preload=none, copies data-poster onto the poster attribute and onto .video-poster's background-image, and fades the poster out via .video-faded when playback starts.",
+  "tokens": [
+    "motion.transition.poster-fade",
+    "elevation.z-base",
+    "radius.panel"
+  ],
+  "composes": [],
+  "reducedMotion": {
+    "kind": "mirrored",
+    "detail": "This is the ONLY slot in the project whose reduced-motion behaviour is real, observed behaviour rather than a design rule this repository prescribes. m27.js is the only script in src/ or public/motion/ that reads the media query, and no stylesheet contains a prefers-reduced-motion rule."
+  },
+  "responsive": {
+    "structured": true,
+    "base": "three clips: one in .ai__grid-small-left, one in .ai__grid-small-lg, one in .ai__grid-small-right",
+    "max-991px": "no documented change",
+    "max-767px": "no documented change"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-video-block",
+      "source": "src/components/AiSection.jsx:93-94",
+      "quote": "w-background-video w-background-video-atom"
+    },
+    {
+      "id": "cit-comp-video-css",
+      "source": "src/styles/fourmula-head.css:124-135",
+      "quote": ".bg-video"
+    },
+    {
+      "id": "cit-comp-video-m27",
+      "source": "public/motion/m27.js:1-16",
+      "quote": "prefers-reduced-motion: reduce"
+    }
+  ],
+  "allowedAssetRoles": [
+    "showcase-video"
+  ],
+  "allowedAssetRolesNote": "Machine-checkable list of the assetRole ids this contract may carry, replacing the prose it previously held ('showcase-video (closed to this one role)'). extraction/verify_all.py check [j] resolves every string under an assetRole key against the closed registry, so a prose sentence there would be - and was - reported as an unlisted role."
+}

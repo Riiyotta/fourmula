@@ -1,0 +1,55 @@
+{
+  "id": "primitive.theme-toggle",
+  "kind": "primitive",
+  "category": "control",
+  "purpose": "The sun/moon palette switch in the header. One instance.",
+  "cssClasses": [
+    ".header__theme",
+    ".header__theme-night.theme-dark",
+    ".header__theme-day.theme-light"
+  ],
+  "props": {
+    "ariaPressed": "ships \"true\"",
+    "dataThemeState": "ships \"dark\"",
+    "dataThemeToggle": "the attribute public/motion/m10.js binds to"
+  },
+  "states": {
+    "rest": "1px border.hairline",
+    "hover": "border becomes border.toggle-hover (#ffffffa6, palette-independent)",
+    "focus": "NONE - see primitive.button-primary."
+  },
+  "tokens": [
+    "component.theme-toggle.border-hover",
+    "border.hairline",
+    "icon-size.ui-glyph-16",
+    "icon-size.ui-glyph-20",
+    "motion.transition.fast"
+  ],
+  "composes": [
+    "primitive.inline-icon"
+  ],
+  "responsive": {
+    "structured": true,
+    "base": "2rem square in the header centre group",
+    "max-991px": "unchanged",
+    "max-767px": "unchanged"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-toggle",
+      "source": "src/components/Header.jsx:17-21",
+      "quote": "data-theme-toggle=\"\" className=\"header__theme\" aria-pressed=\"true\" data-theme-state=\"dark\""
+    },
+    {
+      "id": "cit-prim-toggle-hover",
+      "source": "src/styles/fourmula-base.css:2527-2529",
+      "quote": "border-color: #ffffffa6;"
+    },
+    {
+      "id": "cit-prim-toggle-m10",
+      "source": "public/motion/m10.js:11-16",
+      "quote": "document.body.classList.toggle('dark',darkOn)"
+    }
+  ],
+  "notes": "INVERTED, LOAD-BEARING: the toggle ships aria-pressed=\"true\" and data-theme-state=\"dark\" while the page renders LIGHT, because the class named 'dark' selects the light palette. m10.js defaults to true and persists localStorage['isDarkMode']. See tokens/themes/light.json inversionWarning."
+}

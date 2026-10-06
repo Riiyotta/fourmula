@@ -1,0 +1,481 @@
+{
+  "$description": "Foundation colour palette. TWO sources only: (1) the 12 themed custom properties declared three times each in src/styles/fourmula-base.css (:root 2094-2127, .body 2248-2265, .body.dark 2273-2286) - each property yields one token per palette, except --menu-colors which is identical in both; (2) literal hex values in SITE-AUTHORED rules only. Every histogram behind this file was scoped to site-authored rules: of the 934 rules in fourmula-base.css, 380 are Webflow framework (normalize + base reset, lines 1-2077, plus every post-2077 .w-* / w--* / wf-* / webflow-icons selector) and 554 are site-authored. #3898ec, #ddd, #ccc, #222, #333, #fafafa, #c8c8c8, #999, #5d6c7b and #e2e2e2 appear ONLY in the framework partition and are NOT design tokens - a naive whole-file histogram invents them.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "paletteInversionWarning": "LOAD-BEARING: the theme class names are INVERTED. The .body class carries the DARK values and .body.dark carries the LIGHT values, and the app ships <body class=\"body dark\"> (index.html:16), so the DEFAULT rendered theme is LIGHT (white canvas). Do not normalise this. A generator that reads '.body.dark' as 'the dark theme' inverts the entire palette.",
+  "notTokens": {
+    "frameworkResetColours": [
+      "#3898ec",
+      "#ddd",
+      "#ccc",
+      "#222",
+      "#333",
+      "#fafafa",
+      "#c8c8c8",
+      "#999",
+      "#5d6c7b",
+      "#e2e2e2",
+      "#0000",
+      "#75869600"
+    ],
+    "reason": "Webflow normalize/base-reset values (fourmula-base.css lines 1-2077 and the .w-* re-declarations at 2129-2246). Never reference them.",
+    "evidence": [
+      "cit-col-framework-partition"
+    ]
+  },
+  "correctionToCloneSpec": {
+    "claim": "CLONE_SPEC.md:71 states \"Accent used by the flash-word reveals: rgb(249, 74, 0)\".",
+    "finding": "rgb(249,74,0) appears ZERO times anywhere in src/. The flash-word colours are set at RUNTIME by the motion scripts and there are four of them: #F94A00, #FD7B03, #FFFFFF and var(--fonts-100). They live in public/motion/m23.js, m24.js and m25.js. m22.js carries NO colour at all - it is the splitToWords() helper that creates the .flash-word spans the other three animate.",
+    "evidence": [
+      "cit-col-flash-1",
+      "cit-col-flash-2",
+      "cit-col-flash-3",
+      "cit-col-flash-fonts100",
+      "cit-col-m22-no-colour"
+    ]
+  },
+  "tokens": {
+    "color.mainbg-dark": {
+      "$type": "color",
+      "$value": "#020108",
+      "role": "Page canvas in the DARK palette (--mainbg under .body).",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-mainbg"
+      ],
+      "cssVar": "--mainbg",
+      "palette": "dark"
+    },
+    "color.mainbg-light": {
+      "$type": "color",
+      "$value": "white",
+      "role": "Page canvas in the LIGHT palette (--mainbg under .body.dark). This is the DEFAULT rendered canvas.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-mainbg"
+      ],
+      "cssVar": "--mainbg",
+      "palette": "light"
+    },
+    "color.mainbg-gradient-dark": {
+      "$type": "color",
+      "$value": "#02010800",
+      "role": "Transparent stop of --mainbg for gradient fades, dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-mainbg-gradient"
+      ],
+      "cssVar": "--mainbg-gradient",
+      "palette": "dark"
+    },
+    "color.mainbg-gradient-light": {
+      "$type": "color",
+      "$value": "#fff0",
+      "role": "Transparent stop of --mainbg for gradient fades, light palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-mainbg-gradient"
+      ],
+      "cssVar": "--mainbg-gradient",
+      "palette": "light"
+    },
+    "color.secondbg-dark": {
+      "$type": "color",
+      "$value": "#111",
+      "role": "Secondary surface, dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-secondbg"
+      ],
+      "cssVar": "--secondbg",
+      "palette": "dark"
+    },
+    "color.secondbg-light": {
+      "$type": "color",
+      "$value": "#f7f7f7",
+      "role": "Secondary surface, light palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-secondbg"
+      ],
+      "cssVar": "--secondbg",
+      "palette": "light"
+    },
+    "color.menu-dark": {
+      "$type": "color",
+      "$value": "#272727",
+      "role": "Menu panel fill, dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-menu"
+      ],
+      "cssVar": "--menu",
+      "palette": "dark"
+    },
+    "color.menu-light": {
+      "$type": "color",
+      "$value": "#020108",
+      "role": "Menu panel fill, light palette (near-black panel on a white page).",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-menu"
+      ],
+      "cssVar": "--menu",
+      "palette": "light"
+    },
+    "color.menu-colors": {
+      "$type": "color",
+      "$value": "#fff3",
+      "role": "Menu accent at 20% white. IDENTICAL in both palettes - the only --* property the two palettes agree on.",
+      "usageTotal": 2,
+      "evidence": [
+        "cit-col-menu-colors"
+      ],
+      "cssVar": "--menu-colors",
+      "palette": "both"
+    },
+    "color.lines-dark": {
+      "$type": "color",
+      "$value": "#2a2a30",
+      "role": "Hairline/divider, dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-lines"
+      ],
+      "cssVar": "--lines",
+      "palette": "dark"
+    },
+    "color.lines-light": {
+      "$type": "color",
+      "$value": "#d7d7d6",
+      "role": "Hairline/divider, light palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-lines"
+      ],
+      "cssVar": "--lines",
+      "palette": "light"
+    },
+    "color.dots-pattern-dark": {
+      "$type": "color",
+      "$value": "#1a1a1a",
+      "role": "Footer dots-field / outline-button fill, dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-dots-pattern"
+      ],
+      "cssVar": "--dots-pattern",
+      "palette": "dark"
+    },
+    "color.dots-pattern-light": {
+      "$type": "color",
+      "$value": "#d9d9d9",
+      "role": "Footer dots-field / outline-button fill, light palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-dots-pattern"
+      ],
+      "cssVar": "--dots-pattern",
+      "palette": "light"
+    },
+    "color.fonts-100-dark": {
+      "$type": "color",
+      "$value": "white",
+      "role": "Full-strength text, dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-100"
+      ],
+      "cssVar": "--fonts-100",
+      "palette": "dark"
+    },
+    "color.fonts-100-light": {
+      "$type": "color",
+      "$value": "#020108",
+      "role": "Full-strength text, light palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-100"
+      ],
+      "cssVar": "--fonts-100",
+      "palette": "light"
+    },
+    "color.fonts-64-dark": {
+      "$type": "color",
+      "$value": "#ffffffa3",
+      "role": "Text at 64% (alpha a3), dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-64"
+      ],
+      "cssVar": "--fonts-64",
+      "palette": "dark"
+    },
+    "color.fonts-64-light": {
+      "$type": "color",
+      "$value": "#020108a3",
+      "role": "Text at 64% (alpha a3), light palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-64"
+      ],
+      "cssVar": "--fonts-64",
+      "palette": "light"
+    },
+    "color.fonts-50-dark": {
+      "$type": "color",
+      "$value": "#ffffff80",
+      "role": "Text at 50% (alpha 80), dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-50"
+      ],
+      "cssVar": "--fonts-50",
+      "palette": "dark"
+    },
+    "color.fonts-50-light": {
+      "$type": "color",
+      "$value": "#02010880",
+      "role": "Text at 50% (alpha 80), light palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-50"
+      ],
+      "cssVar": "--fonts-50",
+      "palette": "light"
+    },
+    "color.fonts-30-dark": {
+      "$type": "color",
+      "$value": "#ffffff4d",
+      "role": "Text at 30% (alpha 4d), dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-30"
+      ],
+      "cssVar": "--fonts-30",
+      "palette": "dark"
+    },
+    "color.fonts-30-light": {
+      "$type": "color",
+      "$value": "#0201084d",
+      "role": "Text at 30% (alpha 4d), light palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-30"
+      ],
+      "cssVar": "--fonts-30",
+      "palette": "light"
+    },
+    "color.fonts-20-dark": {
+      "$type": "color",
+      "$value": "#fff3",
+      "role": "Text at 20%, dark palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-20"
+      ],
+      "cssVar": "--fonts-20",
+      "palette": "dark"
+    },
+    "color.fonts-20-light": {
+      "$type": "color",
+      "$value": "#02010833",
+      "role": "Text at 20%, light palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fonts-20"
+      ],
+      "cssVar": "--fonts-20",
+      "palette": "light"
+    },
+    "color.accent-hover": {
+      "$type": "color",
+      "$value": "#ff6b02",
+      "role": "Primary accent, used ONLY on hover: .btn-primary:hover, .ai__btn:hover, .fs-cc_link:hover. It is never a resting fill.",
+      "usageTotal": 3,
+      "evidence": [
+        "cit-col-accent-hover"
+      ]
+    },
+    "color.flash-orange": {
+      "$type": "color",
+      "$value": "#F94A00",
+      "role": "First stop of the flash-word reveal and the first stop of the is-first step gradient. Set at RUNTIME by the motion scripts, not by the stylesheet, for the reveal.",
+      "usageTotal": 4,
+      "evidence": [
+        "cit-col-flash-1",
+        "cit-col-grad-first"
+      ]
+    },
+    "color.flash-amber": {
+      "$type": "color",
+      "$value": "#FD7B03",
+      "role": "Second stop of the flash-word reveal; also the shared END stop of all four step gradients.",
+      "usageTotal": 7,
+      "evidence": [
+        "cit-col-flash-2",
+        "cit-col-grad-first",
+        "cit-col-grad-second",
+        "cit-col-grad-third",
+        "cit-col-grad-fourth"
+      ]
+    },
+    "color.flash-white": {
+      "$type": "color",
+      "$value": "#FFFFFF",
+      "role": "Final stop of the m24 flash-word reveal ONLY. m23 and m25 end on var(--fonts-100) instead, so this literal is not the universal end colour.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-flash-3"
+      ]
+    },
+    "color.grad-second-start": {
+      "$type": "color",
+      "$value": "#48a3d1",
+      "role": "Start stop of the .is-second step gradient (blue).",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-grad-second"
+      ]
+    },
+    "color.grad-third-start": {
+      "$type": "color",
+      "$value": "#3a54ff",
+      "role": "Start stop of the .is-third step gradient (indigo).",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-grad-third"
+      ]
+    },
+    "color.grad-third-mid": {
+      "$type": "color",
+      "$value": "#7a67c5",
+      "role": "23% mid stop of the .is-third step gradient (violet).",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-grad-third"
+      ]
+    },
+    "color.grad-fourth-start": {
+      "$type": "color",
+      "$value": "#9a0101",
+      "role": "Start stop of the .is-fourth step gradient (deep red). The fourth step gradient exists on disk and in the markup; it is NOT a three-variant set.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-grad-fourth"
+      ]
+    },
+    "color.step-scrim": {
+      "$type": "color",
+      "$value": "#fc7303",
+      "role": "Opaque stop of the .list__main__bottom-gradient scrim (paired with its own #fc730300 transparent stop).",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-step-scrim"
+      ]
+    },
+    "color.step-scrim-transparent": {
+      "$type": "color",
+      "$value": "#fc730300",
+      "role": "Transparent stop of the .list__main__bottom-gradient scrim.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-step-scrim"
+      ]
+    },
+    "color.ink-black": {
+      "$type": "color",
+      "$value": "#000",
+      "role": "Resting text colour of .ai__btn (a white pill on a dark section). Literal, not a themed property.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-ai-btn"
+      ]
+    },
+    "color.paper-white": {
+      "$type": "color",
+      "$value": "#fff",
+      "role": "Resting fill of .ai__btn and hover text of the vendored cookie buttons. Literal, not a themed property.",
+      "usageTotal": 20,
+      "evidence": [
+        "cit-col-ai-btn"
+      ]
+    },
+    "color.theme-toggle-hover-border": {
+      "$type": "color",
+      "$value": "#ffffffa6",
+      "role": "Border colour of .header__theme:hover (65% white). Literal; it does not follow the palette.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-theme-hover"
+      ]
+    },
+    "color.table-cell-border": {
+      "$type": "color",
+      "$value": "#00000026",
+      "role": "Bottom border of .tech__rich-cell on the legal pages (15% black).",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-table-cell"
+      ]
+    },
+    "color.table-head-fill": {
+      "$type": "color",
+      "$value": "#0000000a",
+      "role": "Fill of .tech__rich-cell.is-head (4% black).",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-table-head"
+      ]
+    },
+    "color.table-head-border": {
+      "$type": "color",
+      "$value": "#00000040",
+      "role": "Bottom border colour of .tech__rich-cell.is-head (25% black).",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-table-head"
+      ]
+    },
+    "color.vendor-finsweet-accent": {
+      "$type": "color",
+      "$value": "#146ef5",
+      "role": "Finsweet Cookie Consent accent. NOT a Fourmula brand colour. Used on the is-cookies button hovers, .cookies__modal__close:hover and the CHECKED state of .fs-cc_checkbox-button (so it is not hover-only).",
+      "usageTotal": 7,
+      "evidence": [
+        "cit-col-fs-accent",
+        "cit-col-fs-accent-checked"
+      ],
+      "vendored": "finsweet-cookie-consent"
+    },
+    "color.vendor-finsweet-accent-soft": {
+      "$type": "color",
+      "$value": "#468df7",
+      "role": "Finsweet Cookie Consent hover text colour on .fs-cc_checkbox:hover. Vendored, not a brand colour.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fs-soft"
+      ],
+      "vendored": "finsweet-cookie-consent"
+    },
+    "color.vendor-finsweet-surface": {
+      "$type": "color",
+      "$value": "#f8f8f8",
+      "role": "Finsweet Cookie Consent preference-button tray fill. Vendored, not a brand colour.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fs-surface"
+      ],
+      "vendored": "finsweet-cookie-consent"
+    },
+    "color.vendor-finsweet-hairline": {
+      "$type": "color",
+      "$value": "#0000001a",
+      "role": "Border of .fs-cc_button.is-secondary (10% black). Vendored.",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-col-fs-hairline"
+      ],
+      "vendored": "finsweet-cookie-consent"
+    }
+  }
+}

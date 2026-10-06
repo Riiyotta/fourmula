@@ -1,0 +1,79 @@
+{
+  "id": "component.rich-text-block",
+  "kind": "component",
+  "category": "content",
+  "purpose": "The long-form prose body of the four section.tech pages: headings, paragraphs, ordered and unordered lists, anchor indexes and tables.",
+  "cssClasses": [
+    ".tech__rich",
+    ".w-richtext",
+    ".tech__rich-anchor",
+    ".tech__rich-cell",
+    ".tech__rich-cell.is-head",
+    ".w-embed"
+  ],
+  "structure": {
+    "anchorIndex": "an <ol role=\"list\"> of in-page <a href=\"#slug\"> links, one per h2",
+    "anchorTargets": "each h2 carries BOTH id=\"slug\" and a preceding empty <div id=\"slug\"> inside a .w-embed wrapper - the duplicate id is how Webflow's rich-text anchors work and it is reproduced verbatim",
+    "tables": "optional; cells use .tech__rich-cell with a .is-head modifier for the header row"
+  },
+  "props": {
+    "headings": "h2 at the anchor level, h3 for sub-sections",
+    "paragraphs": "unbudgeted long-form prose",
+    "lists": "ol and ul",
+    "tables": "optional"
+  },
+  "tokens": [
+    "heading.sub",
+    "body.lead",
+    "label.secondary",
+    "text.primary",
+    "text.secondary",
+    "component.table.cell-border",
+    "component.table.head-fill",
+    "component.table.head-border",
+    "layout.tech.padding-top",
+    "layout.tech.padding-x"
+  ],
+  "composes": [
+    "primitive.text-link"
+  ],
+  "responsive": {
+    "structured": true,
+    "base": "single column under an 8rem top offset with 2rem side gutters",
+    "max-991px": "heading.sub (via the .tech__title override to type.h1) drops 5.5rem -> 4.5rem",
+    "max-767px": "heading.sub drops to 2.5rem and body.lead to 1rem"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-rich-markup",
+      "source": "src/pages/PrivacyContent.jsx:6-10",
+      "quote": "tech__rich u-fonts-100 w-richtext"
+    },
+    {
+      "id": "cit-comp-rich-anchor",
+      "source": "src/pages/PrivacyContent.jsx:36-36",
+      "quote": "className=\"tech__rich-anchor\""
+    },
+    {
+      "id": "cit-comp-rich-cell",
+      "source": "src/styles/fourmula-base.css:4741-4746",
+      "quote": "border-bottom: 1px solid #00000026;"
+    },
+    {
+      "id": "cit-comp-rich-cell-head",
+      "source": "src/styles/fourmula-base.css:4748-4752",
+      "quote": "background-color: #0000000a;"
+    },
+    {
+      "id": "cit-comp-rich-tech-pad",
+      "source": "src/styles/fourmula-base.css:4658-4662",
+      "quote": "padding-top: 8rem;"
+    },
+    {
+      "id": "cit-comp-rich-title-override",
+      "source": "src/styles/fourmula-base.css:4664-4666",
+      "quote": "font-size: var(--_fonts---h1);"
+    }
+  ],
+  "notes": "EVIDENCE LEVEL: the DOM scaffolding of this component on /privacy-policy and /terms-of-service was measured against the live original (privacy h1:1 h2:12 h3:2 p:39 li:31 a:15 table:2 tr:25 td:105; terms h1:1 h2:16 h3:1 p:63 li:30 a:21 - all independently re-counted from the real JSX and matching exactly). The PROSE ITSELF IS DELIBERATE PLACEHOLDER FILLER, not the original's copy. Any word budget derived from these pages measures the filler. That is why this component declares NO maxWords on its paragraph slots and why sections/content-tech.json budgets only the headings and labels."
+}

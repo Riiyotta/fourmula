@@ -1,0 +1,53 @@
+{
+  "id": "primitive.button-outline",
+  "kind": "primitive",
+  "category": "control",
+  "purpose": "The hairline-bordered pill CTA. Used on the 404 page and for the secondary cookie actions.",
+  "cssClasses": [
+    ".btn-outline",
+    ".u-btn",
+    "modifiers: .is-header-btn, .is-cookies"
+  ],
+  "props": {
+    "label": "1-3 words observed (\"Get started\", \"Settings\", \"Save changes\", \"Back to site\")",
+    "href": "one of the six routes, '#', or a '/#anchor'"
+  },
+  "states": {
+    "rest": "transparent, 1px border.hairline, text text.primary; the .is-cookies modifier adds a surface.dots fill",
+    "hover": "the .is-cookies modifier turns vendor.cookie-accent (#146ef5) - that is FINSWEET'S accent, not a Fourmula accent",
+    "focus": "NONE - see primitive.button-primary."
+  },
+  "tokens": [
+    "component.button.outline.border",
+    "component.button.outline.text",
+    "component.button.outline.fill-cookies",
+    "component.cookie-modal.accent",
+    "label.button",
+    "radius.control",
+    "motion.transition.fast"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "inline-flex pill",
+    "max-991px": "unchanged",
+    "max-767px": "unchanged"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-btn-outline-css",
+      "source": "src/styles/fourmula-base.css:3523-3526",
+      "quote": ".btn-outline.u-btn.is-cookies"
+    },
+    {
+      "id": "cit-prim-btn-outline-hover",
+      "source": "src/styles/fourmula-base.css:3528-3531",
+      "quote": "color: #146ef5;"
+    },
+    {
+      "id": "cit-prim-btn-outline-404",
+      "source": "src/pages/NotFoundContent.jsx:8-9",
+      "quote": "btn-outline u-btn is-header-btn w-inline-block"
+    }
+  ]
+}

@@ -1,0 +1,2677 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "Fourmula PageSpec",
+ "description": "A generated page: one of the 5 closed templates, one of the 6 closed routes, and an ordered list of section instances. There is deliberately NO per-instance token or style override field - styling is owned entirely by the section and component contracts. The non-standard keywords maxWords and maxWordsTotal are annotations enforced by schema/semantic_validate.py, where a word count is always len(text.split()). Media use only local absolute paths and the closed assetRole enum from assets/asset-roles.json; remote, protocol-relative and '..' paths are rejected by pattern. EVERY length in the underlying token system is a rem on a FLUID root font-size - see tokens/00-foundation/typography.json before converting anything to px. Generated from the section contracts by extraction/build_pagespec_schema.py.",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "pageSpecVersion",
+  "template",
+  "route",
+  "nodes"
+ ],
+ "properties": {
+  "$schema": {
+   "type": "string"
+  },
+  "pageSpecVersion": {
+   "const": "1.0.0"
+  },
+  "template": {
+   "type": "string",
+   "enum": [
+    "home",
+    "legal",
+    "app-onboarding",
+    "app-auth",
+    "not-found"
+   ]
+  },
+  "route": {
+   "type": "string",
+   "enum": [
+    "/",
+    "/404",
+    "/auth",
+    "/privacy-policy",
+    "/start",
+    "/terms-of-service"
+   ]
+  },
+  "nodes": {
+   "type": "array",
+   "minItems": 5,
+   "maxItems": 12,
+   "items": {
+    "$ref": "#/definitions/node"
+   },
+   "description": "The real templates range from 5 nodes (not-found) to 12 (home)."
+  }
+ },
+ "allOf": [
+  {
+   "if": {
+    "properties": {
+     "template": {
+      "const": "home"
+     }
+    },
+    "required": [
+     "template"
+    ]
+   },
+   "then": {
+    "properties": {
+     "route": {
+      "enum": [
+       "/"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "template": {
+      "const": "legal"
+     }
+    },
+    "required": [
+     "template"
+    ]
+   },
+   "then": {
+    "properties": {
+     "route": {
+      "enum": [
+       "/privacy-policy",
+       "/terms-of-service"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "template": {
+      "const": "app-onboarding"
+     }
+    },
+    "required": [
+     "template"
+    ]
+   },
+   "then": {
+    "properties": {
+     "route": {
+      "enum": [
+       "/start"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "template": {
+      "const": "app-auth"
+     }
+    },
+    "required": [
+     "template"
+    ]
+   },
+   "then": {
+    "properties": {
+     "route": {
+      "enum": [
+       "/auth"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "template": {
+      "const": "not-found"
+     }
+    },
+    "required": [
+     "template"
+    ]
+   },
+   "then": {
+    "properties": {
+     "route": {
+      "enum": [
+       "/404"
+      ]
+     }
+    }
+   }
+  }
+ ],
+ "definitions": {
+  "assetRole": {
+   "type": "string",
+   "enum": [
+    "hero-carousel-photo",
+    "preloader-photo",
+    "product-shot-photo",
+    "step-artwork",
+    "showcase-video",
+    "not-found-artwork",
+    "brand-wordmark",
+    "trusted-partner-logo",
+    "ui-icon-glyph",
+    "form-control-checkmark",
+    "favicon",
+    "brand-typeface-file",
+    "og-banner",
+    "auth-inert-form"
+   ],
+   "description": "Closed enum from assets/asset-roles.json. One member (auth-inert-form) describes a behaviour slot, not a file."
+  },
+  "motion": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "pattern",
+    "reducedMotionFallback"
+   ],
+   "description": "CLOSED to the only fields a real section contract carries per instance: pattern (const-locked per section type by the allOf branches below) and reducedMotionFallback. The contracts' detailed reveal/marquee/trigger descriptions are owned by the section contract and are never restated per instance. additionalProperties is false on purpose: leaving it open would let a generated PageSpec smuggle in an invented motion field and still validate.",
+   "properties": {
+    "pattern": {
+     "type": "string",
+     "enum": [
+      "chrome-reveal",
+      "dots-field-wave",
+      "flash-word-reveal",
+      "hero-reveal",
+      "marquee-scroll",
+      "overlay-fade",
+      "panel-expand",
+      "pinned-3d-stack",
+      "preloader-reveal",
+      "static"
+     ]
+    },
+    "reducedMotionFallback": {
+     "type": "string",
+     "minLength": 1,
+     "maxWords": 60,
+     "description": "REQUIRED on every node. For every section except the background-video slot this is a DESIGN RULE prescribed by this repository, not mirrored behaviour: public/motion/m27.js is the only script in the whole project that reads prefers-reduced-motion, and no stylesheet contains a prefers-reduced-motion rule."
+    },
+    "reducedMotionFallbackKind": {
+     "type": "string",
+     "enum": [
+      "design-rule",
+      "mirrored",
+      "mixed"
+     ],
+     "description": "Which of the two the fallback is for this node. Only the background-video slot can honestly claim `mirrored`."
+    }
+   }
+  },
+  "node": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "type",
+    "content",
+    "motion"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "type": {
+     "type": "string",
+     "enum": [
+      "chrome.awards-badge",
+      "chrome.cookie-consent",
+      "chrome.footer",
+      "chrome.header",
+      "chrome.menu",
+      "chrome.preloader",
+      "content.tech",
+      "content.what-intro",
+      "faq.accordion",
+      "hero.home",
+      "hero.not-found",
+      "marquee.how-trusted",
+      "showcase.ai-capabilities",
+      "steps.pinned-list"
+     ]
+    },
+    "variant": {
+     "type": "string"
+    },
+    "content": {
+     "type": "object"
+    },
+    "motion": {
+     "$ref": "#/definitions/motion"
+    }
+   },
+   "allOf": [
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "chrome.awards-badge"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "href": {
+          "type": "string",
+          "enum": [
+           "#",
+           "/#",
+           "/#what-is-fourmula",
+           "/#pdp",
+           "/#products",
+           "/#video",
+           "/#list",
+           "/",
+           "/404",
+           "/auth",
+           "/privacy-policy",
+           "/start",
+           "/terms-of-service"
+          ]
+         },
+         "artwork": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "assetRole": {
+            "type": "string",
+            "allOf": [
+             {
+              "$ref": "#/definitions/assetRole"
+             },
+             {
+              "enum": [
+               "ui-icon-glyph"
+              ]
+             }
+            ]
+           }
+          },
+          "required": [
+           "assetRole"
+          ]
+         }
+        },
+        "required": [
+         "href",
+         "artwork"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "static"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "chrome.cookie-consent"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "title": {
+          "type": "string",
+          "maxWords": 3,
+          "minLength": 1
+         },
+         "body": {
+          "type": "string",
+          "maxWords": 32,
+          "minLength": 1
+         },
+         "inlineLinkLabel": {
+          "type": "string",
+          "maxWords": 3,
+          "minLength": 1
+         },
+         "bannerActions": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "label": {
+             "type": "string",
+             "maxWords": 3,
+             "minLength": 1
+            },
+            "style": {
+             "type": "string",
+             "enum": [
+              "primary",
+              "outline"
+             ]
+            },
+            "fsCc": {
+             "type": "string",
+             "enum": [
+              "allow",
+              "open-preferences",
+              "submit",
+              "close"
+             ]
+            },
+            "href": {
+             "type": "string",
+             "enum": [
+              "#",
+              "/#",
+              "/#what-is-fourmula",
+              "/#pdp",
+              "/#products",
+              "/#video",
+              "/#list",
+              "/",
+              "/404",
+              "/auth",
+              "/privacy-policy",
+              "/start",
+              "/terms-of-service"
+             ]
+            }
+           },
+           "required": [
+            "label",
+            "style",
+            "fsCc",
+            "href"
+           ]
+          }
+         },
+         "modalActions": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "label": {
+             "type": "string",
+             "maxWords": 3,
+             "minLength": 1
+            },
+            "style": {
+             "type": "string",
+             "enum": [
+              "primary",
+              "outline"
+             ]
+            },
+            "fsCc": {
+             "type": "string",
+             "enum": [
+              "allow",
+              "open-preferences",
+              "submit",
+              "close"
+             ]
+            },
+            "href": {
+             "type": "string",
+             "enum": [
+              "#",
+              "/#",
+              "/#what-is-fourmula",
+              "/#pdp",
+              "/#products",
+              "/#video",
+              "/#list",
+              "/",
+              "/404",
+              "/auth",
+              "/privacy-policy",
+              "/start",
+              "/terms-of-service"
+             ]
+            }
+           },
+           "required": [
+            "label",
+            "style",
+            "fsCc",
+            "href"
+           ]
+          }
+         },
+         "categories": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "label": {
+             "type": "string",
+             "maxWords": 5,
+             "minLength": 1
+            },
+            "description": {
+             "type": "string",
+             "maxWords": 22,
+             "minLength": 1
+            },
+            "interactive": {
+             "type": "boolean"
+            },
+            "fsCcCheckbox": {
+             "type": "string",
+             "enum": [
+              "marketing",
+              "personalization",
+              "analytics",
+              "necessary"
+             ]
+            },
+            "assetRole": {
+             "type": "string",
+             "allOf": [
+              {
+               "$ref": "#/definitions/assetRole"
+              },
+              {
+               "enum": [
+                "form-control-checkmark"
+               ]
+              }
+             ]
+            }
+           },
+           "required": [
+            "label",
+            "description",
+            "interactive",
+            "fsCcCheckbox"
+           ]
+          }
+         },
+         "closeLabel": {
+          "type": "string",
+          "maxWords": 5,
+          "minLength": 1
+         }
+        },
+        "required": [
+         "title",
+         "body",
+         "bannerActions",
+         "modalActions",
+         "categories"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "overlay-fade"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "chrome.footer"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "logo": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "assetRole": {
+            "type": "string",
+            "allOf": [
+             {
+              "$ref": "#/definitions/assetRole"
+             },
+             {
+              "enum": [
+               "brand-wordmark"
+              ]
+             }
+            ]
+           },
+           "accessibleLabel": {
+            "type": "string",
+            "maxWords": 2,
+            "minLength": 1
+           },
+           "href": {
+            "type": "string",
+            "enum": [
+             "#",
+             "/#",
+             "/#what-is-fourmula",
+             "/#pdp",
+             "/#products",
+             "/#video",
+             "/#list",
+             "/",
+             "/404",
+             "/auth",
+             "/privacy-policy",
+             "/start",
+             "/terms-of-service"
+            ]
+           }
+          },
+          "required": [
+           "assetRole",
+           "href"
+          ]
+         },
+         "linkLists": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "emphasis": {
+             "type": "string",
+             "enum": [
+              "primary",
+              "secondary"
+             ]
+            },
+            "layout": {
+             "type": "string",
+             "enum": [
+              "column",
+              "row"
+             ]
+            },
+            "links": {
+             "type": "array",
+             "minItems": 2,
+             "maxItems": 3,
+             "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+               "label": {
+                "type": "string",
+                "maxWords": 4,
+                "minLength": 1
+               },
+               "href": {
+                "type": "string",
+                "enum": [
+                 "#",
+                 "/#",
+                 "/#what-is-fourmula",
+                 "/#pdp",
+                 "/#products",
+                 "/#video",
+                 "/#list",
+                 "/",
+                 "/404",
+                 "/auth",
+                 "/privacy-policy",
+                 "/start",
+                 "/terms-of-service"
+                ]
+               },
+               "hidden": {
+                "type": "boolean"
+               }
+              },
+              "required": [
+               "label",
+               "href"
+              ]
+             }
+            }
+           },
+           "required": [
+            "emphasis",
+            "layout",
+            "links"
+           ]
+          }
+         },
+         "legalLine": {
+          "type": "string",
+          "maxWords": 9,
+          "minLength": 1
+         },
+         "registrationLine": {
+          "type": "string",
+          "maxWords": 8,
+          "minLength": 1
+         },
+         "dotsField": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "rows": {
+            "type": "integer",
+            "enum": [
+             14
+            ]
+           },
+           "colsDesktop": {
+            "type": "integer",
+            "enum": [
+             52
+            ]
+           }
+          },
+          "required": [
+           "rows",
+           "colsDesktop"
+          ]
+         }
+        },
+        "required": [
+         "logo",
+         "linkLists",
+         "legalLine",
+         "registrationLine",
+         "dotsField"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "dots-field-wave"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "chrome.header"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "logo": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "assetRole": {
+            "type": "string",
+            "allOf": [
+             {
+              "$ref": "#/definitions/assetRole"
+             },
+             {
+              "enum": [
+               "brand-wordmark"
+              ]
+             }
+            ]
+           },
+           "accessibleLabel": {
+            "type": "string",
+            "maxWords": 2,
+            "minLength": 1
+           },
+           "href": {
+            "type": "string",
+            "enum": [
+             "#",
+             "/#",
+             "/#what-is-fourmula",
+             "/#pdp",
+             "/#products",
+             "/#video",
+             "/#list",
+             "/",
+             "/404",
+             "/auth",
+             "/privacy-policy",
+             "/start",
+             "/terms-of-service"
+            ]
+           }
+          },
+          "required": [
+           "assetRole",
+           "href"
+          ]
+         },
+         "menuLabel": {
+          "type": "string",
+          "maxWords": 2,
+          "minLength": 1
+         },
+         "themeToggle": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "ariaPressed": {
+            "type": "boolean"
+           },
+           "dataThemeState": {
+            "type": "string",
+            "enum": [
+             "dark",
+             "light"
+            ]
+           }
+          },
+          "required": [
+           "ariaPressed",
+           "dataThemeState"
+          ]
+         },
+         "progressInitial": {
+          "type": "string",
+          "maxWords": 2,
+          "minLength": 1
+         },
+         "signin": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "assetRole": {
+            "type": "string",
+            "allOf": [
+             {
+              "$ref": "#/definitions/assetRole"
+             },
+             {
+              "enum": [
+               "ui-icon-glyph"
+              ]
+             }
+            ]
+           },
+           "accessibleLabel": {
+            "type": "string",
+            "maxWords": 4,
+            "minLength": 1
+           },
+           "href": {
+            "type": "string",
+            "enum": [
+             "#",
+             "/#",
+             "/#what-is-fourmula",
+             "/#pdp",
+             "/#products",
+             "/#video",
+             "/#list",
+             "/",
+             "/404",
+             "/auth",
+             "/privacy-policy",
+             "/start",
+             "/terms-of-service"
+            ]
+           }
+          },
+          "required": [
+           "assetRole",
+           "href"
+          ]
+         },
+         "cta": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "label": {
+            "type": "string",
+            "maxWords": 3,
+            "minLength": 1
+           },
+           "href": {
+            "type": "string",
+            "enum": [
+             "#",
+             "/#",
+             "/#what-is-fourmula",
+             "/#pdp",
+             "/#products",
+             "/#video",
+             "/#list",
+             "/",
+             "/404",
+             "/auth",
+             "/privacy-policy",
+             "/start",
+             "/terms-of-service"
+            ]
+           },
+           "hoverStagger": {
+            "type": "boolean"
+           }
+          },
+          "required": [
+           "label",
+           "href"
+          ]
+         }
+        },
+        "required": [
+         "logo",
+         "menuLabel",
+         "themeToggle",
+         "progressInitial",
+         "signin",
+         "cta"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "chrome-reveal"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "chrome.menu"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "groups": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "label": {
+             "type": "string",
+             "maxWords": 3,
+             "minLength": 1
+            },
+            "layout": {
+             "type": "string",
+             "enum": [
+              "column",
+              "row"
+             ]
+            },
+            "emphasis": {
+             "type": "string",
+             "enum": [
+              "primary",
+              "secondary"
+             ]
+            },
+            "links": {
+             "type": "array",
+             "minItems": 3,
+             "maxItems": 4,
+             "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+               "label": {
+                "type": "string",
+                "maxWords": 4,
+                "minLength": 1
+               },
+               "href": {
+                "type": "string",
+                "enum": [
+                 "#",
+                 "/#",
+                 "/#what-is-fourmula",
+                 "/#pdp",
+                 "/#products",
+                 "/#video",
+                 "/#list",
+                 "/",
+                 "/404",
+                 "/auth",
+                 "/privacy-policy",
+                 "/start",
+                 "/terms-of-service"
+                ]
+               },
+               "hidden": {
+                "type": "boolean"
+               }
+              },
+              "required": [
+               "label",
+               "href"
+              ]
+             }
+            }
+           },
+           "required": [
+            "label",
+            "layout",
+            "emphasis",
+            "links"
+           ]
+          }
+         },
+         "cta": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "label": {
+            "type": "string",
+            "maxWords": 3,
+            "minLength": 1
+           },
+           "href": {
+            "type": "string",
+            "enum": [
+             "#",
+             "/#",
+             "/#what-is-fourmula",
+             "/#pdp",
+             "/#products",
+             "/#video",
+             "/#list",
+             "/",
+             "/404",
+             "/auth",
+             "/privacy-policy",
+             "/start",
+             "/terms-of-service"
+            ]
+           },
+           "hoverStagger": {
+            "type": "boolean"
+           }
+          },
+          "required": [
+           "label",
+           "href"
+          ]
+         },
+         "signin": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "assetRole": {
+            "type": "string",
+            "allOf": [
+             {
+              "$ref": "#/definitions/assetRole"
+             },
+             {
+              "enum": [
+               "ui-icon-glyph"
+              ]
+             }
+            ]
+           },
+           "accessibleLabel": {
+            "type": "string",
+            "maxWords": 4,
+            "minLength": 1
+           },
+           "href": {
+            "type": "string",
+            "enum": [
+             "#",
+             "/#",
+             "/#what-is-fourmula",
+             "/#pdp",
+             "/#products",
+             "/#video",
+             "/#list",
+             "/",
+             "/404",
+             "/auth",
+             "/privacy-policy",
+             "/start",
+             "/terms-of-service"
+            ]
+           }
+          },
+          "required": [
+           "assetRole",
+           "href"
+          ]
+         }
+        },
+        "required": [
+         "groups",
+         "cta",
+         "signin"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "panel-expand"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "chrome.preloader"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "word": {
+          "type": "string",
+          "maxWords": 2,
+          "minLength": 1
+         },
+         "logo": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "assetRole": {
+            "type": "string",
+            "allOf": [
+             {
+              "$ref": "#/definitions/assetRole"
+             },
+             {
+              "enum": [
+               "brand-wordmark"
+              ]
+             }
+            ]
+           }
+          },
+          "required": [
+           "assetRole"
+          ]
+         },
+         "spinner": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "assetRole": {
+            "type": "string",
+            "allOf": [
+             {
+              "$ref": "#/definitions/assetRole"
+             },
+             {
+              "enum": [
+               "ui-icon-glyph"
+              ]
+             }
+            ]
+           }
+          },
+          "required": [
+           "assetRole"
+          ]
+         },
+         "images": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "assetRole": {
+             "type": "string",
+             "allOf": [
+              {
+               "$ref": "#/definitions/assetRole"
+              },
+              {
+               "enum": [
+                "preloader-photo"
+               ]
+              }
+             ]
+            },
+            "assetRef": {
+             "type": "string",
+             "pattern": "^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~@%+()/-]+$"
+            },
+            "alt": {
+             "type": "string",
+             "maxWords": 28
+            }
+           },
+           "required": [
+            "assetRole"
+           ]
+          }
+         }
+        },
+        "required": [
+         "word",
+         "logo",
+         "spinner",
+         "images"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "preloader-reveal"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "content.tech"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "oneOf": [
+         {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "legal-prose",
+          "description": "The long-form legal page body. DOM scaffolding measured against the live original; the PROSE ITSELF IS DELIBERATE PLACEHOLDER FILLER. Paragraph slots therefore carry NO maxWords: a budget derived from filler would be a fabricated measurement dressed up as a measured one.",
+          "properties": {
+           "titleLines": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 2,
+            "items": {
+             "type": "string",
+             "maxWords": 4,
+             "minLength": 1
+            }
+           },
+           "introParagraph": {
+            "type": "string"
+           },
+           "anchorIndexHeading": {
+            "type": "string",
+            "maxWords": 4,
+            "minLength": 1
+           },
+           "anchorIndex": {
+            "type": "array",
+            "minItems": 12,
+            "maxItems": 16,
+            "items": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "label": {
+               "type": "string",
+               "maxWords": 10,
+               "minLength": 1
+              },
+              "slug": {
+               "type": "string",
+               "pattern": "^[a-z0-9][a-z0-9-]*$"
+              }
+             },
+             "required": [
+              "label",
+              "slug"
+             ]
+            }
+           },
+           "sections": {
+            "type": "array",
+            "minItems": 12,
+            "maxItems": 16,
+            "items": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "heading": {
+               "type": "string",
+               "maxWords": 10,
+               "minLength": 1
+              },
+              "slug": {
+               "type": "string",
+               "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "anchorPattern": {
+               "type": "string",
+               "enum": [
+                "div-embed-only",
+                "div-embed-and-h2-id"
+               ]
+              },
+              "paragraphs": {
+               "type": "array",
+               "minItems": 0,
+               "maxItems": 12,
+               "items": {
+                "type": "string"
+               }
+              },
+              "lists": {
+               "type": "array",
+               "minItems": 0,
+               "maxItems": 6,
+               "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                 "ordered": {
+                  "type": "boolean"
+                 },
+                 "items": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 20,
+                  "items": {
+                   "type": "string"
+                  }
+                 }
+                },
+                "required": [
+                 "ordered",
+                 "items"
+                ]
+               }
+              },
+              "tables": {
+               "type": "array",
+               "minItems": 0,
+               "maxItems": 2,
+               "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                 "headerCells": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 6,
+                  "items": {
+                   "type": "string",
+                   "maxWords": 6,
+                   "minLength": 1
+                  }
+                 },
+                 "rowCount": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 30
+                 }
+                },
+                "required": [
+                 "headerCells",
+                 "rowCount"
+                ]
+               }
+              },
+              "subHeadings": {
+               "type": "array",
+               "minItems": 0,
+               "maxItems": 4,
+               "items": {
+                "type": "string",
+                "maxWords": 10,
+                "minLength": 1
+               }
+              }
+             },
+             "required": [
+              "heading",
+              "slug",
+              "anchorPattern"
+             ]
+            }
+           }
+          },
+          "required": [
+           "titleLines",
+           "anchorIndex",
+           "sections"
+          ]
+         },
+         {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "onboarding-cta",
+          "description": "The /start stand-in. COMPOSED, NOT MEASURED - there was no source page to transcribe. Its word budgets are the lengths of this project's OWN composed copy, not measurements of fourmula.ai.",
+          "properties": {
+           "titleLines": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+             "type": "string",
+             "maxWords": 3,
+             "minLength": 1
+            }
+           },
+           "body": {
+            "type": "string",
+            "maxWords": 26,
+            "minLength": 1
+           },
+           "ctas": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "label": {
+               "type": "string",
+               "maxWords": 3,
+               "minLength": 1
+              },
+              "style": {
+               "type": "string",
+               "enum": [
+                "primary",
+                "outline"
+               ]
+              },
+              "href": {
+               "type": "string",
+               "enum": [
+                "#",
+                "/#",
+                "/#what-is-fourmula",
+                "/#pdp",
+                "/#products",
+                "/#video",
+                "/#list",
+                "/",
+                "/404",
+                "/auth",
+                "/privacy-policy",
+                "/start",
+                "/terms-of-service"
+               ]
+              },
+              "hoverStagger": {
+               "type": "boolean"
+              }
+             },
+             "required": [
+              "label",
+              "style",
+              "href"
+             ]
+            }
+           }
+          },
+          "required": [
+           "titleLines",
+           "body",
+           "ctas"
+          ]
+         },
+         {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "auth-form",
+          "description": "The /auth stand-in. COMPOSED, NOT MEASURED. It carries the project's single <form>, which is DELIBERATELY INERT and is pinned to the auth-inert-form asset role.",
+          "properties": {
+           "titleLines": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+             "type": "string",
+             "maxWords": 3,
+             "minLength": 1
+            }
+           },
+           "body": {
+            "type": "string",
+            "maxWords": 13,
+            "minLength": 1
+           },
+           "form": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+             "assetRole": {
+              "type": "string",
+              "allOf": [
+               {
+                "$ref": "#/definitions/assetRole"
+               },
+               {
+                "enum": [
+                 "auth-inert-form"
+                ]
+               }
+              ]
+             },
+             "ariaLabel": {
+              "type": "string",
+              "maxWords": 4,
+              "minLength": 1
+             },
+             "fields": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "items": {
+               "type": "object",
+               "additionalProperties": false,
+               "properties": {
+                "label": {
+                 "type": "string",
+                 "maxWords": 2,
+                 "minLength": 1
+                },
+                "inputType": {
+                 "type": "string",
+                 "enum": [
+                  "text"
+                 ]
+                },
+                "placeholder": {
+                 "type": "string",
+                 "maxWords": 2,
+                 "minLength": 1
+                },
+                "id": {
+                 "type": "string",
+                 "pattern": "^[a-z0-9][a-z0-9-]*$"
+                }
+               },
+               "required": [
+                "label",
+                "inputType",
+                "id"
+               ]
+              }
+             },
+             "submitLabel": {
+              "type": "string",
+              "maxWords": 2,
+              "minLength": 1
+             },
+             "inert": {
+              "type": "boolean",
+              "const": true
+             }
+            },
+            "required": [
+             "assetRole",
+             "fields",
+             "submitLabel",
+             "inert"
+            ]
+           },
+           "ctas": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "label": {
+               "type": "string",
+               "maxWords": 3,
+               "minLength": 1
+              },
+              "style": {
+               "type": "string",
+               "enum": [
+                "primary",
+                "outline"
+               ]
+              },
+              "href": {
+               "type": "string",
+               "enum": [
+                "#",
+                "/#",
+                "/#what-is-fourmula",
+                "/#pdp",
+                "/#products",
+                "/#video",
+                "/#list",
+                "/",
+                "/404",
+                "/auth",
+                "/privacy-policy",
+                "/start",
+                "/terms-of-service"
+               ]
+              },
+              "hoverStagger": {
+               "type": "boolean"
+              }
+             },
+             "required": [
+              "label",
+              "style",
+              "href"
+             ]
+            }
+           }
+          },
+          "required": [
+           "titleLines",
+           "body",
+           "form",
+           "ctas"
+          ]
+         }
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "static"
+         }
+        }
+       },
+       "variant": {
+        "type": "string",
+        "enum": [
+         "auth-form",
+         "legal-prose",
+         "onboarding-cta"
+        ]
+       }
+      },
+      "required": [
+       "variant"
+      ]
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "content.what-intro"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "eyebrow": {
+          "type": "string",
+          "maxWords": 5,
+          "minLength": 1
+         },
+         "headingLines": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+           "type": "string",
+           "maxWords": 4,
+           "minLength": 1
+          }
+         },
+         "anchorId": {
+          "type": "string",
+          "enum": [
+           "what-is-fourmula"
+          ]
+         }
+        },
+        "required": [
+         "eyebrow",
+         "headingLines",
+         "anchorId"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "flash-word-reveal"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "faq.accordion"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "eyebrow": {
+          "type": "string",
+          "maxWords": 2,
+          "minLength": 1
+         },
+         "headingLines": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+           "type": "string",
+           "maxWords": 4,
+           "minLength": 1
+          }
+         },
+         "items": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "question": {
+             "type": "string",
+             "maxWords": 9,
+             "minLength": 1
+            },
+            "answer": {
+             "type": "string",
+             "maxWords": 18,
+             "minLength": 1
+            },
+            "icon": {
+             "type": "string",
+             "enum": [
+              "+"
+             ]
+            }
+           },
+           "required": [
+            "question",
+            "answer"
+           ]
+          }
+         }
+        },
+        "required": [
+         "eyebrow",
+         "headingLines",
+         "items"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "flash-word-reveal"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "hero.home"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "heading": {
+          "type": "string",
+          "maxWords": 3,
+          "minLength": 1
+         },
+         "headingAccent": {
+          "type": "string",
+          "maxWords": 3,
+          "minLength": 1
+         },
+         "copyrightYear": {
+          "type": "string",
+          "maxWords": 2,
+          "minLength": 1
+         },
+         "scrollCue": {
+          "type": "string",
+          "maxWords": 3,
+          "minLength": 1
+         },
+         "scrollCueHref": {
+          "type": "string",
+          "enum": [
+           "#",
+           "/#",
+           "/#what-is-fourmula",
+           "/#pdp",
+           "/#products",
+           "/#video",
+           "/#list",
+           "/",
+           "/404",
+           "/auth",
+           "/privacy-policy",
+           "/start",
+           "/terms-of-service"
+          ]
+         },
+         "sliderItems": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {
+           "type": "string",
+           "maxWords": 3,
+           "minLength": 1
+          }
+         },
+         "uploadPrompt": {
+          "type": "string",
+          "maxWords": 6,
+          "minLength": 1
+         },
+         "carouselImages": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "assetRole": {
+             "type": "string",
+             "allOf": [
+              {
+               "$ref": "#/definitions/assetRole"
+              },
+              {
+               "enum": [
+                "hero-carousel-photo"
+               ]
+              }
+             ]
+            },
+            "assetRef": {
+             "type": "string",
+             "pattern": "^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~@%+()/-]+$"
+            },
+            "alt": {
+             "type": "string",
+             "maxWords": 28
+            }
+           },
+           "required": [
+            "assetRole"
+           ]
+          }
+         }
+        },
+        "required": [
+         "heading",
+         "headingAccent",
+         "scrollCue",
+         "scrollCueHref",
+         "sliderItems",
+         "uploadPrompt",
+         "carouselImages"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "hero-reveal"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "hero.not-found"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "heading": {
+          "type": "string",
+          "maxWords": 3,
+          "minLength": 1
+         },
+         "headingAccent": {
+          "type": "string",
+          "maxWords": 3,
+          "minLength": 1
+         },
+         "cta": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "label": {
+            "type": "string",
+            "maxWords": 3,
+            "minLength": 1
+           },
+           "href": {
+            "type": "string",
+            "enum": [
+             "#",
+             "/#",
+             "/#what-is-fourmula",
+             "/#pdp",
+             "/#products",
+             "/#video",
+             "/#list",
+             "/",
+             "/404",
+             "/auth",
+             "/privacy-policy",
+             "/start",
+             "/terms-of-service"
+            ]
+           },
+           "hoverStagger": {
+            "type": "boolean"
+           }
+          },
+          "required": [
+           "label",
+           "href"
+          ]
+         },
+         "artwork": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "assetRole": {
+            "type": "string",
+            "allOf": [
+             {
+              "$ref": "#/definitions/assetRole"
+             },
+             {
+              "enum": [
+               "not-found-artwork"
+              ]
+             }
+            ]
+           },
+           "assetRef": {
+            "type": "string",
+            "pattern": "^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~@%+()/-]+$"
+           },
+           "alt": {
+            "type": "string",
+            "maxWords": 28
+           },
+           "themePairRef": {
+            "type": "string",
+            "pattern": "^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~@%+()/-]+$"
+           }
+          },
+          "required": [
+           "assetRole"
+          ]
+         }
+        },
+        "required": [
+         "heading",
+         "headingAccent",
+         "cta",
+         "artwork"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "hero-reveal"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "marquee.how-trusted"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "eyebrow": {
+          "type": "string",
+          "maxWords": 4,
+          "minLength": 1
+         },
+         "headingLead": {
+          "type": "string",
+          "maxWords": 3,
+          "minLength": 1
+         },
+         "capabilities": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+           "type": "string",
+           "maxWords": 3,
+           "minLength": 1
+          }
+         },
+         "cta": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "label": {
+            "type": "string",
+            "maxWords": 3,
+            "minLength": 1
+           },
+           "href": {
+            "type": "string",
+            "enum": [
+             "#",
+             "/#",
+             "/#what-is-fourmula",
+             "/#pdp",
+             "/#products",
+             "/#video",
+             "/#list",
+             "/",
+             "/404",
+             "/auth",
+             "/privacy-policy",
+             "/start",
+             "/terms-of-service"
+            ]
+           },
+           "hoverStagger": {
+            "type": "boolean"
+           }
+          },
+          "required": [
+           "label",
+           "href"
+          ]
+         },
+         "trustedEyebrow": {
+          "type": "string",
+          "maxWords": 3,
+          "minLength": 1
+         },
+         "trustedLogos": {
+          "type": "array",
+          "minItems": 11,
+          "maxItems": 11,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "assetRole": {
+             "type": "string",
+             "allOf": [
+              {
+               "$ref": "#/definitions/assetRole"
+              },
+              {
+               "enum": [
+                "trusted-partner-logo"
+               ]
+              }
+             ]
+            },
+            "accessibleLabel": {
+             "type": "string",
+             "maxWords": 3,
+             "minLength": 1
+            }
+           },
+           "required": [
+            "assetRole"
+           ]
+          }
+         }
+        },
+        "required": [
+         "eyebrow",
+         "headingLead",
+         "capabilities",
+         "cta",
+         "trustedEyebrow",
+         "trustedLogos"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "marquee-scroll"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "showcase.ai-capabilities"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "blocks": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "anchorId": {
+             "type": "string",
+             "enum": [
+              "pdp",
+              "products",
+              "video"
+             ]
+            },
+            "pillHref": {
+             "type": "string",
+             "enum": [
+              "#",
+              "/#",
+              "/#what-is-fourmula",
+              "/#pdp",
+              "/#products",
+              "/#video",
+              "/#list",
+              "/",
+              "/404",
+              "/auth",
+              "/privacy-policy",
+              "/start",
+              "/terms-of-service"
+             ]
+            },
+            "pillGlyph": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "assetRole": {
+               "type": "string",
+               "allOf": [
+                {
+                 "$ref": "#/definitions/assetRole"
+                },
+                {
+                 "enum": [
+                  "ui-icon-glyph"
+                 ]
+                }
+               ]
+              },
+              "accessibleLabel": {
+               "type": "string",
+               "maxWords": 2,
+               "minLength": 1
+              }
+             },
+             "required": [
+              "assetRole"
+             ]
+            },
+            "tagLabel": {
+             "type": "string",
+             "maxWords": 4,
+             "minLength": 1
+            },
+            "heading": {
+             "type": "string",
+             "maxWords": 7,
+             "minLength": 1
+            },
+            "headingSecondLine": {
+             "type": "string",
+             "maxWords": 4,
+             "minLength": 1
+            },
+            "body": {
+             "type": "string",
+             "maxWords": 22,
+             "minLength": 1
+            },
+            "collage": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "arrangement": {
+               "type": "string",
+               "enum": [
+                "two-up-with-arrow",
+                "five-image-collage",
+                "three-video-collage"
+               ]
+              },
+              "images": {
+               "type": "array",
+               "minItems": 0,
+               "maxItems": 12,
+               "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                 "assetRole": {
+                  "type": "string",
+                  "allOf": [
+                   {
+                    "$ref": "#/definitions/assetRole"
+                   },
+                   {
+                    "enum": [
+                     "product-shot-photo"
+                    ]
+                   }
+                  ]
+                 },
+                 "assetRef": {
+                  "type": "string",
+                  "pattern": "^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~@%+()/-]+$"
+                 },
+                 "alt": {
+                  "type": "string",
+                  "maxWords": 28
+                 },
+                 "themePairRef": {
+                  "type": "string",
+                  "pattern": "^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~@%+()/-]+$"
+                 },
+                 "crossFadeTwinRef": {
+                  "type": "string",
+                  "pattern": "^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~@%+()/-]+$"
+                 }
+                },
+                "required": [
+                 "assetRole"
+                ]
+               }
+              },
+              "videos": {
+               "type": "array",
+               "minItems": 0,
+               "maxItems": 3,
+               "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                 "assetRole": {
+                  "type": "string",
+                  "allOf": [
+                   {
+                    "$ref": "#/definitions/assetRole"
+                   },
+                   {
+                    "enum": [
+                     "showcase-video"
+                    ]
+                   }
+                  ]
+                 },
+                 "assetRef": {
+                  "type": "string",
+                  "pattern": "^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~@%+()/-]+$"
+                 },
+                 "alt": {
+                  "type": "string",
+                  "maxWords": 28
+                 }
+                },
+                "required": [
+                 "assetRole"
+                ]
+               }
+              }
+             },
+             "required": [
+              "arrangement"
+             ]
+            }
+           },
+           "required": [
+            "anchorId",
+            "pillHref",
+            "pillGlyph",
+            "tagLabel",
+            "heading",
+            "body",
+            "collage"
+           ]
+          }
+         }
+        },
+        "required": [
+         "blocks"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "flash-word-reveal"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "steps.pinned-list"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "headingLines": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+           "type": "string",
+           "maxWords": 5,
+           "minLength": 1
+          }
+         },
+         "subCopyLines": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+           "type": "string",
+           "maxWords": 7,
+           "minLength": 1
+          }
+         },
+         "anchorId": {
+          "type": "string",
+          "enum": [
+           "list"
+          ]
+         },
+         "slides": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "variant": {
+             "type": "string",
+             "enum": [
+              "is-first",
+              "is-second",
+              "is-third",
+              "is-fourth"
+             ]
+            },
+            "headingLines": {
+             "type": "array",
+             "minItems": 1,
+             "maxItems": 2,
+             "items": {
+              "type": "string",
+              "maxWords": 4,
+              "minLength": 1
+             }
+            },
+            "stepTag": {
+             "type": "string",
+             "maxWords": 2,
+             "minLength": 1
+            },
+            "stepNumber": {
+             "type": "string",
+             "enum": [
+              "01",
+              "02",
+              "03",
+              "04"
+             ]
+            },
+            "infoTags": {
+             "type": "array",
+             "minItems": 2,
+             "maxItems": 2,
+             "items": {
+              "type": "string",
+              "maxWords": 5,
+              "minLength": 1
+             }
+            },
+            "infoCopyLines": {
+             "type": "array",
+             "minItems": 2,
+             "maxItems": 3,
+             "items": {
+              "type": "string",
+              "maxWords": 5,
+              "minLength": 1
+             }
+            },
+            "cta": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "label": {
+               "type": "string",
+               "maxWords": 3,
+               "minLength": 1
+              },
+              "href": {
+               "type": "string",
+               "enum": [
+                "#",
+                "/#",
+                "/#what-is-fourmula",
+                "/#pdp",
+                "/#products",
+                "/#video",
+                "/#list",
+                "/",
+                "/404",
+                "/auth",
+                "/privacy-policy",
+                "/start",
+                "/terms-of-service"
+               ]
+              },
+              "hoverStagger": {
+               "type": "boolean"
+              }
+             },
+             "required": [
+              "label",
+              "href"
+             ]
+            },
+            "artwork": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+              "assetRole": {
+               "type": "string",
+               "allOf": [
+                {
+                 "$ref": "#/definitions/assetRole"
+                },
+                {
+                 "enum": [
+                  "step-artwork"
+                 ]
+                }
+               ]
+              },
+              "assetRef": {
+               "type": "string",
+               "pattern": "^/(?!/)(?!.*\\.\\.)[A-Za-z0-9._~@%+()/-]+$"
+              },
+              "alt": {
+               "type": "string",
+               "maxWords": 28
+              }
+             },
+             "required": [
+              "assetRole"
+             ]
+            },
+            "pinned": {
+             "type": "boolean"
+            }
+           },
+           "required": [
+            "variant",
+            "headingLines",
+            "stepTag",
+            "stepNumber",
+            "infoTags",
+            "infoCopyLines",
+            "cta",
+            "artwork",
+            "pinned"
+           ]
+          }
+         }
+        },
+        "required": [
+         "headingLines",
+         "subCopyLines",
+         "anchorId",
+         "slides"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "pinned-3d-stack"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    }
+   ]
+  }
+ }
+}

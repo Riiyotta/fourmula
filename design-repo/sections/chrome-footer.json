@@ -1,0 +1,233 @@
+{
+  "id": "chrome.footer",
+  "kind": "section",
+  "category": "chrome",
+  "purpose": "The site footer: brand mark, four link lists, two legal lines and the interactive dot field. Present on 4 of the 6 routes; the 404 does not render it, which is why #dotsField is absent there.",
+  "content": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "logo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "assetRole": {
+            "type": "string",
+            "enum": [
+              "brand-wordmark"
+            ]
+          },
+          "accessibleLabel": {
+            "type": "string",
+            "maxWords": 2
+          },
+          "href": {
+            "type": "string",
+            "format": "route-or-inert-hash"
+          }
+        },
+        "required": [
+          "assetRole",
+          "href"
+        ]
+      },
+      "linkLists": {
+        "type": "array",
+        "minItems": 4,
+        "maxItems": 4,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "emphasis": {
+              "type": "string",
+              "enum": [
+                "primary",
+                "secondary"
+              ]
+            },
+            "layout": {
+              "type": "string",
+              "enum": [
+                "column",
+                "row"
+              ]
+            },
+            "links": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 3,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxWords": 4
+                  },
+                  "href": {
+                    "type": "string",
+                    "format": "route-or-inert-hash"
+                  },
+                  "hidden": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "label",
+                  "href"
+                ]
+              }
+            }
+          },
+          "required": [
+            "emphasis",
+            "layout",
+            "links"
+          ]
+        },
+        "note": "Exactly 4 lists: left-primary (PDP's, Videos), left-secondary (Privacy Policy, Terms of Service, Cookie Policy), right-primary (Products, Our features), right-secondary (Instagram, Facebook, Youtube - the last two .is-hide)."
+      },
+      "legalLine": {
+        "type": "string",
+        "maxWords": 9,
+        "note": "Measured: 8 words, \"(c) <year>, Fourmula ltd. UK, London. All rights reserved.\" with the year injected by public/motion/m03.js from [data-current-year]."
+      },
+      "registrationLine": {
+        "type": "string",
+        "maxWords": 8,
+        "note": "Measured: 7 words, \"Registered in England & Wales No.: 13044361\"."
+      },
+      "dotsField": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rows": {
+            "type": "integer",
+            "enum": [
+              14
+            ]
+          },
+          "colsDesktop": {
+            "type": "integer",
+            "enum": [
+              52
+            ]
+          }
+        },
+        "required": [
+          "rows",
+          "colsDesktop"
+        ],
+        "note": "Exactly 14 rows always; 52 / 24 / 22 columns at m07.js's own JS thresholds, so 728 / 336 / 308 dots."
+      }
+    },
+    "required": [
+      "logo",
+      "linkLists",
+      "legalLine",
+      "registrationLine",
+      "dotsField"
+    ]
+  },
+  "contentMaxWordsTotal": 45,
+  "usedOn": [
+    "/",
+    "/privacy-policy",
+    "/terms-of-service",
+    "/start",
+    "/auth"
+  ],
+  "evidence": {
+    "structure": "Structure, layout and motion measured against the live original. A pixel audit verified 1382/1382 elements at a 1440px viewport and 962/962 at 390px with zero deltas. Copy is the original's own.",
+    "copy": "a-exact"
+  },
+  "bodyCopyFields": [],
+  "variants": {},
+  "constraints": {
+    "onePerPage": true,
+    "maxPerPage": 1,
+    "mustPrecedeBadge": true,
+    "verification": "src/layout/Layout.jsx:44 renders it behind a `footer` flag that defaults to true; src/pages/NotFound.jsx:7 passes footer={false}. Checked against all 5 real templates: present once and immediately before chrome.awards-badge in home / legal / app-onboarding / app-auth, and ABSENT from not-found."
+  },
+  "media": {
+    "logo": {
+      "assetRole": [
+        "brand-wordmark"
+      ],
+      "policy": "must-reuse-exact"
+    }
+  },
+  "motion": {
+    "pattern": "dots-field-wave",
+    "detail": "public/motion/m15.js reveals .footer over 0.2s power2.out. m07.js builds the dot grid and rebuilds it on resize; m08.js runs an idle wave outward from the grid centre using steps(2); m09.js adds a cursor-proximity opacity response at 0.2s power2.out. Every dot rests at opacity 0.15.",
+    "reducedMotionFallback": "Render the footer and the full dot grid statically at the dots' resting opacity of 0.15, with no idle wave and no cursor response.",
+    "reducedMotionFallbackKind": "design-rule (the source ships NO prefers-reduced-motion handling for this section, so the fallback is prescribed by this repository, not mirrored)"
+  },
+  "responsive": {
+    "structured": true,
+    "breakpoint": "768px (JS) / 767px (CSS)",
+    "base": "52 x 14 = 728 dots at 1rem, field 103rem wide",
+    "max-991px": "from 768px up m07.js rebuilds at 24 x 14 = 336 dots; the CSS keeps the 1rem dot size",
+    "max-767px": "m07.js rebuilds at 22 x 14 = 308 dots and the CSS drops the dot size and gap to 0.5rem"
+  },
+  "tokens": [
+    "label.primary",
+    "label.secondary",
+    "text.primary",
+    "text.muted",
+    "border.hairline",
+    "component.dots-field.dot-fill",
+    "component.dots-field.dot-size",
+    "layout.dots-field.width",
+    "layout.dots-field.grid",
+    "motion.chrome.reveal",
+    "motion.dots.proximity",
+    "motion.hover-stagger.step",
+    "radius.indicator"
+  ],
+  "composes": [
+    "primitive.text-link",
+    "primitive.inline-icon",
+    "component.dots-field"
+  ],
+  "measuredFrom": [
+    {
+      "id": "cit-sec-ft-root",
+      "source": "src/components/Footer.jsx:6-6",
+      "quote": "<section className=\"footer\">"
+    },
+    {
+      "id": "cit-sec-ft-lists",
+      "source": "src/components/Footer.jsx:16-40",
+      "quote": "footer__main__list"
+    },
+    {
+      "id": "cit-sec-ft-legal",
+      "source": "src/components/Footer.jsx:42-42",
+      "quote": "Fourmula ltd. UK, London. All rights reserved."
+    },
+    {
+      "id": "cit-sec-ft-reg",
+      "source": "src/components/Footer.jsx:43-43",
+      "quote": "Registered in England & Wales No.: 13044361"
+    },
+    {
+      "id": "cit-sec-ft-dots",
+      "source": "src/components/Footer.jsx:85-85",
+      "quote": "id=\"dotsField\""
+    },
+    {
+      "id": "cit-sec-ft-flag",
+      "source": "src/layout/Layout.jsx:44-44",
+      "quote": "{footer && <Footer current={current} />}"
+    },
+    {
+      "id": "cit-sec-ft-404",
+      "source": "src/pages/NotFound.jsx:7-7",
+      "quote": "footer={false}"
+    }
+  ],
+  "notes": "The real markup also carries 21 empty <div className=\"js-global w-embed w-script\"> placeholders where the original's inline scripts used to sit; those scripts now live as the 26 files in public/motion/ loaded by src/loadSite.js. The placeholders are kept so the DOM matches the original.",
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum)."
+}

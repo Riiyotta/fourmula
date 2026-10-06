@@ -1,0 +1,279 @@
+{
+  "$description": "Semantic colour roles. A role is either THEMED (it carries $refDark and $refLight, one foundation token per palette) or a LITERAL (one $ref, identical in both palettes). tokens/themes/light.json and tokens/themes/dark.json resolve every role in this file to exactly one foundation token.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "paletteInversionWarning": "The LIGHT theme is the DEFAULT rendered theme, because the app ships <body class=\"body dark\"> and .body.dark carries the light values. See tokens/themes/light.json.",
+  "vendorRoleNote": "The four vendor.cookie-* roles describe the Finsweet Cookie Consent component that was vendored into this site. They are deliberately namespaced so a generator cannot mistake #146ef5 for a Fourmula brand colour.",
+  "tokens": {
+    "text.primary": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.fonts-100-dark",
+      "$refLight": "color.fonts-100-light",
+      "rationale": "Headings and full-strength copy. Applied through .u-fonts-100, the most used text utility in the markup.",
+      "usage": 82,
+      "evidence": [
+        "cit-sem-fonts-100"
+      ]
+    },
+    "text.secondary": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.fonts-64-dark",
+      "$refLight": "color.fonts-64-light",
+      "rationale": "Supporting paragraph copy. Applied through .u-fonts-64.",
+      "usage": 5,
+      "evidence": [
+        "cit-sem-fonts-64"
+      ]
+    },
+    "text.muted": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.fonts-50-dark",
+      "$refLight": "color.fonts-50-light",
+      "rationale": "Second line of a two-tone heading and secondary labels. 20 occurrences of .u-fonts-50 in src/**/*.jsx, plus 4 of the separate .u-fonts-50-stb class used on the step slides.",
+      "usage": 20,
+      "evidence": [
+        "cit-sem-fonts-50"
+      ]
+    },
+    "text.faint": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.fonts-30-dark",
+      "$refLight": "color.fonts-30-light",
+      "rationale": "Referenced three times in site-authored CSS: background-color of .ai__dot (2874), color of .ai__grid-arrow (3376) and color of .cookies__modal__close (4314). There is NO .u-fonts-30 utility class, so this role is reachable only through those three rules, never from the markup.",
+      "usage": 3,
+      "evidence": [
+        "cit-sem-fonts-30"
+      ]
+    },
+    "text.ghost": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.fonts-20-dark",
+      "$refLight": "color.fonts-20-light",
+      "rationale": "Every 1px hairline border declared as var(--fonts-20): 7 site-authored uses (3440, 3501, 3606, 3789, 4395, 4603, 5868). There is no .u-fonts-20 utility class.",
+      "usage": 7,
+      "evidence": [
+        "cit-sem-fonts-20"
+      ]
+    },
+    "surface.page": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.mainbg-dark",
+      "$refLight": "color.mainbg-light",
+      "rationale": "The page canvas. background-color: var(--mainbg) on .body.",
+      "usage": 1,
+      "evidence": [
+        "cit-sem-mainbg"
+      ]
+    },
+    "surface.page-fade": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.mainbg-gradient-dark",
+      "$refLight": "color.mainbg-gradient-light",
+      "rationale": "The fully transparent companion of surface.page, for gradient scrims over the canvas.",
+      "usage": 1,
+      "evidence": [
+        "cit-sem-mainbg-gradient"
+      ]
+    },
+    "surface.raised": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.secondbg-dark",
+      "$refLight": "color.secondbg-light",
+      "rationale": "Secondary panel surface.",
+      "usage": 1,
+      "evidence": [
+        "cit-sem-secondbg"
+      ]
+    },
+    "surface.menu": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.menu-dark",
+      "$refLight": "color.menu-light",
+      "rationale": "The slide-out menu panel fill.",
+      "usage": 1,
+      "evidence": [
+        "cit-sem-menu"
+      ]
+    },
+    "surface.dots": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.dots-pattern-dark",
+      "$refLight": "color.dots-pattern-light",
+      "rationale": "The footer dots-field surface and the .btn-outline.is-cookies resting fill.",
+      "usage": 2,
+      "evidence": [
+        "cit-sem-dots"
+      ]
+    },
+    "border.hairline": {
+      "$type": "color",
+      "themed": true,
+      "$refDark": "color.lines-dark",
+      "$refLight": "color.lines-light",
+      "rationale": "Every 1px divider in the site.",
+      "usage": 1,
+      "evidence": [
+        "cit-sem-lines"
+      ]
+    },
+    "accent.menu": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.menu-colors",
+      "rationale": "Menu accent. The ONLY role whose value is identical in both palettes (#fff3 in each), so it is modelled as a literal rather than a themed pair.",
+      "usage": 2,
+      "evidence": [
+        "cit-col-menu-colors"
+      ]
+    },
+    "accent.hover": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.accent-hover",
+      "rationale": "The single interactive accent. HOVER ONLY - never a resting fill.",
+      "usage": 3,
+      "evidence": [
+        "cit-col-accent-hover"
+      ]
+    },
+    "accent.flash-start": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.flash-orange",
+      "rationale": "First colour of the runtime flash-word reveal.",
+      "usage": 2,
+      "evidence": [
+        "cit-col-flash-1"
+      ]
+    },
+    "accent.flash-mid": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.flash-amber",
+      "rationale": "Second colour of the runtime flash-word reveal; also the shared end stop of all four step gradients.",
+      "usage": 3,
+      "evidence": [
+        "cit-col-flash-2"
+      ]
+    },
+    "accent.flash-end": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.flash-white",
+      "rationale": "End colour of the m24 variant of the reveal ONLY; m23 and m25 end on text.primary instead.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-flash-3"
+      ]
+    },
+    "surface.invert-pill": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.paper-white",
+      "rationale": "Resting fill of .ai__btn, a white pill that does not follow the palette.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-ai-btn"
+      ]
+    },
+    "text.on-invert-pill": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.ink-black",
+      "rationale": "Resting text colour inside .ai__btn.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-ai-btn"
+      ]
+    },
+    "border.toggle-hover": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.theme-toggle-hover-border",
+      "rationale": "Border of .header__theme:hover. Literal 65% white, palette-independent.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-theme-hover"
+      ]
+    },
+    "border.table-cell": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.table-cell-border",
+      "rationale": "Bottom border of a legal-page table cell.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-table-cell"
+      ]
+    },
+    "surface.table-head": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.table-head-fill",
+      "rationale": "Fill of a legal-page table header cell.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-table-head"
+      ]
+    },
+    "border.table-head": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.table-head-border",
+      "rationale": "Bottom border of a legal-page table header cell.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-table-head"
+      ]
+    },
+    "vendor.cookie-accent": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.vendor-finsweet-accent",
+      "rationale": "VENDORED Finsweet Cookie Consent accent. Not a Fourmula brand colour. Do not reuse it for brand UI.",
+      "usage": 7,
+      "evidence": [
+        "cit-col-fs-accent"
+      ]
+    },
+    "vendor.cookie-accent-soft": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.vendor-finsweet-accent-soft",
+      "rationale": "VENDORED Finsweet hover text colour.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-fs-soft"
+      ]
+    },
+    "vendor.cookie-surface": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.vendor-finsweet-surface",
+      "rationale": "VENDORED Finsweet preference tray fill.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-fs-surface"
+      ]
+    },
+    "vendor.cookie-hairline": {
+      "$type": "color",
+      "themed": false,
+      "$ref": "color.vendor-finsweet-hairline",
+      "rationale": "VENDORED Finsweet secondary-button border.",
+      "usage": 1,
+      "evidence": [
+        "cit-col-fs-hairline"
+      ]
+    }
+  }
+}

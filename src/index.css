@@ -1,0 +1,11 @@
+/* Order mirrors the original document: external stylesheet first,
+   then the inline head <style> blocks that override it. */
+@import './styles/fourmula-base.css';
+@import './styles/fourmula-head.css';
+
+/* NOTE: Tailwind is intentionally NOT included.
+   No Tailwind utility classes are used anywhere in src/components (the markup is a
+   verbatim transcription of the original's Webflow classes), and `@tailwind base`
+   (Preflight) loaded after the site's own stylesheets was overriding the original's
+   cascade -- e.g. body line-height (20px -> 1.5), img display (inline-block -> block),
+   and the heading/paragraph margin resets. */

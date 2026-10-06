@@ -1,0 +1,85 @@
+{
+  "id": "component.marquee-row",
+  "kind": "component",
+  "category": "motion",
+  "purpose": "A CSS-only infinite marquee track. Three distinct instances, all 24s linear infinite, differing only in axis and in what they carry.",
+  "cssClasses": [
+    ".how__bottom-row",
+    ".how__column",
+    ".hero__slider__row"
+  ],
+  "instances": {
+    "trusted-logos": {
+      "selector": ".how__bottom-row",
+      "keyframe": "marquee",
+      "axis": "translateX 0 -> -100%",
+      "items": "11 inline third-party logos",
+      "rows": 2,
+      "seamlessness": "the two rows are byte-identical; the duplication is what makes the loop seamless"
+    },
+    "capability-column": {
+      "selector": ".how__column",
+      "keyframe": "columnanima",
+      "axis": "translateY 0 -> -100%",
+      "items": "3 headings (Create Images / Makes videos / Stays on-brand)",
+      "rows": 2,
+      "seamlessness": "the two columns are byte-identical"
+    },
+    "hero-slider": {
+      "selector": ".hero__slider__row",
+      "keyframe": "hero-row",
+      "axis": "VERTICAL at min-width 992px (--ty-end:-100%), HORIZONTAL at max-width 991px (--tx-end:-100%)",
+      "items": "6 labels (PDPs / UGC / Lifestyle shots / Ads / Stories / Street style)",
+      "rows": 2,
+      "seamlessness": "the two rows are byte-identical"
+    }
+  },
+  "props": {
+    "items": "the repeated list",
+    "axis": "x | y",
+    "duplicateRows": "always 2"
+  },
+  "tokens": [
+    "motion.marquee.duration",
+    "label.secondary",
+    "surface.page-fade",
+    "text.primary"
+  ],
+  "composes": [
+    "primitive.inline-icon"
+  ],
+  "responsive": {
+    "structured": true,
+    "base": "hero slider scrolls vertically; both .how marquees run on their fixed axis",
+    "max-991px": "the hero slider FLIPS to horizontal via the --tx/--ty custom properties - this is the only min-width:992px query in the project",
+    "max-767px": "no further axis change"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-marquee-css",
+      "source": "src/styles/fourmula-head.css:55-61",
+      "quote": "animation: marquee 24s linear infinite;"
+    },
+    {
+      "id": "cit-comp-marquee-column",
+      "source": "src/styles/fourmula-head.css:64-71",
+      "quote": "animation: columnanima 24s linear infinite;"
+    },
+    {
+      "id": "cit-comp-marquee-hero",
+      "source": "src/styles/fourmula-head.css:74-99",
+      "quote": "animation: hero-row 24s linear infinite;"
+    },
+    {
+      "id": "cit-comp-marquee-rows",
+      "source": "src/components/How.jsx:64-94",
+      "quote": "how__bottom-row"
+    },
+    {
+      "id": "cit-comp-marquee-gradients",
+      "source": "src/components/How.jsx:95-96",
+      "quote": "how__bottom-gr-right"
+    }
+  ],
+  "notes": "The .how marquee is masked at both ends by .how__bottom-gr-left / -gr-right, and the hero slider by .hero__slider__top-gr / __bottom-gr; all four use the surface.page-fade transparent companion colour."
+}

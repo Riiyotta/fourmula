@@ -1,0 +1,108 @@
+{
+  "$description": "There are NO box-shadows anywhere in the site-authored stylesheet - every box-shadow in src/styles/fourmula-base.css lives in the Webflow framework partition (lines 1-2077 and the .w-*/.fs-cc_* re-declarations). Elevation here is therefore z-index layers plus two inline blur filters. Do not generate shadows.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "noShadows": {
+    "claim": "zero site-authored box-shadow declarations",
+    "evidence": [
+      "cit-elev-no-shadow"
+    ]
+  },
+  "tokens": {
+    "elevation.z-base": {
+      "$type": "number",
+      "$value": 1,
+      "role": "z-index layer used by .video__asset, .fs-cc_preference-buttons, .x_projects--projects_item-video",
+      "evidence": [
+        "cit-elev-zindex"
+      ]
+    },
+    "elevation.z-raised": {
+      "$type": "number",
+      "$value": 2,
+      "role": "z-index layer used by .header__main, .hero__wrap, .list__main__bottom-gradient, three .ai__grid-asset anima layers",
+      "evidence": [
+        "cit-elev-zindex"
+      ]
+    },
+    "elevation.z-overlay": {
+      "$type": "number",
+      "$value": 3,
+      "role": "z-index layer used by .upload-container, .hero__upload, .hero__carousel__wrap",
+      "evidence": [
+        "cit-elev-zindex"
+      ]
+    },
+    "elevation.z-close-button": {
+      "$type": "number",
+      "$value": 5,
+      "role": "z-index layer used by .cookies__modal__close",
+      "evidence": [
+        "cit-elev-zindex"
+      ]
+    },
+    "elevation.z-dropzone": {
+      "$type": "number",
+      "$value": 9,
+      "role": "z-index layer used by .drop-zone, .hero__upload-embed",
+      "evidence": [
+        "cit-elev-zindex"
+      ]
+    },
+    "elevation.z-menu": {
+      "$type": "number",
+      "$value": 998,
+      "role": "z-index layer used by .menu",
+      "evidence": [
+        "cit-elev-zindex"
+      ]
+    },
+    "elevation.z-header": {
+      "$type": "number",
+      "$value": 999,
+      "role": "z-index layer used by .header, .cookies",
+      "evidence": [
+        "cit-elev-zindex"
+      ]
+    },
+    "elevation.z-cookie-banner": {
+      "$type": "number",
+      "$value": 9500,
+      "role": "z-index layer used by .cookies__modal__wrap",
+      "evidence": [
+        "cit-elev-zindex"
+      ]
+    },
+    "elevation.z-preloader": {
+      "$type": "number",
+      "$value": 9999,
+      "role": "z-index layer used by .preloader, .cookies__list__wrap",
+      "evidence": [
+        "cit-elev-zindex"
+      ]
+    },
+    "elevation.z-awwwards-badge": {
+      "$type": "number",
+      "$value": 999,
+      "role": "Inline z-index on the body-level #awwwards badge (src/components/AwwwardsBadge.jsx:4).",
+      "evidence": [
+        "cit-elev-badge"
+      ]
+    },
+    "elevation.blur-preloader": {
+      "$type": "dimension",
+      "$value": "blur(20px)",
+      "role": "Inline filter on the three preloader layers; animated away by m21.js.",
+      "evidence": [
+        "cit-elev-blur-preloader"
+      ]
+    },
+    "elevation.blur-image-anima": {
+      "$type": "dimension",
+      "$value": "blur(6px)",
+      "role": "Inline filter on .ai__grid-asset.is-img-anima-5 only; the other four anima layers ship blur(0px).",
+      "evidence": [
+        "cit-elev-blur-anima"
+      ]
+    }
+  }
+}

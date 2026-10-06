@@ -1,0 +1,50 @@
+{
+  "id": "primitive.eyebrow-tag",
+  "kind": "primitive",
+  "category": "text",
+  "purpose": "The small uppercase-feel section label that sits opposite a section heading. Four real instances, one per home section that has one.",
+  "cssClasses": [
+    ".what__txt",
+    ".how__title-txt",
+    ".how__bottom-txt",
+    ".faq__txt",
+    "all with .u-tag .u-fonts-100"
+  ],
+  "props": {
+    "label": "2-3 words observed: \"What you can do\", \"How It Works\", \"Trusted By\", \"FAQs\""
+  },
+  "states": {
+    "rest": "text.primary at label.tag",
+    "hover": "n/a",
+    "focus": "n/a"
+  },
+  "tokens": [
+    "label.tag",
+    "text.primary",
+    "weight.regular"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "left column of a two-column section",
+    "max-991px": "label.tag stays 1.125rem",
+    "max-767px": "label.tag drops to 1rem"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-eyebrow-what",
+      "source": "src/components/What.jsx:6-6",
+      "quote": "what__txt u-tag u-fonts-100"
+    },
+    {
+      "id": "cit-prim-eyebrow-how",
+      "source": "src/components/How.jsx:6-6",
+      "quote": "how__title-txt u-tag u-fonts-100"
+    },
+    {
+      "id": "cit-prim-eyebrow-faq",
+      "source": "src/components/Faq.jsx:6-6",
+      "quote": "faq__txt u-tag u-fonts-100"
+    }
+  ]
+}

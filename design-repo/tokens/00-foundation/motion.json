@@ -1,0 +1,184 @@
+{
+  "$description": "Motion vocabulary. CSS-driven values come from the inline head <style> blocks ported into src/styles/fourmula-head.css; GSAP-driven values come from the 26 verbatim scripts in public/motion/. THOSE SCRIPTS ARE READ-ONLY: they are byte-identical copies of the original site's inline scripts, injected by src/loadSite.js which re-dispatches DOMContentLoaded and load after React mounts.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "reducedMotion": {
+    "handling": "PARTIAL, not absent.",
+    "detail": "public/motion/m27.js is the ONLY script that reads prefers-reduced-motion: it gates background-video autoplay (it also honours navigator.connection.saveData). Nothing else in the site responds to the media query, and there is no prefers-reduced-motion rule in any stylesheet. So for the background-video slot the reducedMotionFallback MIRRORS real behaviour; for every other section it is a design rule this repository prescribes, not observed behaviour. Each section contract states which of the two it is in motion.reducedMotionFallbackKind.",
+    "evidence": [
+      "cit-motion-m27-reduced",
+      "cit-motion-no-reduced-css"
+    ]
+  },
+  "scriptInventory": {
+    "count": 26,
+    "files": "public/motion/m03.js, m06.js..m30.js (m04 and m05 do not exist; the numbering follows the original document's script order).",
+    "loader": "src/loadSite.js:43-49",
+    "readOnly": true,
+    "evidence": [
+      "cit-motion-manifest",
+      "cit-motion-loader"
+    ]
+  },
+  "tokens": {
+    "motion.transition.fast": {
+      "$type": "duration",
+      "$value": "0.2s",
+      "usageTotal": 21,
+      "role": "The site's one transition duration: `all .2s` (11 uses) and `opacity .2s` (10 uses) in site-authored rules.",
+      "evidence": [
+        "cit-motion-transition"
+      ]
+    },
+    "motion.transition.instant": {
+      "$type": "duration",
+      "$value": "0.1s",
+      "usageTotal": 1,
+      "role": "`background-color .1s` on the vendored .fs-cc_button only.",
+      "evidence": [
+        "cit-motion-transition-fs"
+      ]
+    },
+    "motion.transition.poster-fade": {
+      "$type": "duration",
+      "$value": "0.25s",
+      "role": "`transition: opacity .25s ease` on .video-poster (fourmula-head.css:127).",
+      "evidence": [
+        "cit-motion-poster"
+      ]
+    },
+    "motion.easing.webflow-quad": {
+      "$type": "cubicBezier",
+      "$value": "cubic-bezier(.25, .46, .45, .94)",
+      "usageTotal": 2,
+      "role": "Webflow's default ease-out-quad, on .fs-cc_checkbox and .fs-cc_checkbox-button.",
+      "evidence": [
+        "cit-motion-easing"
+      ]
+    },
+    "motion.marquee.duration": {
+      "$type": "duration",
+      "$value": "24s",
+      "role": "All three CSS marquees run 24s linear infinite: .how__bottom-row (keyframe marquee, translateX 0 -> -100%), .how__column (columnanima, translateY 0 -> -100%) and .hero__slider__row (hero-row, axis switched by --tx/--ty at the 992px breakpoint).",
+      "evidence": [
+        "cit-motion-marquee",
+        "cit-motion-columnanima",
+        "cit-motion-herorow"
+      ]
+    },
+    "motion.preloader.spin": {
+      "$type": "duration",
+      "$value": "1s",
+      "role": "`animation: spinStep 1s steps(8) infinite` on .preloader__loader - an 8-step, not smooth, rotation.",
+      "evidence": [
+        "cit-motion-spinstep"
+      ]
+    },
+    "motion.carousel.rotation": {
+      "$type": "duration",
+      "$value": "32s",
+      "role": "GSAP rotate:360 on .hero__carousel__in (m17.js) with counter-rotation on .hero__carousel__img (m18.js), both 32s ease none repeat -1.",
+      "evidence": [
+        "cit-motion-m17",
+        "cit-motion-m18"
+      ]
+    },
+    "motion.flash.reveal-in": {
+      "$type": "duration",
+      "$value": "0.2s",
+      "role": "First leg of the flash-word reveal (opacity 0->1 at #F94A00, power2.out) in m23.js and m24.js.",
+      "evidence": [
+        "cit-col-flash-1"
+      ]
+    },
+    "motion.flash.step": {
+      "$type": "duration",
+      "$value": "0.05s",
+      "role": "Colour-step leg of the flash-word reveal (#F94A00 -> #FD7B03).",
+      "evidence": [
+        "cit-col-flash-2"
+      ]
+    },
+    "motion.flash.settle": {
+      "$type": "duration",
+      "$value": "0.1s",
+      "role": "Final leg of the flash-word reveal: to #FFFFFF in m24.js, to var(--fonts-100) in m23.js.",
+      "evidence": [
+        "cit-col-flash-3",
+        "cit-col-flash-fonts100"
+      ]
+    },
+    "motion.hover-stagger.step": {
+      "$type": "duration",
+      "$value": "0.02s",
+      "role": "Per-character stagger on [hover-stagger] elements (m26.js), 0.2s power1.inOut.",
+      "evidence": [
+        "cit-motion-m26"
+      ]
+    },
+    "motion.menu.open": {
+      "$type": "duration",
+      "$value": "0.4s",
+      "role": "Menu panel open, power2.out; list items stagger 0.05 over 0.3s (m19.js).",
+      "evidence": [
+        "cit-motion-m19"
+      ]
+    },
+    "motion.chrome.reveal": {
+      "$type": "duration",
+      "$value": "0.2s",
+      "role": "Header/footer/menu reveal, power2.out (m15.js).",
+      "evidence": [
+        "cit-motion-m15"
+      ]
+    },
+    "motion.burger.rotate": {
+      "$type": "duration",
+      "$value": "0.25s",
+      "role": "Burger line rotation +/-45deg, power2.out (m20.js).",
+      "evidence": [
+        "cit-motion-m20"
+      ]
+    },
+    "motion.preloader.counter": {
+      "$type": "duration",
+      "$value": "1s",
+      "role": "Preloader counter run; images stagger 0.05 (m21.js).",
+      "evidence": [
+        "cit-motion-m21"
+      ]
+    },
+    "motion.cookies.reveal": {
+      "$type": "duration",
+      "$value": "0.8s",
+      "role": "Cookie banner reveal, power2.out (m30.js).",
+      "evidence": [
+        "cit-motion-m30"
+      ]
+    },
+    "motion.image-anima.min": {
+      "$type": "duration",
+      "$value": "0.8s",
+      "role": "Lower bound of the .is-img-anima-1..5 cross-fade loops (m28.js), repeat -1.",
+      "evidence": [
+        "cit-motion-m28"
+      ]
+    },
+    "motion.image-anima.max": {
+      "$type": "duration",
+      "$value": "1.5s",
+      "role": "Upper bound of the .is-img-anima-1..5 cross-fade loops (m28.js).",
+      "evidence": [
+        "cit-motion-m28"
+      ]
+    },
+    "motion.dots.proximity": {
+      "$type": "duration",
+      "$value": "0.2s",
+      "role": "Cursor-proximity opacity response on the footer dots, power2.out (m09.js); m08.js runs the idle wave with steps(2).",
+      "evidence": [
+        "cit-motion-m09",
+        "cit-motion-m08"
+      ]
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "component.upload-dropzone",
+  "kind": "component",
+  "category": "control",
+  "purpose": "The drag-and-drop asset upload affordance in the home hero. One instance. It is a LOCAL-ONLY interaction: nothing is uploaded anywhere.",
+  "cssClasses": [
+    ".hero__upload",
+    ".hero__upload-embed",
+    ".upload-container",
+    ".drop-zone",
+    ".drop-zone-item",
+    ".drop-zone-txt",
+    ".error"
+  ],
+  "props": {
+    "prompt": "\"Upload or drop your assets\" (5 words)",
+    "input": "<input type=\"file\" id=\"fileInput\" accept=\"image/*\"> shipping style display:none",
+    "errorSlot": "an empty #errorMessage .error div"
+  },
+  "behaviour": "public/motion/m16.js binds #dropZone. There is NO form, NO action, NO endpoint and NO network call anywhere in the handler: it reads the dropped file locally only. Treat it as a presentational affordance; a generator must not give it a destination.",
+  "tokens": [
+    "label.secondary",
+    "text.primary",
+    "border.hairline",
+    "radius.panel",
+    "elevation.z-dropzone",
+    "elevation.z-overlay"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "absolutely positioned over the hero",
+    "max-991px": "no documented change",
+    "max-767px": "no documented change"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-drop-markup",
+      "source": "src/components/Hero.jsx:47-54",
+      "quote": "drop-zone"
+    },
+    {
+      "id": "cit-comp-drop-input",
+      "source": "src/components/Hero.jsx:53-53",
+      "quote": "type=\"file\" id=\"fileInput\" accept=\"image/*\""
+    },
+    {
+      "id": "cit-comp-drop-m16",
+      "source": "public/motion/m16.js:1-66",
+      "quote": "querySelector('p"
+    }
+  ]
+}

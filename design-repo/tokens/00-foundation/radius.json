@@ -1,0 +1,149 @@
+{
+  "$description": "Site-authored border-radius scale, histogram over SITE-AUTHORED rules of src/styles/fourmula-base.css only, plus the one radius declared in the inline <style> block inside src/components/Footer.jsx. 16 distinct values + 1 inline. The Webflow framework's 2px/3px/4px/100% resets are excluded.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "evidence": [
+    "cit-radius-histogram",
+    "cit-radius-dot"
+  ],
+  "tokens": {
+    "radius.md": {
+      "$type": "dimension",
+      "$value": "3rem",
+      "usageTotal": 9,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.pill": {
+      "$type": "dimension",
+      "$value": "99rem",
+      "usageTotal": 7,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.sm": {
+      "$type": "dimension",
+      "$value": "1.5rem",
+      "usageTotal": 7,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.xs": {
+      "$type": "dimension",
+      "$value": "0.5rem",
+      "usageTotal": 5,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.s": {
+      "$type": "dimension",
+      "$value": "2rem",
+      "usageTotal": 5,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.xxs": {
+      "$type": "dimension",
+      "$value": "0.75rem",
+      "usageTotal": 2,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.sm-alt": {
+      "$type": "dimension",
+      "$value": "1.75rem",
+      "usageTotal": 2,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.lg": {
+      "$type": "dimension",
+      "$value": "9rem",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.s-alt": {
+      "$type": "dimension",
+      "$value": "2.5rem",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.xs-alt": {
+      "$type": "dimension",
+      "$value": "1.25rem",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.xxs-alt": {
+      "$type": "dimension",
+      "$value": "1rem",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.hairline": {
+      "$type": "dimension",
+      "$value": "0.1rem",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.tiny": {
+      "$type": "dimension",
+      "$value": "0.35rem",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.odd": {
+      "$type": "dimension",
+      "$value": "1.53rem",
+      "usageTotal": 1,
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.left-2rem": {
+      "$type": "dimension",
+      "$value": "2rem 0 0 2rem",
+      "usageTotal": 2,
+      "role": "Left-rounded only (shorthand).",
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.left-0p5rem": {
+      "$type": "dimension",
+      "$value": ".5rem 0 0 .5rem",
+      "usageTotal": 1,
+      "role": "Left-rounded only (shorthand).",
+      "evidence": [
+        "cit-radius-histogram"
+      ]
+    },
+    "radius.circle": {
+      "$type": "dimension",
+      "$value": "50%",
+      "usageTotal": 1,
+      "role": "The footer .dot, declared in the inline <style> block inside src/components/Footer.jsx.",
+      "evidence": [
+        "cit-radius-dot"
+      ]
+    }
+  }
+}

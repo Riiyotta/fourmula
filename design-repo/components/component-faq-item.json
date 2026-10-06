@@ -1,0 +1,51 @@
+{
+  "id": "component.faq-item",
+  "kind": "component",
+  "category": "disclosure",
+  "purpose": "One collapsible question/answer row. Six instances, all on the home FAQ section.",
+  "cssClasses": [
+    ".faq__item",
+    ".faq__item-title",
+    ".faq__label",
+    ".faq__icon",
+    ".faq__content",
+    ".faq__content-txt"
+  ],
+  "props": {
+    "question": "label.large text, 4-8 words observed",
+    "answer": "one <p> at body.default, 14-17 words observed",
+    "icon": "a literal \"+\" character, not a glyph"
+  },
+  "behaviour": "public/motion/m13.js binds a click on .faq__item-title, toggles the class `active` on the item and animates .faq__content height. Every item ships display:none height:0px inline, so the accordion starts fully collapsed and NO item is open by default.",
+  "tokens": [
+    "body.large",
+    "body.default",
+    "text.primary",
+    "border.hairline",
+    "motion.transition.fast"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "full-width rows in the right column of a two-column section",
+    "max-991px": "body.large stays 1.25rem, body.default stays 1rem",
+    "max-767px": "body.large drops to 1rem and body.default to 0.875rem, so the question and answer converge in size"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-faq-item",
+      "source": "src/components/Faq.jsx:16-21",
+      "quote": "faq__item"
+    },
+    {
+      "id": "cit-comp-faq-collapsed",
+      "source": "src/components/Faq.jsx:20-20",
+      "quote": "style={{ display: \"none\", height: \"0px\" }}"
+    },
+    {
+      "id": "cit-comp-faq-m13",
+      "source": "public/motion/m13.js:1-39",
+      "quote": "faq__item-title"
+    }
+  ]
+}

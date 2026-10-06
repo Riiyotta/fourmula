@@ -1,0 +1,136 @@
+{
+  "repositoryId": "fourmula-clone-design-repo",
+  "name": "Fourmula.ai clone design repository",
+  "status": "design-review-pending",
+  "productionApproved": false,
+  "repositoryVersion": "1.0.0",
+  "pageSpecVersion": "1.0.0",
+  "allowlistVersion": "1.0.0",
+  "versionFieldNote": "allowlistVersion is MACHINE-CHECKED: extraction/verify_all.py check [e] fails the run if it differs between tokens/llm/component-allowlist.json and this manifest, and extraction/prove_drift.py proves that check actually fails on bad input. repositoryVersion and pageSpecVersion are DOCUMENTATION-ONLY, hand-maintained markers: nothing checks them automatically, so they imply no enforcement guarantee. The `counts` block below IS machine-checked - check [f] recomputes every number in it from the real files.",
+  "defaultTheme": "light",
+  "schemaValidatedThemes": [
+    "light",
+    "dark"
+  ],
+  "themeNote": "TWO themes, and THE CLASS NAMES ARE INVERTED - this is load-bearing. .body carries the DARK palette (src/styles/fourmula-base.css:2248-2265) and .body.dark carries the LIGHT palette (2273-2286), and the app ships <body class=\"body dark\"> (index.html:16). So the class literally named \"dark\" selects the LIGHT palette and THE DEFAULT RENDERED THEME IS LIGHT (white canvas). public/motion/m10.js reinforces it: it toggles the class 'dark', defaults to true, persists localStorage['isDarkMode'] and sets data-theme-state=\"dark\" - all while the page renders light. The inversion repeats at two more layers: .theme-dark images ship visible, and the asset shown in the default light rendering is the one named -dark.avif. A generator that reads '.body.dark' as 'the dark theme' inverts the entire palette. Do not normalise this.",
+  "sourceProject": {
+    "description": "Vite + React clone of fourmula.ai, 6 routes, 5 page shapes",
+    "frameworks": {
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1",
+      "react-router-dom": "^7.18.4",
+      "vite": "^5.4.8",
+      "@vitejs/plugin-react": "^4.3.1",
+      "gsap": "^3.12.5"
+    },
+    "frameworkVersionsReadFrom": "the source project's package.json, re-read when this repository was finalised",
+    "styling": "NOT A TAILWIND PROJECT. tailwindcss ^3.4.13 is a devDependency and IS INSTALLED, but it is DELIBERATELY UNUSED: src/index.css:6-11 removed the @tailwind directives with a comment explaining that Preflight, loaded after the site's own stylesheets, overrode the ported cascade (body line-height 20px -> 1.5, img display, the heading and paragraph margin resets). tailwind.config.js and postcss.config.js remain on disk, inert. Styling is a vendored Webflow stylesheet (src/styles/fourmula-base.css, 5932 lines, 934 rules) plus 11 ported inline head <style> blocks (src/styles/fourmula-head.css). The markup keeps the original's own Webflow class names. CLONE_SPEC.md:13 calls this a Tailwind project; that is wrong and is corrected here.",
+    "motion": "26 READ-ONLY scripts in public/motion/ (m03.js, then m06.js..m30.js) that are byte-identical copies of the original site's inline scripts, injected by src/loadSite.js, which re-dispatches DOMContentLoaded and load after React mounts. Never modify them.",
+    "fluidRootFontSize": "THE SINGLE MOST IMPORTANT STRUCTURAL FACT. The root font-size is a viewport-width function, so EVERY rem in this repository scales with the viewport: html{font-size:calc(1.484375rem * var(--user-zoom))} with four max-width branches at 2560/1728/991/767px (src/styles/fourmula-head.css:39-52). Measured real values: 13.3084px at a 1440px viewport and 16.1237px at 390px. Multiplying any rem token by 16 is wrong at every viewport. See tokens/00-foundation/typography.json ROOT_FONT_SIZE_IS_FLUID.",
+    "snapshotWarning": "This repository is a SNAPSHOT of the source project at build time. If the project changes - a dependency bump, a new route, a copy or layout edit - re-diff these counts, framework versions, citations and per-route node sequences before trusting it. extraction/verify_all.py re-checks citations only while the source tree sits beside this folder; extraction/classify_routes.py --check re-derives the route/template mapping from the real JSX, also only beside the source tree."
+  },
+  "counts": {
+    "tokens": {
+      "foundation": 173,
+      "semantic": 61,
+      "component": 26,
+      "layout": 10,
+      "total": 270
+    },
+    "catalogEntries": 270,
+    "primitives": 11,
+    "components": 11,
+    "sections": 14,
+    "templates": 5,
+    "routes": 6,
+    "graphRules": 20,
+    "assetRoles": 14,
+    "citations": 336,
+    "motionPatterns": 10
+  },
+  "countsNote": "Every number here is recomputed from the real files by extraction/verify_all.py check [f], which fails the run on any mismatch. extraction/prove_drift.py proves that by injecting wrong counts into a scratch copy.",
+  "routeTemplateMap": {
+    "/": "home",
+    "/privacy-policy": "legal",
+    "/terms-of-service": "legal",
+    "/start": "app-onboarding",
+    "/auth": "app-auth",
+    "/404": "not-found"
+  },
+  "routeTemplateNote": "6 routes, 5 page shapes, 1:1 with no gaps and no double-assignment. Derived by running a real first-party classifier (extraction/classify_routes.py) against the source project's own JSX rather than by inspecting a grouping. Only /privacy-policy and /terms-of-service genuinely share a shape; /start and /auth were deliberately NOT merged because /auth carries a real <form> node that /start does not. '/404' is this repository's name for App.jsx's path=\"*\" catch-all.",
+  "evidenceLevels": {
+    "measured": [
+      "/",
+      "/404"
+    ],
+    "measured-scaffolding-placeholder-prose": [
+      "/privacy-policy",
+      "/terms-of-service"
+    ],
+    "composed-not-measured": [
+      "/start",
+      "/auth"
+    ],
+    "rule": "Recorded per route and per template and NEVER flattened - check [o] fails if the ledger and templates.json disagree, or if a composed route is described as measured."
+  },
+  "scope": {
+    "routes": "Exactly 6 routes exist. The original is a real multi-page Webflow site with no sitemap.xml; only three real pages existed (/, /privacy-policy, /terms-of-service) and unknown paths are served the 404. /start and /auth are LOCAL STAND-INS for app.fourmula.ai, added so the clone stays self-contained. No other route may be added without new evidence.",
+    "legalProse": "The body prose of /privacy-policy and /terms-of-service is DELIBERATE PLACEHOLDER FILLER, not fourmula.ai's wording, precisely because shipping another company's policy text is a liability. The DOM scaffolding around it was measured against the live original. No word budget is derived from that filler.",
+    "composedPages": "/start and /auth are ORIGINAL COMPOSITIONS, not replicas. The real targets are a Next.js app that emits BAILOUT_TO_CLIENT_SIDE_RENDERING with an empty shell (11-18 characters of body text, zero forms, zero inputs), so no source existed to measure. Their structure and copy are NOT evidence about fourmula.ai."
+  },
+  "constraints": {
+    "noExternalRequests": "All images, video, fonts and SVGs are local; 51 local references, all resolving, zero remote. grep -rhoE '(href|src)=\"https?://' src --include='*.jsx' returns ZERO matches. A generated PageSpec must never reference a remote URL, a protocol-relative // URL, a scheme, or a path containing '..'; the schema pattern, the semantic validator and the NO_EXTERNAL_LINKS graph rule all reject them, and the adversarial suite proves it.",
+    "knownMailtoResidue": "The zero-external-links claim is exactly true for http: and https: in href/src, but TWO mailto: hrefs survive inside the legal pages' placeholder filler prose, both with nonsense link text: mailto:support@fourmula.ai (src/pages/TermsContent.jsx:168) and mailto:infot@fourmeta.com (src/pages/PrivacyContent.jsx:273), the second at an unrelated domain with a malformed local part. Neither reaches any PageSpec field, so the rule rejects every scheme without rejecting real structure. Generated output must not reproduce either address.",
+    "realCompany": "The source is a REAL, LIVE COMPANY. Real people appear in 8 hero photographs and 4 preloader images; 11 REAL THIRD-PARTY COMPANY LOGOS appear in a 'Trusted By' marquee; 20 real product images and 3 real produced videos appear in the showcase. Generated output must NEVER reproduce, redraw, approximate or fabricate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's likeness, any third-party mark, or its real copy. See assets/asset-roles.json, where 12 of the 14 roles carry a PINNED generationPolicy that check [j] enforces by value.",
+    "licensing": "Do not publish or make this repository public without the owner's licence review. SF Pro Display (public/assets/fonts/*.otf) is APPLE-LICENSED and may not be redistributed or served publicly. GSAP SplitText (public/vendor/SplitText.min.js) is a PAID Club GreenSock plugin under the same restriction. Both are role brand-typeface-file, pinned must-not-redistribute.",
+    "inertAuthForm": "/auth carries the project's only <form> and it is DELIBERATELY INERT: no action, no handler beyond preventDefault, no state, no network call, nothing read or stored. The asset-role registry pins its role auth-inert-form to must-not-wire-up and check [j] compares that exact VALUE, not just membership in the policy enum - because may-generate-new is a valid enum member that would be wrong here. The adversarial suite mutates it to a different-but-valid value to prove the check catches it.",
+    "preservedUpstreamBugs": "Two of the original's own defects are deliberately preserved and must NOT be 'fixed'. (1) src/styles/fourmula-head.css:150-159 keeps `transform-style: preserve-3d` and `transform-origin: 50% 10%` COMMENTED OUT, because the original ships the first without a semicolon so browsers discard both; uncommenting them creates a visible divergence. (2) The original loads a ScrambleTextPlugin from a cdnjs path that 404s and never uses it - public/motion/m19.js has its own hand-rolled scrambleText(). A third, smaller asymmetry is recorded rather than fixed: public/motion/m11.js:20 initialises from a class ('light') that m10.js never sets, so which member of a theme image pair is visible differs between first paint and a toggle round trip.",
+    "noShadows": "The site-authored stylesheet contains ZERO box-shadow declarations. Do not generate shadows.",
+    "partialReducedMotion": "Reduced-motion handling is PARTIAL, not absent. public/motion/m27.js is the ONLY script that reads prefers-reduced-motion (it gates background-video autoplay, and also honours navigator.connection.saveData), and no stylesheet contains a prefers-reduced-motion rule. So for the background-video slot reducedMotionFallback MIRRORS real behaviour; for every other section it is a design rule this repository prescribes. Each contract states which, and the validator rejects a dishonest 'mirrored' claim.",
+    "noPerInstanceTokenOverride": "A PageSpec has NO per-instance token or style override field; a `tokens` key is rejected at page level and at node level. Styling belongs to the contracts. No such field was invented just to have something to validate - see tokens/llm/token-policy.json `overrides`.",
+    "packaging": "The source project is NOT a git repository: `git rev-parse --git-dir` fails and `git ls-files` cannot run, so no build artifact can currently be tracked. design-repo.zip is nonetheless listed by name in the project's .gitignore so that it stays untracked if the project is ever put under git. The zip is regenerated fresh and LAST, with the CLI zip tool, after every check passes."
+  },
+  "entryPoints": {
+    "docs": [
+      "README.md",
+      "CHANGELOG.md",
+      "registry.manifest.json"
+    ],
+    "tokens": [
+      "tokens/00-foundation",
+      "tokens/10-semantic",
+      "tokens/20-component",
+      "tokens/30-layout",
+      "tokens/themes",
+      "tokens/llm"
+    ],
+    "assets": [
+      "assets/asset-roles.json"
+    ],
+    "contracts": [
+      "primitives",
+      "components",
+      "sections"
+    ],
+    "templates": [
+      "templates/templates.json"
+    ],
+    "compatibility": [
+      "compatibility/graph.json"
+    ],
+    "schema": [
+      "schema/pagespec.schema.json",
+      "schema/example.pagespec.json",
+      "schema/semantic_validate.py",
+      "schema/tests/adversarial_test.py"
+    ],
+    "extraction": [
+      "extraction/measured-values.json",
+      "extraction/verify_all.py",
+      "extraction/prove_drift.py",
+      "extraction/build_pagespec_schema.py",
+      "extraction/classify_routes.py"
+    ]
+  },
+  "entryPointsNote": "Every entry point is a path INSIDE this package: no `..`, nothing absolute, and check [m] fails on either. An entry point is a promise about this package's own contents, so the build-time evidence that lives in the source project is cited in extraction/measured-values.json instead - which degrades gracefully (a WARN, not a failure) when no sibling source tree is present."
+}

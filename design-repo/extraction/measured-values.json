@@ -1,0 +1,2512 @@
+{
+ "schemaNote": "Ledger of the real evidence behind every token, asset role, contract and template claim in this package. `source` is \"path:startLine-endLine\" relative to the SOURCE PROJECT, which is NOT shipped inside this package. extraction/verify_all.py check [i] resolves every citation - line range AND stored quote - against the real file, but only while the source project sits beside this folder; with no sibling tree it prints a WARN and skips them, which is a warning, not a failure. Citations that point INTO this package (prefix \"design-repo/\") are always checked.",
+ "sourceRootNote": "Paths are relative to the cloned project root that contains src/, public/, index.html, package.json and CLONE_SPEC.md.",
+ "citationKinds": {
+  "declaration": "Quoted directly from a CSS, JSX or JS declaration at the cited location.",
+  "counted": "A count derived by a histogram or a regex sweep; the cited line is one representative occurrence and the count itself is stated in the note or in the token's usage field.",
+  "spec-measured": "A value measured against the live original during the clone build and recorded in the project's own CLONE_SPEC.md; the cited line is that record.",
+  "inferred": "An ABSENCE claim or a reading inferred from the evidence (no box-shadows, no reduced-motion CSS, no remote assets, a preserved upstream bug). The note always says how it was verified. An absence claim may carry `absenceOf` instead of `quote`: check [i] then asserts the named string does NOT appear in the cited range, which is a real check rather than a comment."
+ },
+ "evidenceLevels": {
+  "measured": "Structure, layout, motion and copy measured against the live original. Routes: /, /404. The homepage pixel audit verified 1382/1382 elements at 1440px and 962/962 at 390px with zero deltas.",
+  "measured-scaffolding-placeholder-prose": "DOM scaffolding measured against the live original, but the body prose is DELIBERATE PLACEHOLDER FILLER - shipping another company's policy text is a liability. Routes: /privacy-policy, /terms-of-service. A word budget derived from these pages measures the filler, NOT real copy.",
+  "composed-not-measured": "No source existed to measure: app.fourmula.ai is a Next.js app emitting BAILOUT_TO_CLIENT_SIDE_RENDERING with an empty shell (11-18 characters of body text, zero forms, zero inputs). Routes: /start, /auth. These are ORIGINAL COMPOSITIONS from this project's own design system and are NOT evidence about fourmula.ai.",
+  "rule": "Recorded per route and per template and NEVER flattened. Two routes that share a node list do not share an evidence level."
+ },
+ "perRouteEvidence": {
+  "/": {
+   "template": "home",
+   "evidenceLevel": "measured",
+   "copy": "the original's own"
+  },
+  "/privacy-policy": {
+   "template": "legal",
+   "evidenceLevel": "measured-scaffolding-placeholder-prose",
+   "copy": "PLACEHOLDER FILLER",
+   "measuredDom": "h1:1 h2:12 h3:2 p:39 li:31 a:15 table:2 tr:25 td:105"
+  },
+  "/terms-of-service": {
+   "template": "legal",
+   "evidenceLevel": "measured-scaffolding-placeholder-prose",
+   "copy": "PLACEHOLDER FILLER",
+   "measuredDom": "h1:1 h2:16 h3:1 p:63 li:30 a:21"
+  },
+  "/start": {
+   "template": "app-onboarding",
+   "evidenceLevel": "composed-not-measured",
+   "copy": "ORIGINAL COMPOSITION"
+  },
+  "/auth": {
+   "template": "app-auth",
+   "evidenceLevel": "composed-not-measured",
+   "copy": "ORIGINAL COMPOSITION"
+  },
+  "/404": {
+   "template": "not-found",
+   "evidenceLevel": "measured",
+   "copy": "the original's own"
+  }
+ },
+ "correctionsToPriorGroundwork": [
+  {
+   "claim": "CLONE_SPEC.md:71 - \"Accent used by the flash-word reveals: rgb(249, 74, 0)\".",
+   "finding": "rgb(249,74,0) appears ZERO times in src/. There are FOUR flash colours, set at runtime: #F94A00, #FD7B03, #FFFFFF and var(--fonts-100), in m23.js, m24.js and m25.js. m22.js carries no colour - it is the word splitter.",
+   "evidence": [
+    "cit-col-flash-1",
+    "cit-col-flash-2",
+    "cit-col-flash-3",
+    "cit-col-flash-fonts100",
+    "cit-col-m22-no-colour"
+   ]
+  },
+  {
+   "claim": "CLONE_SPEC.md:107 - the dots field has \"732 dots\".",
+   "finding": "728. Verified three ways: grep -c 'className=\"dot\"' Footer.jsx = 728; data-row spans 0-13 and data-col 0-51 so 14 x 52 = 728; the highest data-index is 727. m07.js's own COLS x ROWS arithmetic agrees.",
+   "evidence": [
+    "cit-dots-m07",
+    "cit-comp-dots-markup"
+   ]
+  },
+  {
+   "claim": "CLONE_SPEC.md:13 - \"React 18 + Vite 5 + Tailwind v3\".",
+   "finding": "Tailwind is INSTALLED BUT DELIBERATELY UNUSED. src/index.css:6-11 removed the @tailwind directives with a comment explaining that Preflight broke the ported cascade. tailwind.config.js and postcss.config.js remain on disk, inert. This is not a Tailwind project.",
+   "evidence": [
+    "cit-stack-no-tailwind"
+   ]
+  },
+  {
+   "claim": "CLONE_SPEC.md:142-144 - \"41 images ... 49/49 references resolve\".",
+   "finding": "51 local references, all resolving: 41 .avif + 2 .webp images, 3 videos, 2 fonts, 2 SVGs and 1 favicon. 75 files sit on disk, 24 of them referenced by nothing.",
+   "evidence": [
+    "cit-asset-inventory",
+    "cit-asset-unreferenced"
+   ]
+  },
+  {
+   "claim": "Groundwork - the step gradients are a three-variant set (.is-first / .is-second / .is-third).",
+   "finding": "There are FOUR: .is-fourth is linear-gradient(#9a0101, #fd7b03). A fifth gradient, the shared .list__main__bottom-gradient scrim (#fc730300 -> #fc7303), was also unrecorded.",
+   "evidence": [
+    "cit-col-grad-fourth",
+    "cit-col-step-scrim",
+    "cit-comp-step-fourth-markup"
+   ]
+  },
+  {
+   "claim": "Groundwork - #progress lives inside Footer, so it is absent from the 404.",
+   "finding": "#progress lives in src/components/Header.jsx:23 (the only occurrence in src/), and Layout renders Header unconditionally, so it IS present on the 404. Only #dotsField (Footer.jsx:85) is genuinely absent.",
+   "evidence": [
+    "cit-prim-progress",
+    "cit-sec-ft-dots",
+    "cit-sec-404-page"
+   ]
+  },
+  {
+   "claim": "Groundwork - /start and /auth use the preloader (\"yes*\").",
+   "finding": "Neither does. Both pass only `current` to Layout (Start.jsx:15, Auth.jsx:17), so they inherit Layout's `preloader = false` default. Layout.jsx's own docstring table omits both routes, which is why this had to be read from the real call sites.",
+   "evidence": [
+    "cit-sec-tech-start",
+    "cit-sec-tech-auth",
+    "cit-layout-defaults"
+   ]
+  },
+  {
+   "claim": "Groundwork - breakpoint use counts 991px=5, 767px=4, 479px=4, min-width:768px=1.",
+   "finding": "767px is 5 and min-width:768px is 2 once all three CSS sources are counted: the inline <style> block inside src/components/Footer.jsx adds one of each for the dots field. 991px=5, 479px=4 and min-width:992px=1 are confirmed.",
+   "evidence": [
+    "cit-bp-767",
+    "cit-bp-min768-dots",
+    "cit-bp-min768-lightbox"
+   ]
+  },
+  {
+   "claim": "Groundwork - public/assets contains 2 .svg files (the radio and checkbox checkmarks).",
+   "finding": "23. Two sit at the assets root and are the only two anything references (both from CSS url()); the other 21 live under public/assets/svg/ and are referenced by nothing - every glyph, logo and wordmark is inlined as <svg> in the JSX instead. They still carry the same brand and third-party marks and inherit the same generationPolicy.",
+   "evidence": [
+    "cit-asset-inventory",
+    "cit-asset-unreferenced"
+   ]
+  },
+  {
+   "claim": "Groundwork - \"zero external links\"; the only remaining http:// strings are SVG xmlns namespaces.",
+   "finding": "True for http: and https: in href/src, and the xmlns claim needs one addition: src/loadSite.js:5 also holds a commented-out cdnjs URL documenting the original's 404ing ScrambleTextPlugin. But two mailto: hrefs survive in the legal pages' filler prose - mailto:support@fourmula.ai (TermsContent.jsx:168) and mailto:infot@fourmeta.com (PrivacyContent.jsx:273), the second at an unrelated domain. Neither reaches a PageSpec field, so NO_EXTERNAL_LINKS rejects every scheme without rejecting real structure.",
+   "evidence": [
+    "cit-constraint-no-external",
+    "cit-constraint-mailto-terms",
+    "cit-constraint-mailto-privacy"
+   ]
+  },
+  {
+   "claim": "Groundwork - #146ef5 is the Finsweet cookie component's hover accent.",
+   "finding": "Correct that it is vendored and not a brand colour, but it is not hover-only: it is also the CHECKED state fill of .fs-cc_checkbox-button. Three more vendored Finsweet colours were unrecorded: #468df7, #f8f8f8 and #0000001a.",
+   "evidence": [
+    "cit-col-fs-accent",
+    "cit-col-fs-accent-checked",
+    "cit-col-fs-soft",
+    "cit-col-fs-surface",
+    "cit-col-fs-hairline"
+   ]
+  },
+  {
+   "claim": "Groundwork - the source ships no prefers-reduced-motion handling at all.",
+   "finding": "Almost: handling is PARTIAL. public/motion/m27.js reads the media query to gate background-video autoplay. No stylesheet has a prefers-reduced-motion rule and nothing else in the project reads it. So the background-video slot's reducedMotionFallback MIRRORS real behaviour and every other section's is a design rule this repository prescribes - the contracts state which per section.",
+   "evidence": [
+    "cit-motion-m27-reduced",
+    "cit-motion-no-reduced-css"
+   ]
+  }
+ ],
+ "citations": [
+  {
+   "id": "cit-col-mainbg",
+   "source": "src/styles/fourmula-base.css:2250-2274",
+   "quote": "--mainbg: #020108;",
+   "kind": "declaration",
+   "note": "--mainbg declared three times: :root line 2095 (dark values), .body line 2250 (dark values, the block this citation spans) and .body.dark line 2274 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-mainbg-gradient",
+   "source": "src/styles/fourmula-base.css:2259-2283",
+   "quote": "--mainbg-gradient: #02010800;",
+   "kind": "declaration",
+   "note": "--mainbg-gradient declared three times: :root line 2121 (dark values), .body line 2259 (dark values, the block this citation spans) and .body.dark line 2283 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-secondbg",
+   "source": "src/styles/fourmula-base.css:2254-2278",
+   "quote": "--secondbg: #111;",
+   "kind": "declaration",
+   "note": "--secondbg declared three times: :root line 2116 (dark values), .body line 2254 (dark values, the block this citation spans) and .body.dark line 2278 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-menu",
+   "source": "src/styles/fourmula-base.css:2252-2276",
+   "quote": "--menu: #272727;",
+   "kind": "declaration",
+   "note": "--menu declared three times: :root line 2114 (dark values), .body line 2252 (dark values, the block this citation spans) and .body.dark line 2276 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-menu-colors",
+   "source": "src/styles/fourmula-base.css:2253-2277",
+   "quote": "--menu-colors: #fff3;",
+   "kind": "declaration",
+   "note": "--menu-colors declared three times: :root line 2115 (dark values), .body line 2253 (dark values, the block this citation spans) and .body.dark line 2277 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-lines",
+   "source": "src/styles/fourmula-base.css:2256-2280",
+   "quote": "--lines: #2a2a30;",
+   "kind": "declaration",
+   "note": "--lines declared three times: :root line 2118 (dark values), .body line 2256 (dark values, the block this citation spans) and .body.dark line 2280 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-dots-pattern",
+   "source": "src/styles/fourmula-base.css:2261-2285",
+   "quote": "--dots-pattern: #1a1a1a;",
+   "kind": "declaration",
+   "note": "--dots-pattern declared three times: :root line 2123 (dark values), .body line 2261 (dark values, the block this citation spans) and .body.dark line 2285 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-fonts-100",
+   "source": "src/styles/fourmula-base.css:2251-2275",
+   "quote": "--fonts-100: white;",
+   "kind": "declaration",
+   "note": "--fonts-100 declared three times: :root line 2113 (dark values), .body line 2251 (dark values, the block this citation spans) and .body.dark line 2275 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-fonts-64",
+   "source": "src/styles/fourmula-base.css:2258-2282",
+   "quote": "--fonts-64: #ffffffa3;",
+   "kind": "declaration",
+   "note": "--fonts-64 declared three times: :root line 2120 (dark values), .body line 2258 (dark values, the block this citation spans) and .body.dark line 2282 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-fonts-50",
+   "source": "src/styles/fourmula-base.css:2255-2279",
+   "quote": "--fonts-50: #ffffff80;",
+   "kind": "declaration",
+   "note": "--fonts-50 declared three times: :root line 2117 (dark values), .body line 2255 (dark values, the block this citation spans) and .body.dark line 2279 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-fonts-30",
+   "source": "src/styles/fourmula-base.css:2257-2281",
+   "quote": "--fonts-30: #ffffff4d;",
+   "kind": "declaration",
+   "note": "--fonts-30 declared three times: :root line 2119 (dark values), .body line 2257 (dark values, the block this citation spans) and .body.dark line 2281 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-col-fonts-20",
+   "source": "src/styles/fourmula-base.css:2260-2284",
+   "quote": "--fonts-20: #fff3;",
+   "kind": "declaration",
+   "note": "--fonts-20 declared three times: :root line 2122 (dark values), .body line 2260 (dark values, the block this citation spans) and .body.dark line 2284 (LIGHT values). The cited range covers the .body and .body.dark declarations, which are the two palettes."
+  },
+  {
+   "id": "cit-theme-body-dark-palette",
+   "source": "src/styles/fourmula-base.css:2248-2271",
+   "quote": ".body {",
+   "kind": "declaration",
+   "note": "The .body class block. It carries the DARK palette values."
+  },
+  {
+   "id": "cit-theme-body-dark-light-palette",
+   "source": "src/styles/fourmula-base.css:2273-2286",
+   "quote": ".body.dark {",
+   "kind": "declaration",
+   "note": "The .body.dark block. It carries the LIGHT palette values - the class literally named \"dark\" selects the light palette."
+  },
+  {
+   "id": "cit-theme-index-html",
+   "source": "index.html:16-16",
+   "quote": "<body class=\"body dark\">",
+   "kind": "declaration",
+   "note": "The shipped body element carries both classes, so .body.dark wins and the DEFAULT RENDERED THEME IS LIGHT."
+  },
+  {
+   "id": "cit-theme-m10-toggle",
+   "source": "public/motion/m10.js:12-12",
+   "quote": "document.body.classList.toggle('dark',darkOn)",
+   "kind": "declaration",
+   "note": "m10.js toggles only the class 'dark' and readInitial() defaults to true, so the page starts on .body.dark, i.e. the LIGHT palette, while the toggle reports data-theme-state=\"dark\"."
+  },
+  {
+   "id": "cit-theme-m11-images",
+   "source": "public/motion/m11.js:20-20",
+   "quote": "document.body.classList.contains(\"light\")",
+   "kind": "inferred",
+   "note": "m11.js initialises from a class ('light') that m10.js never sets, so this expression is always false on first paint; its theme:changed listener uses the real boolean. The scripts are verbatim copies and are read-only, so the resulting first-paint vs post-toggle asymmetry is recorded, not fixed."
+  },
+  {
+   "id": "cit-theme-asset-suffix",
+   "source": "src/components/AiSection.jsx:21-21",
+   "quote": "grid-01-dark.avif",
+   "kind": "declaration",
+   "note": "The image shown in the DEFAULT (light) rendering is the one named -dark.avif and classed .theme-dark. The inversion repeats at the asset-filename layer."
+  },
+  {
+   "id": "cit-col-accent-hover",
+   "source": "src/styles/fourmula-base.css:2444-2446",
+   "quote": ".btn-primary:hover",
+   "kind": "declaration",
+   "note": "The primary accent #ff6b02 appears only on hover, in three rules: .btn-primary:hover, .ai__btn:hover and .fs-cc_link:hover."
+  },
+  {
+   "id": "cit-col-ai-btn",
+   "source": "src/styles/fourmula-base.css:2833-2836",
+   "quote": ".ai__btn {",
+   "kind": "declaration",
+   "note": "The .ai__btn pill uses the #000/#fff literals, not the themed palette."
+  },
+  {
+   "id": "cit-col-theme-hover",
+   "source": "src/styles/fourmula-base.css:2527-2529",
+   "quote": ".header__theme:hover",
+   "kind": "declaration",
+   "note": "Border #ffffffa6 on hover; palette-independent."
+  },
+  {
+   "id": "cit-col-grad-first",
+   "source": "src/styles/fourmula-base.css:4025-4025",
+   "quote": "linear-gradient(#f94a00, #fd7b03)",
+   "kind": "declaration",
+   "note": "The .is-first step gradient."
+  },
+  {
+   "id": "cit-col-grad-second",
+   "source": "src/styles/fourmula-base.css:4030-4030",
+   "quote": "linear-gradient(#48a3d1, #fd7b03)",
+   "kind": "declaration",
+   "note": "The .is-second step gradient."
+  },
+  {
+   "id": "cit-col-grad-third",
+   "source": "src/styles/fourmula-base.css:4034-4034",
+   "quote": "linear-gradient(#3a54ff, #7a67c5 23%, #fd7b03)",
+   "kind": "declaration",
+   "note": "The .is-third step gradient."
+  },
+  {
+   "id": "cit-col-grad-fourth",
+   "source": "src/styles/fourmula-base.css:4038-4038",
+   "quote": "linear-gradient(#9a0101, #fd7b03)",
+   "kind": "declaration",
+   "note": "The .is-FOURTH step gradient. Its existence is the correction to the three-variant claim in the build groundwork."
+  },
+  {
+   "id": "cit-col-step-scrim",
+   "source": "src/styles/fourmula-base.css:4213-4213",
+   "quote": "linear-gradient(#fc730300, #fc7303)",
+   "kind": "declaration",
+   "note": "The shared .list__main__bottom-gradient scrim, a fifth gradient the groundwork did not record."
+  },
+  {
+   "id": "cit-col-table-cell",
+   "source": "src/styles/fourmula-base.css:4744-4744",
+   "quote": "border-bottom: 1px solid #00000026",
+   "kind": "declaration",
+   "note": "Legal-page table cell border."
+  },
+  {
+   "id": "cit-col-table-head",
+   "source": "src/styles/fourmula-base.css:4749-4752",
+   "quote": "background-color: #0000000a",
+   "kind": "declaration",
+   "note": "Legal-page table header cell fill; the same rule sets the 2px bottom border whose colour is #00000040."
+  },
+  {
+   "id": "cit-col-fs-accent",
+   "source": "src/styles/fourmula-base.css:2461-2464",
+   "quote": ".btn-primary.u-btn.is-cookies:hover",
+   "kind": "declaration",
+   "note": "Finsweet's #146ef5 on the cookie primary-button hover."
+  },
+  {
+   "id": "cit-col-fs-accent-checked",
+   "source": "src/styles/fourmula-base.css:4406-4409",
+   "quote": ".fs-cc_checkbox-button.w--redirected-checked",
+   "kind": "declaration",
+   "note": "#146ef5 is ALSO the CHECKED state fill, so describing it as hover-only is incomplete."
+  },
+  {
+   "id": "cit-col-fs-soft",
+   "source": "src/styles/fourmula-base.css:4446-4449",
+   "quote": ".fs-cc_checkbox:hover",
+   "kind": "declaration",
+   "note": "Finsweet's #468df7 hover text colour."
+  },
+  {
+   "id": "cit-col-fs-surface",
+   "source": "src/styles/fourmula-base.css:4489-4489",
+   "quote": "background-color: #f8f8f8",
+   "kind": "declaration",
+   "note": "Finsweet's preference-tray fill."
+  },
+  {
+   "id": "cit-col-fs-hairline",
+   "source": "src/styles/fourmula-base.css:4292-4292",
+   "quote": "border: 1px solid #0000001a",
+   "kind": "declaration",
+   "note": "Finsweet's secondary-button border."
+  },
+  {
+   "id": "cit-col-framework-partition",
+   "source": "src/styles/fourmula-base.css:269-269",
+   "quote": "background-color: #3898ec",
+   "kind": "counted",
+   "note": "A representative Webflow framework reset value. The framework partition is lines 1-2077 plus every post-2077 .w-* / w--* / wf-* / webflow-icons selector: 380 of the file's 934 rules. #3898ec, #ddd, #ccc, #222, #333, #fafafa, #c8c8c8, #999 and #5d6c7b occur ONLY there and are not tokens."
+  },
+  {
+   "id": "cit-col-flash-1",
+   "source": "public/motion/m24.js:20-20",
+   "quote": "{ opacity: 1, color: '#F94A00', duration: 0.2, ease: 'power2.out' }",
+   "kind": "declaration",
+   "note": "First leg of the flash-word reveal. Also present in m23.js."
+  },
+  {
+   "id": "cit-col-flash-2",
+   "source": "public/motion/m24.js:21-21",
+   "quote": "{ color: '#FD7B03', duration: 0.05 }",
+   "kind": "declaration",
+   "note": "Second leg. Also present in m23.js and m25.js."
+  },
+  {
+   "id": "cit-col-flash-3",
+   "source": "public/motion/m24.js:22-22",
+   "quote": "{ color: '#FFFFFF', duration: 0.1 }",
+   "kind": "declaration",
+   "note": "Final leg in m24 ONLY: the white literal."
+  },
+  {
+   "id": "cit-col-flash-fonts100",
+   "source": "public/motion/m23.js:22-22",
+   "quote": "{ color: 'var(--fonts-100)', duration: 0.1 }",
+   "kind": "declaration",
+   "note": "Final leg in m23: var(--fonts-100), NOT the white literal. m25.js also ends on var(--fonts-100)."
+  },
+  {
+   "id": "cit-col-m22-no-colour",
+   "source": "public/motion/m22.js:21-21",
+   "quote": "span.className = 'flash-word'",
+   "kind": "inferred",
+   "note": "m22.js is the splitToWords() helper that CREATES the .flash-word spans. It contains no colour at all, so attributing the flash colours to m22 is incorrect; they live in m23, m24 and m25."
+  },
+  {
+   "id": "cit-type-root",
+   "source": "src/styles/fourmula-base.css:2096-2126",
+   "quote": "--_font-family---font-family:",
+   "kind": "declaration",
+   "note": "The :root block declaring the family, both weights and the base tier of all 16 type steps."
+  },
+  {
+   "id": "cit-type-991",
+   "source": "src/styles/fourmula-base.css:4768-4783",
+   "quote": "--_fonts---h1: 4.5rem",
+   "kind": "declaration",
+   "note": "The <=991px tier: all 16 steps re-declared on `body` inside @media screen and (max-width: 991px)."
+  },
+  {
+   "id": "cit-type-767",
+   "source": "src/styles/fourmula-base.css:5142-5157",
+   "quote": "--_fonts---h1: 2.5rem",
+   "kind": "declaration",
+   "note": "The <=767px tier: all 16 steps re-declared on `body` inside @media screen and (max-width: 767px)."
+  },
+  {
+   "id": "cit-type-fluid-root",
+   "source": "src/styles/fourmula-head.css:39-39",
+   "quote": "html { font-size: calc(1.484375rem * var(--user-zoom)); }",
+   "kind": "declaration",
+   "note": "The fluid root font-size base declaration."
+  },
+  {
+   "id": "cit-type-fluid-media",
+   "source": "src/styles/fourmula-head.css:41-52",
+   "quote": "@media screen and (max-width:2560px)",
+   "kind": "declaration",
+   "note": "The four viewport-width branches of the root font-size, 2560 / 1728 / 991 / 767."
+  },
+  {
+   "id": "cit-type-userzoom",
+   "source": "public/motion/m06.js:3-3",
+   "quote": "site-user-zoom",
+   "kind": "declaration",
+   "note": "m06.js drives --user-zoom in steps of 0.1 via localStorage."
+  },
+  {
+   "id": "cit-type-fluid-measured",
+   "source": "CLONE_SPEC.md:37-38",
+   "quote": "**17.7885px**, i.e. 1.11178× the default 16px",
+   "kind": "spec-measured",
+   "note": "The worked example recorded in the project's own spec. Independently re-derived here, and the measured real values 13.3084px at 1440px and 16.1237px at 390px are carried from the build's pixel audit."
+  },
+  {
+   "id": "cit-type-fontface-medium",
+   "source": "src/styles/fourmula-base.css:2080-2080",
+   "quote": "url(\"/assets/fonts/SF-Pro-Display-Medium.otf\")",
+   "kind": "declaration",
+   "note": "The weight-500 @font-face."
+  },
+  {
+   "id": "cit-type-fontface-regular",
+   "source": "src/styles/fourmula-base.css:2088-2088",
+   "quote": "url(\"/assets/fonts/SF-Pro-Display-Regular.otf\")",
+   "kind": "declaration",
+   "note": "The weight-400 @font-face."
+  },
+  {
+   "id": "cit-type-framework-reset",
+   "source": "src/styles/fourmula-base.css:417-417",
+   "quote": "font-size: 38px",
+   "kind": "counted",
+   "note": "A representative Webflow base-reset heading size. The 38/32/24/18/14/12px set is framework, not the type scale."
+  },
+  {
+   "id": "cit-type-util-h1",
+   "source": "src/styles/fourmula-base.css:2298-2303",
+   "quote": ".u-h1 {",
+   "kind": "declaration",
+   "note": "The .u-h1 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-h1",
+   "source": "src/styles/fourmula-base.css:2298-2303",
+   "quote": ".u-h1 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.h1."
+  },
+  {
+   "id": "cit-type-util-h2",
+   "source": "src/styles/fourmula-base.css:2306-2311",
+   "quote": ".u-h2 {",
+   "kind": "declaration",
+   "note": "The .u-h2 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-h2",
+   "source": "src/styles/fourmula-base.css:2306-2311",
+   "quote": ".u-h2 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.h2."
+  },
+  {
+   "id": "cit-type-util-h2-5",
+   "source": "src/styles/fourmula-base.css:4099-4104",
+   "quote": ".u-h2-5 {",
+   "kind": "declaration",
+   "note": "The .u-h2-5 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-h2-5",
+   "source": "src/styles/fourmula-base.css:4099-4104",
+   "quote": ".u-h2-5 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.h2-5."
+  },
+  {
+   "id": "cit-type-util-h3",
+   "source": "src/styles/fourmula-base.css:2314-2319",
+   "quote": ".u-h3 {",
+   "kind": "declaration",
+   "note": "The .u-h3 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-h3",
+   "source": "src/styles/fourmula-base.css:2314-2319",
+   "quote": ".u-h3 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.h3."
+  },
+  {
+   "id": "cit-type-util-h4",
+   "source": "src/styles/fourmula-base.css:2322-2327",
+   "quote": ".u-h4 {",
+   "kind": "declaration",
+   "note": "The .u-h4 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-h4",
+   "source": "src/styles/fourmula-base.css:2322-2327",
+   "quote": ".u-h4 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.h4."
+  },
+  {
+   "id": "cit-type-util-body-1",
+   "source": "src/styles/fourmula-base.css:2330-2335",
+   "quote": ".u-body-1 {",
+   "kind": "declaration",
+   "note": "The .u-body-1 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-body-1",
+   "source": "src/styles/fourmula-base.css:2330-2335",
+   "quote": ".u-body-1 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.body-1."
+  },
+  {
+   "id": "cit-type-util-body-2",
+   "source": "src/styles/fourmula-base.css:2337-2342",
+   "quote": ".u-body-2 {",
+   "kind": "declaration",
+   "note": "The .u-body-2 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-body-2",
+   "source": "src/styles/fourmula-base.css:2337-2342",
+   "quote": ".u-body-2 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.body-2."
+  },
+  {
+   "id": "cit-type-util-body-3",
+   "source": "src/styles/fourmula-base.css:2400-2405",
+   "quote": ".u-body-3 {",
+   "kind": "declaration",
+   "note": "The .u-body-3 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-body-3",
+   "source": "src/styles/fourmula-base.css:2400-2405",
+   "quote": ".u-body-3 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.body-3."
+  },
+  {
+   "id": "cit-type-util-tag",
+   "source": "src/styles/fourmula-base.css:2344-2349",
+   "quote": ".u-tag {",
+   "kind": "declaration",
+   "note": "The .u-tag utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-tag",
+   "source": "src/styles/fourmula-base.css:2344-2349",
+   "quote": ".u-tag {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.tag."
+  },
+  {
+   "id": "cit-type-util-tag-small",
+   "source": "src/styles/fourmula-base.css:2351-2356",
+   "quote": ".u-tag-small {",
+   "kind": "declaration",
+   "note": "The .u-tag-small utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-tag-small",
+   "source": "src/styles/fourmula-base.css:2351-2356",
+   "quote": ".u-tag-small {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.tag-small."
+  },
+  {
+   "id": "cit-type-util-title-1",
+   "source": "src/styles/fourmula-base.css:2358-2363",
+   "quote": ".u-title-1 {",
+   "kind": "declaration",
+   "note": "The .u-title-1 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-title-1",
+   "source": "src/styles/fourmula-base.css:2358-2363",
+   "quote": ".u-title-1 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.title-1."
+  },
+  {
+   "id": "cit-type-util-title-2",
+   "source": "src/styles/fourmula-base.css:2366-2371",
+   "quote": ".u-title-2 {",
+   "kind": "declaration",
+   "note": "The .u-title-2 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-title-2",
+   "source": "src/styles/fourmula-base.css:2366-2371",
+   "quote": ".u-title-2 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.title-2."
+  },
+  {
+   "id": "cit-type-util-title-3",
+   "source": "src/styles/fourmula-base.css:3829-3834",
+   "quote": ".u-title-3 {",
+   "kind": "declaration",
+   "note": "The .u-title-3 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-title-3",
+   "source": "src/styles/fourmula-base.css:3829-3834",
+   "quote": ".u-title-3 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.title-3."
+  },
+  {
+   "id": "cit-type-util-btn",
+   "source": "src/styles/fourmula-base.css:2407-2412",
+   "quote": ".u-btn {",
+   "kind": "declaration",
+   "note": "The .u-btn utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-btn",
+   "source": "src/styles/fourmula-base.css:2407-2412",
+   "quote": ".u-btn {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.btn."
+  },
+  {
+   "id": "cit-type-util-small-text-1",
+   "source": "src/styles/fourmula-base.css:2374-2379",
+   "quote": ".u-small-text-1 {",
+   "kind": "declaration",
+   "note": "The .u-small-text-1 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-small-1",
+   "source": "src/styles/fourmula-base.css:2374-2379",
+   "quote": ".u-small-text-1 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.small-text-1."
+  },
+  {
+   "id": "cit-type-util-small-text-2",
+   "source": "src/styles/fourmula-base.css:2382-2387",
+   "quote": ".u-small-text-2 {",
+   "kind": "declaration",
+   "note": "The .u-small-text-2 utility class, which binds the type step to the family and a weight."
+  },
+  {
+   "id": "cit-sem-type-small-2",
+   "source": "src/styles/fourmula-base.css:2382-2387",
+   "quote": ".u-small-text-2 {",
+   "kind": "counted",
+   "note": "Usage evidence for the semantic role built on type.small-text-2."
+  },
+  {
+   "id": "cit-sem-type-h4-unused",
+   "source": "src/styles/fourmula-base.css:2322-2322",
+   "quote": ".u-h4 {",
+   "kind": "counted",
+   "note": "type.h4 is declared and bound to .u-h4, but the regex (?<![\\w-])u-h4(?![\\w-]) finds ZERO occurrences across src/**/*.jsx, so the role is defined-unused-in-markup."
+  },
+  {
+   "id": "cit-sem-type-tag-small-unused",
+   "source": "src/styles/fourmula-base.css:2351-2351",
+   "quote": ".u-tag-small {",
+   "kind": "counted",
+   "note": "type.tag-small is declared and bound to .u-tag-small, but zero elements in src/ carry it."
+  },
+  {
+   "id": "cit-sem-fonts-100",
+   "source": "src/styles/fourmula-base.css:2511-2513",
+   "quote": ".u-fonts-100 {",
+   "kind": "counted",
+   "note": "The utility class that applies var(--fonts-100) in the markup."
+  },
+  {
+   "id": "cit-sem-fonts-50",
+   "source": "src/styles/fourmula-base.css:2691-2693",
+   "quote": ".u-fonts-50 {",
+   "kind": "counted",
+   "note": "The utility class that applies var(--fonts-50) in the markup."
+  },
+  {
+   "id": "cit-sem-fonts-64",
+   "source": "src/styles/fourmula-base.css:2869-2871",
+   "quote": ".u-fonts-64 {",
+   "kind": "counted",
+   "note": "The utility class that applies var(--fonts-64) in the markup."
+  },
+  {
+   "id": "cit-sem-fonts-30",
+   "source": "src/styles/fourmula-base.css:2874-2874",
+   "quote": "color: var(--fonts-30)",
+   "kind": "counted",
+   "note": "One of the three site-authored rules that reference --fonts-30 (.ai__dot, .ai__grid-arrow, .cookies__modal__close). There is no .u-fonts-30 utility class."
+  },
+  {
+   "id": "cit-sem-fonts-20",
+   "source": "src/styles/fourmula-base.css:3440-3440",
+   "quote": "border: 1px solid var(--fonts-20)",
+   "kind": "counted",
+   "note": "One of the seven site-authored hairline borders that reference --fonts-20. There is no .u-fonts-20 utility class."
+  },
+  {
+   "id": "cit-sem-mainbg",
+   "source": "src/styles/fourmula-base.css:2249-2249",
+   "quote": "background-color: var(--mainbg);",
+   "kind": "declaration",
+   "note": "The page canvas fill on .body."
+  },
+  {
+   "id": "cit-sem-mainbg-gradient",
+   "source": "src/styles/fourmula-base.css:2259-2259",
+   "quote": "--mainbg-gradient:",
+   "kind": "declaration",
+   "note": "The transparent companion of --mainbg, used for gradient scrims."
+  },
+  {
+   "id": "cit-sem-secondbg",
+   "source": "src/styles/fourmula-base.css:2597-2597",
+   "quote": "background-color: var(--secondbg)",
+   "kind": "declaration",
+   "note": "A secondary surface usage site."
+  },
+  {
+   "id": "cit-sem-menu",
+   "source": "src/styles/fourmula-base.css:2252-2252",
+   "quote": "--menu:",
+   "kind": "declaration",
+   "note": "The menu panel fill."
+  },
+  {
+   "id": "cit-sem-lines",
+   "source": "src/styles/fourmula-base.css:2256-2256",
+   "quote": "--lines:",
+   "kind": "declaration",
+   "note": "The hairline/divider colour."
+  },
+  {
+   "id": "cit-sem-dots",
+   "source": "src/styles/fourmula-base.css:3524-3524",
+   "quote": "background-color: var(--dots-pattern)",
+   "kind": "declaration",
+   "note": "The .btn-outline.is-cookies resting fill, one of the two --dots-pattern usage sites."
+  },
+  {
+   "id": "cit-sem-radius-pill",
+   "source": "src/styles/fourmula-base.css:2435-2435",
+   "quote": "border-radius: 99rem",
+   "kind": "declaration",
+   "note": "The pill radius used by every button."
+  },
+  {
+   "id": "cit-sem-tech-padding",
+   "source": "src/styles/fourmula-base.css:4659-4662",
+   "quote": "padding-top: 8rem",
+   "kind": "declaration",
+   "note": "section.tech's only top offset, with 2rem side gutters."
+  },
+  {
+   "id": "cit-sem-tech-title-override",
+   "source": "src/styles/fourmula-base.css:4664-4666",
+   "quote": ".tech__title.u-h3.u-fonts-100",
+   "kind": "declaration",
+   "note": "The override that renders the .u-h3 page title at type.h1 instead, on all four tech routes."
+  },
+  {
+   "id": "cit-sem-start-gap",
+   "source": "src/pages/Start.jsx:31-31",
+   "quote": "gap: '0.75rem'",
+   "kind": "declaration",
+   "note": "The inline gap on the composed /start button row."
+  },
+  {
+   "id": "cit-space-histogram",
+   "source": "src/styles/fourmula-base.css:2078-5932",
+   "quote": ".body {",
+   "kind": "counted",
+   "note": "Histogram over margin/padding/gap/grid-*-gap/column-gap/row-gap/top/bottom/left/right/inset declarations in SITE-AUTHORED rules only (554 of this file's 934 rules; lines 1-2077 and every post-2077 .w-*/w--*/wf-*/webflow-icons selector are the 380-rule framework partition). 47 distinct rem values: 35 positive, 12 negative."
+  },
+  {
+   "id": "cit-radius-histogram",
+   "source": "src/styles/fourmula-base.css:2078-5932",
+   "quote": "border-radius: 3rem",
+   "kind": "counted",
+   "note": "Histogram over border-radius in SITE-AUTHORED rules only. 16 distinct values plus the 50% circle declared in Footer.jsx's inline <style>. radius.md (3rem, 9 uses) and radius.pill (99rem, 7 uses) dominate."
+  },
+  {
+   "id": "cit-radius-dot",
+   "source": "src/components/Footer.jsx:75-79",
+   "quote": "border-radius: 50%",
+   "kind": "declaration",
+   "note": "The footer .dot, declared in the component's own inline <style> block together with its 1rem/0.5rem size and the opacity 0.15 resting state."
+  },
+  {
+   "id": "cit-bp-991",
+   "source": "src/styles/fourmula-base.css:817-817",
+   "quote": "@media screen and (max-width: 991px)",
+   "kind": "counted",
+   "note": "One of the 5 occurrences of the 991px query across the three CSS sources."
+  },
+  {
+   "id": "cit-bp-767",
+   "source": "src/styles/fourmula-base.css:885-885",
+   "quote": "@media screen and (max-width: 767px)",
+   "kind": "counted",
+   "note": "One of the 5 occurrences of the 767px query across the three CSS sources. The groundwork counted 4: the fifth is in Footer.jsx's inline <style>."
+  },
+  {
+   "id": "cit-bp-479",
+   "source": "src/styles/fourmula-base.css:954-954",
+   "quote": "@media screen and (max-width: 479px)",
+   "kind": "counted",
+   "note": "One of the 4 occurrences of the 479px query. No type-scale change happens at this tier."
+  },
+  {
+   "id": "cit-bp-min992",
+   "source": "src/styles/fourmula-head.css:83-83",
+   "quote": "@media (min-width: 992px)",
+   "kind": "declaration",
+   "note": "The ONLY min-width:992px query in the project: it sets the hero slider marquee axis to vertical."
+  },
+  {
+   "id": "cit-bp-min768-lightbox",
+   "source": "src/styles/fourmula-base.css:1652-1652",
+   "quote": "@media (min-width: 768px)",
+   "kind": "declaration",
+   "note": "The Webflow lightbox min-width:768px query - one of the TWO occurrences, not one."
+  },
+  {
+   "id": "cit-bp-min768-dots",
+   "source": "src/components/Footer.jsx:50-56",
+   "quote": "@media (min-width: 768px)",
+   "kind": "declaration",
+   "note": "The SECOND min-width:768px query, in Footer.jsx's inline <style>: it sets the dots-field dot size and gap to 1rem."
+  },
+  {
+   "id": "cit-dots-m07",
+   "source": "public/motion/m07.js:21-38",
+   "quote": "const ROWS = 14;",
+   "kind": "declaration",
+   "note": "m07.js rebuilds the dot field on resize at its own JS thresholds: 52 cols >=992px, 24 >=768px, 22 below, with ROWS always 14 - so 728 / 336 / 308 dots. CLONE_SPEC.md:107's \"732 dots\" is wrong; 52 x 14 = 728, the highest data-index is 727."
+  },
+  {
+   "id": "cit-elev-zindex",
+   "source": "src/styles/fourmula-base.css:3893-3893",
+   "quote": "z-index: 9999",
+   "kind": "counted",
+   "note": "One of the 10 site-authored z-index layers (1, 2, 3, 5, 9, 998, 999, 9500, 9999)."
+  },
+  {
+   "id": "cit-elev-no-shadow",
+   "source": "src/styles/fourmula-base.css:2078-5932",
+   "quote": "box-shadow",
+   "kind": "inferred",
+   "note": "ABSENCE CLAIM, verified by scanning every site-authored rule: there are ZERO site-authored box-shadow declarations. Every box-shadow in this file belongs to the Webflow framework partition or to the vendored .fs-cc_* component."
+  },
+  {
+   "id": "cit-elev-blur-preloader",
+   "source": "src/components/Preloader.jsx:5-5",
+   "quote": "filter: \"blur(20px)\"",
+   "kind": "declaration",
+   "note": "The inline blur on the three preloader layers, animated away by m21.js."
+  },
+  {
+   "id": "cit-elev-blur-anima",
+   "source": "src/components/AiSection.jsx:68-68",
+   "quote": "filter: \"blur(6px)\"",
+   "kind": "declaration",
+   "note": "The ONE image-anima layer that ships a non-zero blur (.is-img-anima-5); the other four ship blur(0px)."
+  },
+  {
+   "id": "cit-elev-badge",
+   "source": "src/components/AwwwardsBadge.jsx:4-4",
+   "quote": "zIndex: \"999\"",
+   "kind": "declaration",
+   "note": "The body-level badge's inline z-index."
+  },
+  {
+   "id": "cit-icon-viewbox",
+   "source": "src/components/How.jsx:36-36",
+   "quote": "viewBox=\"0 0 104 24\"",
+   "kind": "counted",
+   "note": "The trusted-logo viewBox; every glyph in the project states its size only as a viewBox."
+  },
+  {
+   "id": "cit-icon-wrapper",
+   "source": "src/styles/fourmula-base.css:3043-3047",
+   "quote": ".how__bottom-logo",
+   "kind": "declaration",
+   "note": "A representative glyph wrapper: the rendered size comes from the wrapper's CSS because every inline <svg> is width=100% height=100%."
+  },
+  {
+   "id": "cit-motion-transition",
+   "source": "src/styles/fourmula-base.css:2440-2440",
+   "quote": "transition: all .2s",
+   "kind": "counted",
+   "note": "The site's single transition duration: `all .2s` (11 uses) and `opacity .2s` (10 uses) in site-authored rules."
+  },
+  {
+   "id": "cit-motion-transition-fs",
+   "source": "src/styles/fourmula-base.css:1289-1289",
+   "quote": "transition: background-color .1s",
+   "kind": "declaration",
+   "note": "The only 0.1s transition, on the vendored .fs-cc_button."
+  },
+  {
+   "id": "cit-motion-easing",
+   "source": "src/styles/fourmula-base.css:4402-4402",
+   "quote": "cubic-bezier(.25, .46, .45, .94)",
+   "kind": "counted",
+   "note": "Webflow's default ease-out-quad, used twice, both on vendored Finsweet controls."
+  },
+  {
+   "id": "cit-motion-poster",
+   "source": "src/styles/fourmula-head.css:127-127",
+   "quote": "transition: opacity .25s ease",
+   "kind": "declaration",
+   "note": "The .video-poster fade."
+  },
+  {
+   "id": "cit-motion-marquee",
+   "source": "src/styles/fourmula-head.css:56-62",
+   "quote": "animation: marquee 24s linear infinite",
+   "kind": "declaration",
+   "note": "The .how__bottom-row trusted-logo marquee."
+  },
+  {
+   "id": "cit-motion-columnanima",
+   "source": "src/styles/fourmula-head.css:65-72",
+   "quote": "animation: columnanima 24s linear infinite",
+   "kind": "declaration",
+   "note": "The .how__column vertical capability loop."
+  },
+  {
+   "id": "cit-motion-herorow",
+   "source": "src/styles/fourmula-head.css:75-100",
+   "quote": "animation: hero-row 24s linear infinite",
+   "kind": "declaration",
+   "note": "The .hero__slider__row marquee, whose axis is switched by --tx/--ty at the 992px breakpoint."
+  },
+  {
+   "id": "cit-motion-spinstep",
+   "source": "src/styles/fourmula-head.css:111-122",
+   "quote": "animation: spinStep 1s steps(8) infinite",
+   "kind": "declaration",
+   "note": "The preloader spinner: an 8-STEP rotation, not a smooth one."
+  },
+  {
+   "id": "cit-motion-m08",
+   "source": "public/motion/m08.js:15-18",
+   "quote": "const COLS = Math.max(...dots.map(d => +d.dataset.col)) + 1;",
+   "kind": "declaration",
+   "note": "m08.js derives the grid size from the DOM and runs the idle dot wave."
+  },
+  {
+   "id": "cit-motion-m09",
+   "source": "public/motion/m09.js:24-24",
+   "quote": "power2.out",
+   "kind": "declaration",
+   "note": "m09.js's cursor-proximity dot response at 0.2s power2.out."
+  },
+  {
+   "id": "cit-motion-m15",
+   "source": "public/motion/m15.js:2-2",
+   "quote": "querySelector(\".header",
+   "kind": "declaration",
+   "note": "m15.js reveals the header, footer and menu at 0.2s power2.out."
+  },
+  {
+   "id": "cit-motion-m17",
+   "source": "public/motion/m17.js:2-2",
+   "quote": "querySelector(\".hero__carousel__in",
+   "kind": "declaration",
+   "note": "m17.js rotates the carousel ring 360 degrees over 32s, ease none, repeat -1."
+  },
+  {
+   "id": "cit-motion-m18",
+   "source": "public/motion/m18.js:2-2",
+   "quote": "querySelectorAll(\".hero__carousel__img",
+   "kind": "declaration",
+   "note": "m18.js counter-rotates each carousel image on the same 32s timing so the photographs stay upright."
+  },
+  {
+   "id": "cit-motion-m19",
+   "source": "public/motion/m19.js:32-32",
+   "quote": "scrambleText",
+   "kind": "declaration",
+   "note": "m19.js opens the menu panel and carries its own hand-rolled scrambleText(), which is why the original's 404ing ScrambleTextPlugin is never needed."
+  },
+  {
+   "id": "cit-motion-m20",
+   "source": "public/motion/m20.js:3-3",
+   "quote": "querySelector(\".header__menu-line.is-top",
+   "kind": "declaration",
+   "note": "m20.js rotates the burger lines +/-45 degrees over 0.25s power2.out."
+  },
+  {
+   "id": "cit-motion-m21",
+   "source": "public/motion/m21.js:4-4",
+   "quote": "querySelectorAll('.preloader__images-in",
+   "kind": "declaration",
+   "note": "m21.js runs the preloader counter and staggers the four images by 0.05."
+  },
+  {
+   "id": "cit-motion-m26",
+   "source": "public/motion/m26.js:32-32",
+   "quote": "querySelectorAll('[hover-stagger]",
+   "kind": "declaration",
+   "note": "m26.js drives the per-character hover sweep: stagger 0.02, 0.2s power1.inOut."
+  },
+  {
+   "id": "cit-motion-m27-reduced",
+   "source": "public/motion/m27.js:2-4",
+   "quote": "matchMedia(\"(prefers-reduced-motion: reduce)\").matches",
+   "kind": "declaration",
+   "note": "The ONLY place in the whole project that reads prefers-reduced-motion. It also honours navigator.connection.saveData."
+  },
+  {
+   "id": "cit-motion-m28",
+   "source": "public/motion/m28.js:18-18",
+   "quote": "repeat: -1",
+   "kind": "declaration",
+   "note": "m28.js cross-fades the five .is-img-anima layers on 0.8-1.5s repeating loops."
+  },
+  {
+   "id": "cit-motion-m30",
+   "source": "public/motion/m30.js:3-3",
+   "quote": "querySelector('.cookies",
+   "kind": "declaration",
+   "note": "m30.js reveals the cookie banner over 0.8s power2.out."
+  },
+  {
+   "id": "cit-motion-manifest",
+   "source": "src/motionManifest.json:2-28",
+   "quote": "\"/motion/m03.js\"",
+   "kind": "declaration",
+   "note": "The ordered manifest of the 26 verbatim motion scripts (m03, then m06..m30)."
+  },
+  {
+   "id": "cit-motion-loader",
+   "source": "src/loadSite.js:48-50",
+   "quote": "document.dispatchEvent(new Event('DOMContentLoaded', { bubbles: true }))",
+   "kind": "declaration",
+   "note": "loadSite.js re-dispatches DOMContentLoaded and load after React mounts, so the original's scripts run unmodified."
+  },
+  {
+   "id": "cit-motion-no-reduced-css",
+   "source": "src/styles/fourmula-base.css:1-5932",
+   "kind": "inferred",
+   "note": "ABSENCE CLAIM, machine-checked. `absenceOf` names a string that must NOT occur anywhere in the cited range; extraction/verify_all.py check [i] asserts that. grep -rn 'prefers-reduced-motion' over src/ and public/motion/ returns exactly ONE hit in the whole project, public/motion/m27.js:2, and no stylesheet contains a prefers-reduced-motion rule.",
+   "absenceOf": "prefers-reduced-motion"
+  },
+  {
+   "id": "cit-layout-page",
+   "source": "src/styles/fourmula-base.css:2391-2398",
+   "quote": ".page {",
+   "kind": "declaration",
+   "note": "section.page is the flex-column shell holding header, menu, content and footer. It is a WRAPPER, so it has no section contract."
+  },
+  {
+   "id": "cit-layout-dots-width",
+   "source": "src/styles/fourmula-base.css:4653-4654",
+   "quote": "width: 103rem",
+   "kind": "declaration",
+   "note": "The .dots-field width. 52 columns x 1rem + 51 gaps x 1rem = 103rem exactly. Its other 7 occurrences in this file are all .hero__404__* layers, so 103rem is NOT a content max-width."
+  },
+  {
+   "id": "cit-layout-menu-closed",
+   "source": "src/styles/fourmula-head.css:102-108",
+   "quote": ".menu__wrap {",
+   "kind": "declaration",
+   "note": "The closed menu panel geometry: 15rem x 0rem, padding 0, translateY(2rem)."
+  },
+  {
+   "id": "cit-layout-preserve3d-bug",
+   "source": "src/styles/fourmula-head.css:158-160",
+   "quote": "transform-style: preserve-3d;",
+   "kind": "inferred",
+   "note": "THE PRESERVED ORIGINAL BUG. The original ships this declaration with NO semicolon before transform-origin, so browsers discard BOTH. It is kept commented out here to match real rendering. DO NOT UNCOMMENT IT."
+  },
+  {
+   "id": "cit-layout-trusted-rows",
+   "source": "src/components/How.jsx:33-33",
+   "quote": "how__bottom-row",
+   "kind": "declaration",
+   "note": "The first of two byte-identical 11-logo rows; the duplication is what makes the 24s marquee seamless."
+  },
+  {
+   "id": "cit-layout-how-columns",
+   "source": "src/components/How.jsx:15-15",
+   "quote": "how__column",
+   "kind": "declaration",
+   "note": "The first of two byte-identical 3-item capability columns."
+  },
+  {
+   "id": "cit-comp-btn-primary",
+   "source": "src/styles/fourmula-base.css:2431-2443",
+   "quote": ".btn-primary {",
+   "kind": "declaration",
+   "note": "The primary button inverts the text colour into a fill: background var(--fonts-100), colour var(--mainbg)."
+  },
+  {
+   "id": "cit-comp-btn-outline",
+   "source": "src/styles/fourmula-base.css:3500-3510",
+   "quote": ".btn-outline {",
+   "kind": "declaration",
+   "note": "The outline button: transparent with a hairline border."
+  },
+  {
+   "id": "cit-comp-btn-outline-cookies",
+   "source": "src/styles/fourmula-base.css:3523-3526",
+   "quote": ".btn-outline.u-btn.is-cookies",
+   "kind": "declaration",
+   "note": "Only the .is-cookies modifier gives the outline button a resting fill."
+  },
+  {
+   "id": "cit-constraint-no-external",
+   "source": "src/App.jsx:17-21",
+   "quote": "local stand-ins for app.fourmula.ai",
+   "kind": "inferred",
+   "note": "THE ZERO-EXTERNAL-LINKS CONSTRAINT. grep -rhoE '(href|src)=\"https?://' src --include='*.jsx' returns ZERO matches. Formerly-external links became the local routes /start and /auth (App.jsx:17-19) or inert hashes. The only http strings left in src/ are the SVG xmlns namespace and one commented-out cdnjs URL in loadSite.js:5."
+  },
+  {
+   "id": "cit-constraint-mailto-terms",
+   "source": "src/pages/TermsContent.jsx:168-168",
+   "quote": "href=\"mailto:support@fourmula.ai\"",
+   "kind": "inferred",
+   "note": "A surviving mailto: href inside the legal page's PLACEHOLDER FILLER prose, with nonsense link text (\"Typography.\"). The zero-external-links claim holds for http(s) but not for every scheme."
+  },
+  {
+   "id": "cit-constraint-mailto-privacy",
+   "source": "src/pages/PrivacyContent.jsx:273-273",
+   "quote": "href=\"mailto:infot@fourmeta.com\"",
+   "kind": "inferred",
+   "note": "The second surviving mailto:, also in filler prose with nonsense link text (\"Body.\"). Note the address is at an UNRELATED domain (fourmeta.com) with a malformed local part - a filler artifact, not a real contact address."
+  },
+  {
+   "id": "cit-asset-inventory",
+   "source": "index.html:12-13",
+   "quote": "href=\"/assets/favicon.png\"",
+   "kind": "counted",
+   "note": "Asset inventory counted from disk: 75 files under public/assets/ (42 .avif, 23 .svg, 3 .mp4, 3 .png, 2 .webp, 2 .otf). 51 of them are referenced from src/ or index.html and ALL 51 resolve. The cited line is a representative reference."
+  },
+  {
+   "id": "cit-asset-unreferenced",
+   "source": "index.html:1-18",
+   "quote": "<!DOCTYPE html>",
+   "kind": "inferred",
+   "note": "ABSENCE CLAIM: 24 files on disk are referenced by nothing - the 21 .svg extracts under public/assets/svg/ (every glyph is inlined in the JSX instead), two spare favicon PNGs, and banner.avif, for which index.html declares no og:image meta tag. The cited range is the whole of index.html, where those references would have to appear."
+  },
+  {
+   "id": "cit-asset-no-remote",
+   "source": "src/App.jsx:1-25",
+   "quote": "import { BrowserRouter, Routes, Route } from 'react-router-dom'",
+   "kind": "inferred",
+   "note": "ABSENCE CLAIM: zero remote asset references anywhere. Every image, video, font and SVG path in the project is a local absolute path under /assets/."
+  },
+  {
+   "id": "cit-stack-no-tailwind",
+   "source": "src/index.css:6-11",
+   "quote": "NOTE: Tailwind is intentionally NOT included.",
+   "kind": "inferred",
+   "note": "Tailwind is a devDependency in package.json but is DELIBERATELY UNUSED: the @tailwind directives were removed because Preflight, loaded after the site's own stylesheets, overrode the ported cascade (body line-height, img display, heading/paragraph margin resets). tailwind.config.js and postcss.config.js remain on disk, inert. This is NOT a Tailwind project."
+  },
+  {
+   "id": "cit-layout-defaults",
+   "source": "src/layout/Layout.jsx:27-30",
+   "quote": "preloader = false,",
+   "kind": "declaration",
+   "note": "Layout's own default parameter values. /start and /auth pass only `current`, so both inherit preloader=false. The docstring table immediately above (Layout.jsx:14-18) lists only /, /privacy-policy, /terms-of-service and 404 - it omits /start and /auth entirely."
+  },
+  {
+   "id": "cit-layout-docstring-gap",
+   "source": "src/layout/Layout.jsx:14-19",
+   "quote": "route              preloader  menu  footer  badge",
+   "kind": "inferred",
+   "note": "The incomplete docstring table: it documents 4 of the 6 real routes. /start and /auth are missing, so their chrome composition had to be read from the real call sites instead."
+  },
+  {
+   "id": "cit-comp-video-block",
+   "source": "src/components/AiSection.jsx:93-94",
+   "quote": "w-background-video w-background-video-atom",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-background-video.json."
+  },
+  {
+   "id": "cit-comp-video-css",
+   "source": "src/styles/fourmula-head.css:124-135",
+   "quote": ".bg-video",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-background-video.json."
+  },
+  {
+   "id": "cit-comp-video-m27",
+   "source": "public/motion/m27.js:1-16",
+   "quote": "prefers-reduced-motion: reduce",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-background-video.json."
+  },
+  {
+   "id": "cit-comp-ring-markup",
+   "source": "src/components/Hero.jsx:55-80",
+   "quote": "hero__carousel__0deg",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-carousel-ring.json."
+  },
+  {
+   "id": "cit-comp-ring-m17",
+   "source": "public/motion/m17.js:1-10",
+   "quote": "hero__carousel__in",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-carousel-ring.json."
+  },
+  {
+   "id": "cit-comp-ring-m18",
+   "source": "public/motion/m18.js:1-10",
+   "quote": "hero__carousel__img",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-carousel-ring.json."
+  },
+  {
+   "id": "cit-comp-cookie-banner",
+   "source": "src/components/Cookies.jsx:5-6",
+   "quote": "fs-cc=\"banner\"",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-cookie-modal.json."
+  },
+  {
+   "id": "cit-comp-cookie-prefs",
+   "source": "src/components/Cookies.jsx:19-21",
+   "quote": "fs-cc=\"preferences\"",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-cookie-modal.json."
+  },
+  {
+   "id": "cit-comp-cookie-hide",
+   "source": "src/styles/fourmula-head.css:27-27",
+   "quote": "[fs-cc=\"banner\"]",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-cookie-modal.json."
+  },
+  {
+   "id": "cit-comp-cookie-form",
+   "source": "src/components/Cookies.jsx:30-30",
+   "quote": "data-turnstile-sitekey",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-cookie-modal.json."
+  },
+  {
+   "id": "cit-comp-cookie-m30",
+   "source": "public/motion/m30.js:1-23",
+   "quote": "querySelector('.cookies",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-cookie-modal.json."
+  },
+  {
+   "id": "cit-comp-dots-markup",
+   "source": "src/components/Footer.jsx:85-86",
+   "quote": "id=\"dotsField\" className=\"dots-field\"",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-dots-field.json."
+  },
+  {
+   "id": "cit-comp-dots-css",
+   "source": "src/components/Footer.jsx:44-81",
+   "quote": ".dots-field {",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-dots-field.json."
+  },
+  {
+   "id": "cit-comp-dots-m07",
+   "source": "public/motion/m07.js:20-37",
+   "quote": "const ROWS = 14;",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-dots-field.json."
+  },
+  {
+   "id": "cit-comp-dots-m08",
+   "source": "public/motion/m08.js:15-18",
+   "quote": "const COLS = Math.max(...dots.map(d => +d.dataset.col)) + 1;",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-dots-field.json."
+  },
+  {
+   "id": "cit-comp-faq-item",
+   "source": "src/components/Faq.jsx:16-21",
+   "quote": "faq__item",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-faq-item.json."
+  },
+  {
+   "id": "cit-comp-faq-collapsed",
+   "source": "src/components/Faq.jsx:20-20",
+   "quote": "style={{ display: \"none\", height: \"0px\" }}",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-faq-item.json."
+  },
+  {
+   "id": "cit-comp-faq-m13",
+   "source": "public/motion/m13.js:1-39",
+   "quote": "faq__item-title",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-faq-item.json."
+  },
+  {
+   "id": "cit-comp-collage-grid",
+   "source": "src/components/AiSection.jsx:19-27",
+   "quote": "ai__grid",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-image-collage.json."
+  },
+  {
+   "id": "cit-comp-collage-alt",
+   "source": "src/components/AiSection.jsx:28-43",
+   "quote": "ai__grid-alt",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-image-collage.json."
+  },
+  {
+   "id": "cit-comp-collage-small",
+   "source": "src/components/AiSection.jsx:54-72",
+   "quote": "ai__grid-small",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-image-collage.json."
+  },
+  {
+   "id": "cit-comp-collage-arrow",
+   "source": "src/styles/fourmula-base.css:3373-3377",
+   "quote": "color: var(--fonts-30);",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-image-collage.json."
+  },
+  {
+   "id": "cit-comp-marquee-css",
+   "source": "src/styles/fourmula-head.css:55-61",
+   "quote": "animation: marquee 24s linear infinite;",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-marquee-row.json."
+  },
+  {
+   "id": "cit-comp-marquee-column",
+   "source": "src/styles/fourmula-head.css:64-71",
+   "quote": "animation: columnanima 24s linear infinite;",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-marquee-row.json."
+  },
+  {
+   "id": "cit-comp-marquee-hero",
+   "source": "src/styles/fourmula-head.css:74-99",
+   "quote": "animation: hero-row 24s linear infinite;",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-marquee-row.json."
+  },
+  {
+   "id": "cit-comp-marquee-rows",
+   "source": "src/components/How.jsx:64-94",
+   "quote": "how__bottom-row",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-marquee-row.json."
+  },
+  {
+   "id": "cit-comp-marquee-gradients",
+   "source": "src/components/How.jsx:95-96",
+   "quote": "how__bottom-gr-right",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-marquee-row.json."
+  },
+  {
+   "id": "cit-comp-img-srcset",
+   "source": "src/components/Preloader.jsx:14-14",
+   "quote": "srcSet=\"/assets/69416332c761b96e289cac9a_image-pre-04-p-500.avif 500w",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-media-image.json."
+  },
+  {
+   "id": "cit-comp-img-themepair",
+   "source": "src/components/AiSection.jsx:21-22",
+   "quote": "ai__grid-asset theme-dark",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-media-image.json."
+  },
+  {
+   "id": "cit-comp-img-404pair",
+   "source": "src/pages/NotFoundContent.jsx:13-14",
+   "quote": "hero__404__loop-img theme-dark",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-media-image.json."
+  },
+  {
+   "id": "cit-comp-img-anima",
+   "source": "src/components/AiSection.jsx:67-68",
+   "quote": "is-img-anima-5",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-media-image.json."
+  },
+  {
+   "id": "cit-comp-img-alt",
+   "source": "src/components/Hero.jsx:59-59",
+   "quote": "alt=\"Woman with dark hair wearing a soft blue scarf",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-media-image.json."
+  },
+  {
+   "id": "cit-comp-rich-markup",
+   "source": "src/pages/PrivacyContent.jsx:6-10",
+   "quote": "tech__rich u-fonts-100 w-richtext",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-rich-text-block.json."
+  },
+  {
+   "id": "cit-comp-rich-anchor",
+   "source": "src/pages/PrivacyContent.jsx:36-36",
+   "quote": "className=\"tech__rich-anchor\"",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-rich-text-block.json."
+  },
+  {
+   "id": "cit-comp-rich-cell",
+   "source": "src/styles/fourmula-base.css:4741-4746",
+   "quote": "border-bottom: 1px solid #00000026;",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-rich-text-block.json."
+  },
+  {
+   "id": "cit-comp-rich-cell-head",
+   "source": "src/styles/fourmula-base.css:4748-4752",
+   "quote": "background-color: #0000000a;",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-rich-text-block.json."
+  },
+  {
+   "id": "cit-comp-rich-tech-pad",
+   "source": "src/styles/fourmula-base.css:4658-4662",
+   "quote": "padding-top: 8rem;",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-rich-text-block.json."
+  },
+  {
+   "id": "cit-comp-rich-title-override",
+   "source": "src/styles/fourmula-base.css:4664-4666",
+   "quote": "font-size: var(--_fonts---h1);",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-rich-text-block.json."
+  },
+  {
+   "id": "cit-comp-step-first",
+   "source": "src/styles/fourmula-base.css:4024-4027",
+   "quote": "linear-gradient(#f94a00, #fd7b03)",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-step-slide.json."
+  },
+  {
+   "id": "cit-comp-step-second",
+   "source": "src/styles/fourmula-base.css:4029-4031",
+   "quote": "linear-gradient(#48a3d1, #fd7b03)",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-step-slide.json."
+  },
+  {
+   "id": "cit-comp-step-third",
+   "source": "src/styles/fourmula-base.css:4033-4035",
+   "quote": "linear-gradient(#3a54ff, #7a67c5 23%, #fd7b03)",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-step-slide.json."
+  },
+  {
+   "id": "cit-comp-step-fourth",
+   "source": "src/styles/fourmula-base.css:4037-4039",
+   "quote": "linear-gradient(#9a0101, #fd7b03)",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-step-slide.json."
+  },
+  {
+   "id": "cit-comp-step-scrim",
+   "source": "src/styles/fourmula-base.css:4211-4214",
+   "quote": "linear-gradient(#fc730300, #fc7303)",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-step-slide.json."
+  },
+  {
+   "id": "cit-comp-step-markup",
+   "source": "src/components/ListSection.jsx:15-43",
+   "quote": "list__main__content is-first",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-step-slide.json."
+  },
+  {
+   "id": "cit-comp-step-fourth-markup",
+   "source": "src/components/ListSection.jsx:112-114",
+   "quote": "list__main__content is-fourth",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-step-slide.json."
+  },
+  {
+   "id": "cit-comp-step-m29",
+   "source": "public/motion/m29.js:1-39",
+   "quote": "list__main__slide",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-step-slide.json."
+  },
+  {
+   "id": "cit-comp-step-perspective",
+   "source": "src/styles/fourmula-head.css:144-149",
+   "quote": "perspective: 250vw;",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-step-slide.json."
+  },
+  {
+   "id": "cit-comp-drop-markup",
+   "source": "src/components/Hero.jsx:47-54",
+   "quote": "drop-zone",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-upload-dropzone.json."
+  },
+  {
+   "id": "cit-comp-drop-input",
+   "source": "src/components/Hero.jsx:53-53",
+   "quote": "type=\"file\" id=\"fileInput\" accept=\"image/*\"",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-upload-dropzone.json."
+  },
+  {
+   "id": "cit-comp-drop-m16",
+   "source": "public/motion/m16.js:1-66",
+   "quote": "querySelector('p",
+   "kind": "declaration",
+   "note": "Structural citation from components/component-upload-dropzone.json."
+  },
+  {
+   "id": "cit-prim-btn-outline-css",
+   "source": "src/styles/fourmula-base.css:3523-3526",
+   "quote": ".btn-outline.u-btn.is-cookies",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-button-outline.json."
+  },
+  {
+   "id": "cit-prim-btn-outline-hover",
+   "source": "src/styles/fourmula-base.css:3528-3531",
+   "quote": "color: #146ef5;",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-button-outline.json."
+  },
+  {
+   "id": "cit-prim-btn-outline-404",
+   "source": "src/pages/NotFoundContent.jsx:8-9",
+   "quote": "btn-outline u-btn is-header-btn w-inline-block",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-button-outline.json."
+  },
+  {
+   "id": "cit-prim-btn-primary-css",
+   "source": "src/styles/fourmula-base.css:2444-2446",
+   "quote": ".btn-primary:hover",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-button-primary.json."
+  },
+  {
+   "id": "cit-prim-btn-primary-use",
+   "source": "src/components/Header.jsx:29-31",
+   "quote": "btn-primary u-btn is-header-btn w-inline-block",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-button-primary.json."
+  },
+  {
+   "id": "cit-prim-btn-primary-focus",
+   "source": "src/styles/fourmula-head.css:36-36",
+   "quote": "*:focus { outline: none; }",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-button-primary.json."
+  },
+  {
+   "id": "cit-prim-btn-step",
+   "source": "src/components/ListSection.jsx:38-40",
+   "quote": "btn-primary-stb u-btn w-inline-block",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-button-step.json."
+  },
+  {
+   "id": "cit-prim-btn-step-4",
+   "source": "src/components/ListSection.jsx:138-140",
+   "quote": "btn-primary-stb u-btn w-inline-block",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-button-step.json."
+  },
+  {
+   "id": "cit-prim-checkbox",
+   "source": "src/components/Cookies.jsx:34-38",
+   "quote": "w-checkbox fs-cc_checkbox w-clearfix",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-checkbox.json."
+  },
+  {
+   "id": "cit-prim-checkbox-checked",
+   "source": "src/styles/fourmula-base.css:4406-4409",
+   "quote": "background-image: url(\"/assets/radio__checkmark.svg\")",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-checkbox.json."
+  },
+  {
+   "id": "cit-prim-checkbox-focus",
+   "source": "src/styles/fourmula-base.css:4415-4417",
+   "quote": "box-shadow: none;",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-checkbox.json."
+  },
+  {
+   "id": "cit-prim-dottag",
+   "source": "src/components/AiSection.jsx:11-13",
+   "quote": "ai__tag",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-dot-tag.json."
+  },
+  {
+   "id": "cit-prim-dottag-dot",
+   "source": "src/styles/fourmula-base.css:2873-2875",
+   "quote": "background-color: var(--fonts-30);",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-dot-tag.json."
+  },
+  {
+   "id": "cit-prim-eyebrow-what",
+   "source": "src/components/What.jsx:6-6",
+   "quote": "what__txt u-tag u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-eyebrow-tag.json."
+  },
+  {
+   "id": "cit-prim-eyebrow-how",
+   "source": "src/components/How.jsx:6-6",
+   "quote": "how__title-txt u-tag u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-eyebrow-tag.json."
+  },
+  {
+   "id": "cit-prim-eyebrow-faq",
+   "source": "src/components/Faq.jsx:6-6",
+   "quote": "faq__txt u-tag u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-eyebrow-tag.json."
+  },
+  {
+   "id": "cit-prim-icon-wrapper",
+   "source": "src/components/Header.jsx:8-9",
+   "quote": "header__logo w-embed",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-inline-icon.json."
+  },
+  {
+   "id": "cit-prim-icon-currentcolor",
+   "source": "src/components/Header.jsx:9-9",
+   "quote": "fill=\"currentColor\"",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-inline-icon.json."
+  },
+  {
+   "id": "cit-prim-icon-trusted",
+   "source": "src/components/How.jsx:35-36",
+   "quote": "how__bottom-logo w-embed",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-inline-icon.json."
+  },
+  {
+   "id": "cit-prim-progress",
+   "source": "src/components/Header.jsx:22-23",
+   "quote": "<div id=\"progress\" className=\"header__prc-txt u-btn\">0%</div>",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-progress-readout.json."
+  },
+  {
+   "id": "cit-prim-progress-m12",
+   "source": "public/motion/m12.js:2-5",
+   "quote": "document.getElementById(\"progress\")",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-progress-readout.json."
+  },
+  {
+   "id": "cit-prim-input",
+   "source": "src/pages/Auth.jsx:36-42",
+   "quote": "className=\"w-input\"",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-text-input.json."
+  },
+  {
+   "id": "cit-prim-input-label",
+   "source": "src/pages/Auth.jsx:33-35",
+   "quote": "htmlFor=\"auth-email\"",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-text-input.json."
+  },
+  {
+   "id": "cit-prim-input-inert",
+   "source": "src/pages/Auth.jsx:28-32",
+   "quote": "onSubmit={(e) => e.preventDefault()}",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-text-input.json."
+  },
+  {
+   "id": "cit-prim-link-menu",
+   "source": "src/components/Menu.jsx:12-13",
+   "quote": "menu__link u-title-3 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-text-link.json."
+  },
+  {
+   "id": "cit-prim-link-footer",
+   "source": "src/components/Footer.jsx:17-18",
+   "quote": "footer__main__link u-title-1 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-text-link.json."
+  },
+  {
+   "id": "cit-prim-link-active",
+   "source": "src/components/Menu.jsx:2-3",
+   "quote": "current === h ? { \"aria-current\": \"page\" }",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-text-link.json."
+  },
+  {
+   "id": "cit-prim-link-hide",
+   "source": "src/components/Menu.jsx:34-34",
+   "quote": "menu__link u-title-2 u-fonts-100 is-hide",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-text-link.json."
+  },
+  {
+   "id": "cit-prim-toggle",
+   "source": "src/components/Header.jsx:17-21",
+   "quote": "data-theme-toggle=\"\" className=\"header__theme\" aria-pressed=\"true\" data-theme-state=\"dark\"",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-theme-toggle.json."
+  },
+  {
+   "id": "cit-prim-toggle-hover",
+   "source": "src/styles/fourmula-base.css:2527-2529",
+   "quote": "border-color: #ffffffa6;",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-theme-toggle.json."
+  },
+  {
+   "id": "cit-prim-toggle-m10",
+   "source": "public/motion/m10.js:11-16",
+   "quote": "document.body.classList.toggle('dark',darkOn)",
+   "kind": "declaration",
+   "note": "Structural citation from primitives/primitive-theme-toggle.json."
+  },
+  {
+   "id": "cit-sec-badge-root",
+   "source": "src/components/AwwwardsBadge.jsx:4-4",
+   "quote": "id=\"awwwards\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-awards-badge.json."
+  },
+  {
+   "id": "cit-sec-badge-inert",
+   "source": "src/components/AwwwardsBadge.jsx:5-5",
+   "quote": "<a href=\"#\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-awards-badge.json."
+  },
+  {
+   "id": "cit-sec-badge-outside",
+   "source": "src/layout/Layout.jsx:45-46",
+   "quote": "<AwwwardsBadge />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-awards-badge.json."
+  },
+  {
+   "id": "cit-sec-badge-comment",
+   "source": "src/components/AwwwardsBadge.jsx:1-1",
+   "quote": "in the original this sits OUTSIDE section.page",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-awards-badge.json."
+  },
+  {
+   "id": "cit-sec-cookies-root",
+   "source": "src/components/Cookies.jsx:4-5",
+   "quote": "<section className=\"cookies\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-cookie-consent.json."
+  },
+  {
+   "id": "cit-sec-cookies-title",
+   "source": "src/components/Cookies.jsx:12-13",
+   "quote": "Cookie settings",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-cookie-consent.json."
+  },
+  {
+   "id": "cit-sec-cookies-body",
+   "source": "src/components/Cookies.jsx:13-13",
+   "quote": "By clicking \"Accept all cookies\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-cookie-consent.json."
+  },
+  {
+   "id": "cit-sec-cookies-cats",
+   "source": "src/components/Cookies.jsx:31-46",
+   "quote": "fs-cc_checkbox",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-cookie-consent.json."
+  },
+  {
+   "id": "cit-sec-cookies-layout",
+   "source": "src/layout/Layout.jsx:39-39",
+   "quote": "<Cookies />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-cookie-consent.json."
+  },
+  {
+   "id": "cit-sec-ft-root",
+   "source": "src/components/Footer.jsx:6-6",
+   "quote": "<section className=\"footer\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-footer.json."
+  },
+  {
+   "id": "cit-sec-ft-lists",
+   "source": "src/components/Footer.jsx:16-40",
+   "quote": "footer__main__list",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-footer.json."
+  },
+  {
+   "id": "cit-sec-ft-legal",
+   "source": "src/components/Footer.jsx:42-42",
+   "quote": "Fourmula ltd. UK, London. All rights reserved.",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-footer.json."
+  },
+  {
+   "id": "cit-sec-ft-reg",
+   "source": "src/components/Footer.jsx:43-43",
+   "quote": "Registered in England & Wales No.: 13044361",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-footer.json."
+  },
+  {
+   "id": "cit-sec-ft-dots",
+   "source": "src/components/Footer.jsx:85-85",
+   "quote": "id=\"dotsField\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-footer.json."
+  },
+  {
+   "id": "cit-sec-ft-flag",
+   "source": "src/layout/Layout.jsx:44-44",
+   "quote": "{footer && <Footer current={current} />}",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-footer.json."
+  },
+  {
+   "id": "cit-sec-ft-404",
+   "source": "src/pages/NotFound.jsx:7-7",
+   "quote": "footer={false}",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-footer.json."
+  },
+  {
+   "id": "cit-sec-hdr-root",
+   "source": "src/components/Header.jsx:5-6",
+   "quote": "<section className=\"header\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-header.json."
+  },
+  {
+   "id": "cit-sec-hdr-logo",
+   "source": "src/components/Header.jsx:7-10",
+   "quote": "header__left-link w-inline-block",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-header.json."
+  },
+  {
+   "id": "cit-sec-hdr-menu",
+   "source": "src/components/Header.jsx:12-16",
+   "quote": "header__menu-txt u-btn",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-header.json."
+  },
+  {
+   "id": "cit-sec-hdr-toggle",
+   "source": "src/components/Header.jsx:17-17",
+   "quote": "data-theme-toggle=\"\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-header.json."
+  },
+  {
+   "id": "cit-sec-hdr-progress",
+   "source": "src/components/Header.jsx:23-23",
+   "quote": "id=\"progress\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-header.json."
+  },
+  {
+   "id": "cit-sec-hdr-cta",
+   "source": "src/components/Header.jsx:29-31",
+   "quote": "btn-primary u-btn is-header-btn",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-header.json."
+  },
+  {
+   "id": "cit-sec-hdr-layout",
+   "source": "src/layout/Layout.jsx:41-41",
+   "quote": "<Header current={current} />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-header.json."
+  },
+  {
+   "id": "cit-sec-menu-root",
+   "source": "src/components/Menu.jsx:6-6",
+   "quote": "<section className=\"menu\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-menu.json."
+  },
+  {
+   "id": "cit-sec-menu-groups",
+   "source": "src/components/Menu.jsx:9-37",
+   "quote": "menu__label u-small-text-1 u-fonts-50",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-menu.json."
+  },
+  {
+   "id": "cit-sec-menu-hidden",
+   "source": "src/components/Menu.jsx:34-36",
+   "quote": "u-fonts-100 is-hide",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-menu.json."
+  },
+  {
+   "id": "cit-sec-menu-typo",
+   "source": "src/components/Menu.jsx:41-41",
+   "quote": "Ge tstarted",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-menu.json."
+  },
+  {
+   "id": "cit-sec-menu-closed",
+   "source": "src/styles/fourmula-head.css:102-107",
+   "quote": ".menu__wrap {",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-menu.json."
+  },
+  {
+   "id": "cit-sec-menu-flag",
+   "source": "src/layout/Layout.jsx:42-42",
+   "quote": "{menu && <Menu current={current} />}",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-menu.json."
+  },
+  {
+   "id": "cit-sec-menu-404",
+   "source": "src/pages/NotFound.jsx:7-7",
+   "quote": "menu={false}",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-menu.json."
+  },
+  {
+   "id": "cit-sec-pre-root",
+   "source": "src/components/Preloader.jsx:4-5",
+   "quote": "preloader__number u-h1 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-preloader.json."
+  },
+  {
+   "id": "cit-sec-pre-word",
+   "source": "src/components/Preloader.jsx:5-5",
+   "quote": "Synced",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-preloader.json."
+  },
+  {
+   "id": "cit-sec-pre-images",
+   "source": "src/components/Preloader.jsx:13-17",
+   "quote": "preloader__images",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-preloader.json."
+  },
+  {
+   "id": "cit-sec-pre-css",
+   "source": "src/styles/fourmula-head.css:9-24",
+   "quote": "html.is-loading .preloader",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-preloader.json."
+  },
+  {
+   "id": "cit-sec-pre-loading",
+   "source": "src/loadSite.js:41-41",
+   "quote": "root.classList.add('is-loading')",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-preloader.json."
+  },
+  {
+   "id": "cit-sec-pre-layout",
+   "source": "src/layout/Layout.jsx:38-38",
+   "quote": "{preloader && <Preloader />}",
+   "kind": "declaration",
+   "note": "Structural citation from sections/chrome-preloader.json."
+  },
+  {
+   "id": "cit-sec-tech-privacy",
+   "source": "src/pages/PrivacyContent.jsx:4-5",
+   "quote": "<section className=\"tech\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-privacy-title",
+   "source": "src/pages/PrivacyContent.jsx:5-5",
+   "quote": "FOURMULA AI <br />PRIVACY & COOKIES POLICY",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-privacy-anchor",
+   "source": "src/pages/PrivacyContent.jsx:36-36",
+   "quote": "className=\"tech__rich-anchor\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-terms",
+   "source": "src/pages/TermsContent.jsx:5-5",
+   "quote": "TERMS OF USE",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-start",
+   "source": "src/pages/Start.jsx:16-21",
+   "quote": "tech__title u-h3 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-start-doc",
+   "source": "src/pages/Start.jsx:3-12",
+   "quote": "BAILOUT_TO_CLIENT_SIDE_RENDERING",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-auth",
+   "source": "src/pages/Auth.jsx:18-27",
+   "quote": "<section className=\"tech\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-auth-form",
+   "source": "src/pages/Auth.jsx:28-46",
+   "quote": "onSubmit={(e) => e.preventDefault()}",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-auth-doc",
+   "source": "src/pages/Auth.jsx:11-13",
+   "quote": "The form is deliberately INERT",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-css",
+   "source": "src/styles/fourmula-base.css:4658-4662",
+   "quote": "padding-top: 8rem;",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-tech-title-override",
+   "source": "src/styles/fourmula-base.css:4664-4666",
+   "quote": "font-size: var(--_fonts---h1);",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-tech.json."
+  },
+  {
+   "id": "cit-sec-what-root",
+   "source": "src/components/What.jsx:4-4",
+   "quote": "<section id=\"what-is-fourmula\" className=\"what\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-what-intro.json."
+  },
+  {
+   "id": "cit-sec-what-eyebrow",
+   "source": "src/components/What.jsx:6-6",
+   "quote": "What you can do",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-what-intro.json."
+  },
+  {
+   "id": "cit-sec-what-h2",
+   "source": "src/components/What.jsx:8-11",
+   "quote": "what__title u-h2 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-what-intro.json."
+  },
+  {
+   "id": "cit-sec-what-flash",
+   "source": "src/components/What.jsx:8-8",
+   "quote": "data-flash=\"\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-what-intro.json."
+  },
+  {
+   "id": "cit-sec-what-home",
+   "source": "src/pages/Home.jsx:13-13",
+   "quote": "<What />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-what-intro.json."
+  },
+  {
+   "id": "cit-sec-faq-root",
+   "source": "src/components/Faq.jsx:4-4",
+   "quote": "<section className=\"faq\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/faq-accordion.json."
+  },
+  {
+   "id": "cit-sec-faq-eyebrow",
+   "source": "src/components/Faq.jsx:6-6",
+   "quote": "faq__txt u-tag u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/faq-accordion.json."
+  },
+  {
+   "id": "cit-sec-faq-h2",
+   "source": "src/components/Faq.jsx:9-12",
+   "quote": "faq__title-in u-h2 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/faq-accordion.json."
+  },
+  {
+   "id": "cit-sec-faq-item1",
+   "source": "src/components/Faq.jsx:16-21",
+   "quote": "What can AI FOURMULA create for my brand?",
+   "kind": "declaration",
+   "note": "Structural citation from sections/faq-accordion.json."
+  },
+  {
+   "id": "cit-sec-faq-item6",
+   "source": "src/components/Faq.jsx:46-51",
+   "quote": "Does this replace my creative team?",
+   "kind": "declaration",
+   "note": "Structural citation from sections/faq-accordion.json."
+  },
+  {
+   "id": "cit-sec-faq-home",
+   "source": "src/pages/Home.jsx:17-17",
+   "quote": "<Faq />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/faq-accordion.json."
+  },
+  {
+   "id": "cit-sec-hero-root",
+   "source": "src/components/Hero.jsx:4-4",
+   "quote": "<section id=\"hero\" className=\"hero\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-home.json."
+  },
+  {
+   "id": "cit-sec-hero-h1",
+   "source": "src/components/Hero.jsx:7-9",
+   "quote": "hero__title u-h1 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-home.json."
+  },
+  {
+   "id": "cit-sec-hero-accent",
+   "source": "src/components/Hero.jsx:8-9",
+   "quote": "<span className=\"u-fonts-50\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-home.json."
+  },
+  {
+   "id": "cit-sec-hero-year",
+   "source": "src/components/Hero.jsx:10-13",
+   "quote": "data-current-year",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-home.json."
+  },
+  {
+   "id": "cit-sec-hero-scroll",
+   "source": "src/components/Hero.jsx:15-16",
+   "quote": "hero__scroll u-small-text-2 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-home.json."
+  },
+  {
+   "id": "cit-sec-hero-slider",
+   "source": "src/components/Hero.jsx:19-31",
+   "quote": "hero__slider__row",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-home.json."
+  },
+  {
+   "id": "cit-sec-hero-upload",
+   "source": "src/components/Hero.jsx:50-52",
+   "quote": "Upload or drop your assets",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-home.json."
+  },
+  {
+   "id": "cit-sec-hero-carousel",
+   "source": "src/components/Hero.jsx:57-59",
+   "quote": "hero__carousel__0deg",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-home.json."
+  },
+  {
+   "id": "cit-sec-hero-home",
+   "source": "src/pages/Home.jsx:12-12",
+   "quote": "<Hero />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-home.json."
+  },
+  {
+   "id": "cit-sec-404-root",
+   "source": "src/pages/NotFoundContent.jsx:4-4",
+   "quote": "<section id=\"hero\" className=\"hero__404__wrap\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-not-found.json."
+  },
+  {
+   "id": "cit-sec-404-h1",
+   "source": "src/pages/NotFoundContent.jsx:6-7",
+   "quote": "hero__404__txt u-h1 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-not-found.json."
+  },
+  {
+   "id": "cit-sec-404-cta",
+   "source": "src/pages/NotFoundContent.jsx:8-9",
+   "quote": "btn-outline u-btn is-header-btn w-inline-block",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-not-found.json."
+  },
+  {
+   "id": "cit-sec-404-art",
+   "source": "src/pages/NotFoundContent.jsx:13-14",
+   "quote": "hero__404__loop-img theme-dark",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-not-found.json."
+  },
+  {
+   "id": "cit-sec-404-page",
+   "source": "src/pages/NotFound.jsx:7-8",
+   "quote": "<Layout current=\"/404\" preloader menu={false} footer={false}>",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-not-found.json."
+  },
+  {
+   "id": "cit-sec-404-route",
+   "source": "src/App.jsx:21-21",
+   "quote": "<Route path=\"*\" element={<NotFound />} />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/hero-not-found.json."
+  },
+  {
+   "id": "cit-sec-how-root",
+   "source": "src/components/How.jsx:4-4",
+   "quote": "<section className=\"how\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/marquee-how-trusted.json."
+  },
+  {
+   "id": "cit-sec-how-eyebrow",
+   "source": "src/components/How.jsx:6-6",
+   "quote": "How It Works",
+   "kind": "declaration",
+   "note": "Structural citation from sections/marquee-how-trusted.json."
+  },
+  {
+   "id": "cit-sec-how-lead",
+   "source": "src/components/How.jsx:9-10",
+   "quote": "how__left-title u-h2 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/marquee-how-trusted.json."
+  },
+  {
+   "id": "cit-sec-how-columns",
+   "source": "src/components/How.jsx:15-28",
+   "quote": "how__column",
+   "kind": "declaration",
+   "note": "Structural citation from sections/marquee-how-trusted.json."
+  },
+  {
+   "id": "cit-sec-how-trusted",
+   "source": "src/components/How.jsx:31-31",
+   "quote": "Trusted By",
+   "kind": "declaration",
+   "note": "Structural citation from sections/marquee-how-trusted.json."
+  },
+  {
+   "id": "cit-sec-how-logos",
+   "source": "src/components/How.jsx:33-63",
+   "quote": "how__bottom-row",
+   "kind": "declaration",
+   "note": "Structural citation from sections/marquee-how-trusted.json."
+  },
+  {
+   "id": "cit-sec-how-masks",
+   "source": "src/components/How.jsx:95-96",
+   "quote": "how__bottom-gr-right",
+   "kind": "declaration",
+   "note": "Structural citation from sections/marquee-how-trusted.json."
+  },
+  {
+   "id": "cit-sec-how-home",
+   "source": "src/pages/Home.jsx:15-15",
+   "quote": "<How />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/marquee-how-trusted.json."
+  },
+  {
+   "id": "cit-sec-ai-root",
+   "source": "src/components/AiSection.jsx:4-5",
+   "quote": "<section className=\"ai\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-ai-anchor1",
+   "source": "src/components/AiSection.jsx:5-5",
+   "quote": "id=\"pdp\" className=\"anchor-pdp\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-ai-anchor2",
+   "source": "src/components/AiSection.jsx:45-45",
+   "quote": "id=\"products\" className=\"anchor-products\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-ai-anchor3",
+   "source": "src/components/AiSection.jsx:76-76",
+   "quote": "id=\"video\" className=\"anchor-video\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-ai-tag",
+   "source": "src/components/AiSection.jsx:13-13",
+   "quote": "AI Fashion Photoshoot",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-ai-h3",
+   "source": "src/components/AiSection.jsx:15-17",
+   "quote": "ai__subtitle u-h3 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-ai-body",
+   "source": "src/components/AiSection.jsx:18-18",
+   "quote": "Upload one product and get all the angles",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-ai-pill",
+   "source": "src/components/AiSection.jsx:7-10",
+   "quote": "ai__btn w-inline-block",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-ai-pill-css",
+   "source": "src/styles/fourmula-base.css:2833-2836",
+   "quote": "color: #000;",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-ai-home",
+   "source": "src/pages/Home.jsx:14-14",
+   "quote": "<AiSection />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/showcase-ai-capabilities.json."
+  },
+  {
+   "id": "cit-sec-list-root",
+   "source": "src/components/ListSection.jsx:4-5",
+   "quote": "<section className=\"list\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/steps-pinned-list.json."
+  },
+  {
+   "id": "cit-sec-list-heading",
+   "source": "src/components/ListSection.jsx:7-9",
+   "quote": "list__title-h1 u-h1 u-fonts-100",
+   "kind": "declaration",
+   "note": "Structural citation from sections/steps-pinned-list.json."
+  },
+  {
+   "id": "cit-sec-list-sub",
+   "source": "src/components/ListSection.jsx:10-10",
+   "quote": "Sign up for free and supercharge",
+   "kind": "declaration",
+   "note": "Structural citation from sections/steps-pinned-list.json."
+  },
+  {
+   "id": "cit-sec-list-anchor",
+   "source": "src/components/ListSection.jsx:5-5",
+   "quote": "id=\"list\" className=\"list__wrap\"",
+   "kind": "declaration",
+   "note": "Structural citation from sections/steps-pinned-list.json."
+  },
+  {
+   "id": "cit-sec-list-slide1",
+   "source": "src/components/ListSection.jsx:12-43",
+   "quote": "list__main__content is-first",
+   "kind": "declaration",
+   "note": "Structural citation from sections/steps-pinned-list.json."
+  },
+  {
+   "id": "cit-sec-list-slide4",
+   "source": "src/components/ListSection.jsx:112-143",
+   "quote": "list__main__content is-fourth",
+   "kind": "declaration",
+   "note": "Structural citation from sections/steps-pinned-list.json."
+  },
+  {
+   "id": "cit-sec-list-nopin",
+   "source": "src/components/ListSection.jsx:112-113",
+   "quote": "<div className=\"list__main__content__wrap\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/steps-pinned-list.json."
+  },
+  {
+   "id": "cit-sec-list-home",
+   "source": "src/pages/Home.jsx:16-16",
+   "quote": "<ListSection />",
+   "kind": "declaration",
+   "note": "Structural citation from sections/steps-pinned-list.json."
+  }
+ ]
+}

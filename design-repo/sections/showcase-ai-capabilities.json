@@ -1,0 +1,313 @@
+{
+  "id": "showcase.ai-capabilities",
+  "kind": "section",
+  "category": "showcase",
+  "purpose": "The three-capability product showcase. ONE section element holding three blocks, each with its own in-page anchor, pill link, dot tag, heading, body and media collage.",
+  "content": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "blocks": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "anchorId": {
+              "type": "string",
+              "enum": [
+                "pdp",
+                "products",
+                "video"
+              ],
+              "note": "Exactly these three ids, in this order; the menu and footer link to all three."
+            },
+            "pillHref": {
+              "type": "string",
+              "format": "route-or-inert-hash"
+            },
+            "pillGlyph": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "assetRole": {
+                  "type": "string",
+                  "enum": [
+                    "ui-icon-glyph"
+                  ]
+                },
+                "accessibleLabel": {
+                  "type": "string",
+                  "maxWords": 2
+                }
+              },
+              "required": [
+                "assetRole"
+              ]
+            },
+            "tagLabel": {
+              "type": "string",
+              "maxWords": 4,
+              "note": "Measured: 3 words on all three blocks - \"AI Fashion Photoshoot\", \"AI Product Shots\", \"AI Video Production\"."
+            },
+            "heading": {
+              "type": "string",
+              "maxWords": 7,
+              "note": "First line of the h3. MEASURED 1-6 words: \"Studio-quality,\" (1), \"Your product, new scenes on demand.\" (6), \"Campaign-ready\" (1). Budget 7 gives one word of headroom."
+            },
+            "headingSecondLine": {
+              "type": "string",
+              "maxWords": 4,
+              "note": "Optional second line after a <br/>. Measured 3 words on blocks 1 and 3; block 2 has none."
+            },
+            "body": {
+              "type": "string",
+              "maxWords": 22,
+              "note": "Measured 11-20 words, split across a <br/>. Block 1 is 20 words, block 2 is 15, block 3 is 11.",
+              "bodyCopy": true
+            },
+            "collage": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "arrangement": {
+                  "type": "string",
+                  "enum": [
+                    "two-up-with-arrow",
+                    "five-image-collage",
+                    "three-video-collage"
+                  ]
+                },
+                "images": {
+                  "type": "array",
+                  "minItems": 0,
+                  "maxItems": 12,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "assetRole": {
+                        "type": "string",
+                        "enum": [
+                          "product-shot-photo"
+                        ]
+                      },
+                      "assetRef": {
+                        "type": "string",
+                        "format": "local-asset-path"
+                      },
+                      "alt": {
+                        "type": "string",
+                        "maxWords": 28,
+                        "note": "Required on every content image. Measured 3-27 words across the real images (longest: a 27-word hero carousel description); the four decorative preloader images ship alt=\"\", which is why the empty string is allowed. alt is accessibility text, not visible page copy, so it carries its own budget but is excluded from contentMaxWordsTotal.",
+                        "allowEmpty": true,
+                        "countsTowardTotal": false
+                      },
+                      "themePairRef": {
+                        "type": "string",
+                        "format": "local-asset-path"
+                      },
+                      "crossFadeTwinRef": {
+                        "type": "string",
+                        "format": "local-asset-path"
+                      }
+                    },
+                    "required": [
+                      "assetRole"
+                    ]
+                  }
+                },
+                "videos": {
+                  "type": "array",
+                  "minItems": 0,
+                  "maxItems": 3,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "assetRole": {
+                        "type": "string",
+                        "enum": [
+                          "showcase-video"
+                        ]
+                      },
+                      "assetRef": {
+                        "type": "string",
+                        "format": "local-asset-path"
+                      },
+                      "alt": {
+                        "type": "string",
+                        "maxWords": 28,
+                        "note": "Required on every content image. Measured 3-27 words across the real images (longest: a 27-word hero carousel description); the four decorative preloader images ship alt=\"\", which is why the empty string is allowed. alt is accessibility text, not visible page copy, so it carries its own budget but is excluded from contentMaxWordsTotal.",
+                        "allowEmpty": true,
+                        "countsTowardTotal": false
+                      }
+                    },
+                    "required": [
+                      "assetRole"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "arrangement"
+              ]
+            }
+          },
+          "required": [
+            "anchorId",
+            "pillHref",
+            "pillGlyph",
+            "tagLabel",
+            "heading",
+            "body",
+            "collage"
+          ]
+        },
+        "note": "Exactly 3 blocks, in the fixed order pdp -> products -> video."
+      }
+    },
+    "required": [
+      "blocks"
+    ]
+  },
+  "contentMaxWordsTotal": 110,
+  "usedOn": [
+    "/"
+  ],
+  "evidence": {
+    "structure": "Structure, layout and motion measured against the live original. A pixel audit verified 1382/1382 elements at a 1440px viewport and 962/962 at 390px with zero deltas. Copy is the original's own.",
+    "copy": "a-exact"
+  },
+  "bodyCopyFields": [
+    "blocks[].body"
+  ],
+  "variants": {},
+  "constraints": {
+    "onePerPage": true,
+    "maxPerPage": 1,
+    "homeRouteOnly": true,
+    "verification": "src/pages/Home.jsx:14 renders <AiSection /> third. Checked against all 5 real templates: it appears only in `home`, immediately after content.what-intro. It is ONE section element, not three, so onePerPage is correct."
+  },
+  "media": {
+    "productShots": {
+      "assetRole": [
+        "product-shot-photo"
+      ],
+      "policy": "must-not-fabricate",
+      "count": "20 files: 2 theme pairs (4), 6 mobile tiles, 5 collage images + their 5 -upd cross-fade twins"
+    },
+    "videos": {
+      "assetRole": [
+        "showcase-video"
+      ],
+      "policy": "must-not-fabricate",
+      "count": 3
+    },
+    "pillGlyph": {
+      "assetRole": [
+        "ui-icon-glyph"
+      ],
+      "policy": "may-generate-new",
+      "count": "1 design, 3 occurrences"
+    }
+  },
+  "motion": {
+    "pattern": "flash-word-reveal",
+    "detail": "All three h3 headings carry data-flash and run the m22 + m23 split-and-reveal sequence. public/motion/m28.js cross-fades the five .is-img-anima-1..5 twins on a 0.8-1.5s repeating loop. m27.js drives the three background videos and is the ONE place prefers-reduced-motion is genuinely honoured. The .ai__btn pill scales to 0.9 and turns accent.hover on hover.",
+    "reducedMotionFallback": "Render all three headings unsplit at text.primary; stop the image cross-fades on their base frame; leave the three background videos paused on their poster, which is what m27.js itself already does under prefers-reduced-motion.",
+    "reducedMotionFallbackKind": "mixed - the heading and image-cross-fade parts are a design rule; the background-video part is mirrored (public/motion/m27.js genuinely reads prefers-reduced-motion for this slot)"
+  },
+  "responsive": {
+    "structured": true,
+    "breakpoint": "767px",
+    "base": "block 1 shows the two-up .ai__grid; blocks 2 and 3 use the .ai__grid-small collage skeleton",
+    "max-991px": "heading.sub stays 3.25rem and body.default stays 1rem",
+    "max-767px": "block 1 swaps the two-up grid for the six-tile .ai__grid-alt collage (a DIFFERENT element set, not a reflow); heading.sub drops to 1.5rem and body.default to 0.875rem"
+  },
+  "tokens": [
+    "heading.sub",
+    "body.default",
+    "label.secondary",
+    "text.primary",
+    "text.secondary",
+    "text.faint",
+    "component.ai-pill.fill",
+    "component.ai-pill.text",
+    "component.ai-pill.fill-hover",
+    "radius.control",
+    "radius.panel",
+    "elevation.z-raised",
+    "elevation.blur-image-anima",
+    "motion.image-anima.min",
+    "motion.image-anima.max",
+    "motion.transition.poster-fade",
+    "motion.flash.reveal-in",
+    "motion.flash.step",
+    "motion.flash.settle",
+    "icon-size.ai-btn-glyph",
+    "icon-size.ui-glyph-24"
+  ],
+  "composes": [
+    "primitive.dot-tag",
+    "primitive.inline-icon",
+    "component.image-collage",
+    "component.media-image",
+    "component.background-video"
+  ],
+  "measuredFrom": [
+    {
+      "id": "cit-sec-ai-root",
+      "source": "src/components/AiSection.jsx:4-5",
+      "quote": "<section className=\"ai\">"
+    },
+    {
+      "id": "cit-sec-ai-anchor1",
+      "source": "src/components/AiSection.jsx:5-5",
+      "quote": "id=\"pdp\" className=\"anchor-pdp\""
+    },
+    {
+      "id": "cit-sec-ai-anchor2",
+      "source": "src/components/AiSection.jsx:45-45",
+      "quote": "id=\"products\" className=\"anchor-products\""
+    },
+    {
+      "id": "cit-sec-ai-anchor3",
+      "source": "src/components/AiSection.jsx:76-76",
+      "quote": "id=\"video\" className=\"anchor-video\""
+    },
+    {
+      "id": "cit-sec-ai-tag",
+      "source": "src/components/AiSection.jsx:13-13",
+      "quote": "AI Fashion Photoshoot"
+    },
+    {
+      "id": "cit-sec-ai-h3",
+      "source": "src/components/AiSection.jsx:15-17",
+      "quote": "ai__subtitle u-h3 u-fonts-100"
+    },
+    {
+      "id": "cit-sec-ai-body",
+      "source": "src/components/AiSection.jsx:18-18",
+      "quote": "Upload one product and get all the angles"
+    },
+    {
+      "id": "cit-sec-ai-pill",
+      "source": "src/components/AiSection.jsx:7-10",
+      "quote": "ai__btn w-inline-block"
+    },
+    {
+      "id": "cit-sec-ai-pill-css",
+      "source": "src/styles/fourmula-base.css:2833-2836",
+      "quote": "color: #000;"
+    },
+    {
+      "id": "cit-sec-ai-home",
+      "source": "src/pages/Home.jsx:14-14",
+      "quote": "<AiSection />"
+    }
+  ],
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum)."
+}

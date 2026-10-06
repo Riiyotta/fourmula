@@ -1,0 +1,179 @@
+{
+  "$description": "Semantic type roles over the 16 fluid foundation steps. EVERY value is a rem on a fluid root font-size - see tokens/00-foundation/typography.json ROOT_FONT_SIZE_IS_FLUID before converting anything to px. `usage` counts .u-<step> class occurrences across src/**/*.jsx.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "tokens": {
+    "heading.display": {
+      "$type": "fontSize",
+      "$ref": "type.h2",
+      "rationale": "The largest step (7.5rem base). Used by every h2 section heading and the .list__main__h1 step numerals.",
+      "usage": 13,
+      "evidence": [
+        "cit-sem-type-h2"
+      ]
+    },
+    "heading.page": {
+      "$type": "fontSize",
+      "$ref": "type.h1",
+      "rationale": "Page-level h1: the hero title, the 404 title and the .list__title-h1 step-list heading.",
+      "usage": 4,
+      "evidence": [
+        "cit-sem-type-h1"
+      ]
+    },
+    "heading.step": {
+      "$type": "fontSize",
+      "$ref": "type.h2-5",
+      "rationale": "The pinned-step slide headings (.list__main__h2).",
+      "usage": 4,
+      "evidence": [
+        "cit-sem-type-h2-5"
+      ]
+    },
+    "heading.sub": {
+      "$type": "fontSize",
+      "$ref": "type.h3",
+      "rationale": "The three .ai__subtitle headings and - via an override - the .tech__title on all four tech pages.",
+      "usage": 7,
+      "evidence": [
+        "cit-sem-type-h3",
+        "cit-sem-tech-title-override"
+      ]
+    },
+    "heading.minor": {
+      "$type": "fontSize",
+      "$ref": "type.h4",
+      "rationale": "Declared and bound to .u-h4; no element in src/ carries .u-h4, so this role is DEFINED-UNUSED in the markup.",
+      "usage": 0,
+      "evidence": [
+        "cit-sem-type-h4-unused"
+      ]
+    },
+    "body.lead": {
+      "$type": "fontSize",
+      "$ref": "type.body-1",
+      "rationale": "Lead paragraph on the composed tech pages.",
+      "usage": 2,
+      "evidence": [
+        "cit-sem-type-body-1"
+      ]
+    },
+    "body.default": {
+      "$type": "fontSize",
+      "$ref": "type.body-2",
+      "rationale": "The .ai__txt supporting paragraphs and the FAQ answers.",
+      "usage": 9,
+      "evidence": [
+        "cit-sem-type-body-2"
+      ]
+    },
+    "body.large": {
+      "$type": "fontSize",
+      "$ref": "type.body-3",
+      "rationale": "FAQ question labels and the + / - icon.",
+      "usage": 12,
+      "evidence": [
+        "cit-sem-type-body-3"
+      ]
+    },
+    "label.tag": {
+      "$type": "fontSize",
+      "$ref": "type.tag",
+      "rationale": "Section eyebrow labels: \"What you can do\", \"How It Works\", \"Trusted By\", \"FAQs\", and the step-list sub-copy.",
+      "usage": 5,
+      "evidence": [
+        "cit-sem-type-tag"
+      ]
+    },
+    "label.tag-small": {
+      "$type": "fontSize",
+      "$ref": "type.tag-small",
+      "rationale": "Declared and bound to .u-tag-small; no element in src/ carries it. DEFINED-UNUSED.",
+      "usage": 0,
+      "evidence": [
+        "cit-sem-type-tag-small-unused"
+      ]
+    },
+    "label.primary": {
+      "$type": "fontSize",
+      "$ref": "type.title-1",
+      "rationale": "Footer primary nav links and the cookie-preference titles.",
+      "usage": 8,
+      "evidence": [
+        "cit-sem-type-title-1"
+      ]
+    },
+    "label.secondary": {
+      "$type": "fontSize",
+      "$ref": "type.title-2",
+      "rationale": "Menu/footer secondary links, hero slider items, the .ai__tag text and the cookie body copy.",
+      "usage": 44,
+      "evidence": [
+        "cit-sem-type-title-2"
+      ]
+    },
+    "label.button": {
+      "$type": "fontSize",
+      "$ref": "type.btn",
+      "rationale": "Every .u-btn: all buttons, the header Menu word and the #progress readout.",
+      "usage": 18,
+      "evidence": [
+        "cit-sem-type-btn"
+      ]
+    },
+    "caption.small": {
+      "$type": "fontSize",
+      "$ref": "type.small-text-1",
+      "rationale": "The three menu group labels (\"Menu\", \"Other\", \"Social media\").",
+      "usage": 3,
+      "evidence": [
+        "cit-sem-type-small-1"
+      ]
+    },
+    "caption.xsmall": {
+      "$type": "fontSize",
+      "$ref": "type.small-text-2",
+      "rationale": "The hero copyright line and the \"scroll down\" cue.",
+      "usage": 2,
+      "evidence": [
+        "cit-sem-type-small-2"
+      ]
+    },
+    "font.body": {
+      "$type": "fontFamily",
+      "$ref": "font.family.sans",
+      "rationale": "One family for everything.",
+      "usage": 16,
+      "evidence": [
+        "cit-type-root"
+      ]
+    },
+    "weight.regular": {
+      "$type": "fontWeight",
+      "$ref": "font.weight.regular",
+      "rationale": "h1, h2, body-*, tag, title-3, small-text-*.",
+      "usage": 9,
+      "evidence": [
+        "cit-type-root"
+      ]
+    },
+    "weight.medium": {
+      "$type": "fontWeight",
+      "$ref": "font.weight.medium",
+      "rationale": "h2-5, h3, h4, title-1, title-2, btn.",
+      "usage": 7,
+      "evidence": [
+        "cit-type-root"
+      ]
+    },
+    "label.emphasis": {
+      "$type": "fontSize",
+      "$ref": "type.title-3",
+      "rationale": "Menu primary links, the step-slide info copy and the cookie modal title.",
+      "usage": 14,
+      "evidence": [
+        "cit-sem-type-title-3"
+      ]
+    }
+  },
+  "usageNote": "`usage` is the exact count of the bound .u-<step> class in src/**/*.jsx, counted with the regex (?<![\\w-])u-<step>(?![\\w-]) so that .u-h2 and .u-h2-5 are never conflated. heading.minor (.u-h4) and label.tag-small (.u-tag-small) are 0: both steps are declared in the stylesheet and bound to a utility class, but no element in src/ carries them."
+}

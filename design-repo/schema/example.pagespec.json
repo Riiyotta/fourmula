@@ -1,0 +1,780 @@
+{
+ "$schema": "pagespec.schema.json",
+ "pageSpecVersion": "1.0.0",
+ "template": "home",
+ "route": "/",
+ "nodes": [
+  {
+   "type": "chrome.preloader",
+   "content": {
+    "word": "Synced",
+    "logo": {
+     "assetRole": "brand-wordmark"
+    },
+    "spinner": {
+     "assetRole": "ui-icon-glyph"
+    },
+    "images": [
+     {
+      "assetRole": "preloader-photo",
+      "assetRef": "/assets/6941633274e43deb343482c1_image-pre-01.avif",
+      "alt": ""
+     },
+     {
+      "assetRole": "preloader-photo",
+      "assetRef": "/assets/69416332c6dadc70eb5fa3cc_image-pre-02.avif",
+      "alt": ""
+     },
+     {
+      "assetRole": "preloader-photo",
+      "assetRef": "/assets/69416332b3dc4ef668dec473_image-pre-03.avif",
+      "alt": ""
+     },
+     {
+      "assetRole": "preloader-photo",
+      "assetRef": "/assets/69416332c761b96e289cac9a_image-pre-04.avif",
+      "alt": ""
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "preloader-reveal",
+    "reducedMotionFallback": "Show the final state immediately with no blur, no counter and no image stagger, then remove the overlay.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.cookie-consent",
+   "content": {
+    "title": "Cookie settings",
+    "body": "By clicking \"Accept all cookies\", you agree to storing cookies on your device to enhance site navigation, analyze site usage and assist in our marketing efforts as outlined in our privacy policy.",
+    "inlineLinkLabel": "privacy policy",
+    "bannerActions": [
+     {
+      "label": "Accept all",
+      "style": "primary",
+      "fsCc": "allow",
+      "href": "/#"
+     },
+     {
+      "label": "Settings",
+      "style": "outline",
+      "fsCc": "open-preferences",
+      "href": "/#"
+     }
+    ],
+    "modalActions": [
+     {
+      "label": "Accept all",
+      "style": "primary",
+      "fsCc": "allow",
+      "href": "/#"
+     },
+     {
+      "label": "Save changes",
+      "style": "outline",
+      "fsCc": "submit",
+      "href": "/#"
+     }
+    ],
+    "categories": [
+     {
+      "label": "Strictly necessary (always active)",
+      "description": "Cookies required to enable basic website functionality.",
+      "interactive": false,
+      "fsCcCheckbox": "necessary"
+     },
+     {
+      "label": "Marketing",
+      "description": "Cookies used to deliver advertising that is more relevant to you and your interests.",
+      "interactive": true,
+      "fsCcCheckbox": "marketing",
+      "assetRole": "form-control-checkmark"
+     },
+     {
+      "label": "Personalization",
+      "description": "Cookies allowing the website to remember choices you make, such as your user name, language, or region.",
+      "interactive": true,
+      "fsCcCheckbox": "personalization",
+      "assetRole": "form-control-checkmark"
+     },
+     {
+      "label": "Analytics",
+      "description": "Cookies helping understand how this website performs, how visitors interact with it, and whether there are technical issues.",
+      "interactive": true,
+      "fsCcCheckbox": "analytics",
+      "assetRole": "form-control-checkmark"
+     }
+    ],
+    "closeLabel": "Close cookies modal"
+   },
+   "motion": {
+    "pattern": "overlay-fade",
+    "reducedMotionFallback": "Show the banner at its final position immediately, with no fade and no translate.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.header",
+   "content": {
+    "logo": {
+     "assetRole": "brand-wordmark",
+     "accessibleLabel": "fourmula.ai",
+     "href": "/"
+    },
+    "menuLabel": "Menu",
+    "themeToggle": {
+     "ariaPressed": true,
+     "dataThemeState": "dark"
+    },
+    "progressInitial": "0%",
+    "signin": {
+     "assetRole": "ui-icon-glyph",
+     "accessibleLabel": "Fourmula app account",
+     "href": "/auth"
+    },
+    "cta": {
+     "label": "Get started",
+     "href": "/start",
+     "hoverStagger": true
+    }
+   },
+   "motion": {
+    "pattern": "chrome-reveal",
+    "reducedMotionFallback": "Render the header at its final position with no reveal, show the burger at rest, and keep the progress readout updating because it is information, not decoration.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.menu",
+   "content": {
+    "groups": [
+     {
+      "label": "Menu",
+      "layout": "column",
+      "emphasis": "primary",
+      "links": [
+       {
+        "label": "PDP's",
+        "href": "/#pdp"
+       },
+       {
+        "label": "Products",
+        "href": "/#products"
+       },
+       {
+        "label": "Videos",
+        "href": "/#video"
+       },
+       {
+        "label": "Our features",
+        "href": "/#list"
+       }
+      ]
+     },
+     {
+      "label": "Other",
+      "layout": "column",
+      "emphasis": "secondary",
+      "links": [
+       {
+        "label": "Privacy Policy",
+        "href": "/privacy-policy"
+       },
+       {
+        "label": "Terms of Service",
+        "href": "/terms-of-service"
+       },
+       {
+        "label": "Cookie Policy",
+        "href": "/#"
+       }
+      ]
+     },
+     {
+      "label": "Social media",
+      "layout": "row",
+      "emphasis": "secondary",
+      "links": [
+       {
+        "label": "Instagram",
+        "href": "#"
+       },
+       {
+        "label": "Linkedin",
+        "href": "/#",
+        "hidden": true
+       },
+       {
+        "label": "Youtube",
+        "href": "/#",
+        "hidden": true
+       }
+      ]
+     }
+    ],
+    "cta": {
+     "label": "Ge tstarted",
+     "href": "/start",
+     "hoverStagger": true
+    },
+    "signin": {
+     "assetRole": "ui-icon-glyph",
+     "accessibleLabel": "Fourmula app account",
+     "href": "/auth"
+    }
+   },
+   "motion": {
+    "pattern": "panel-expand",
+    "reducedMotionFallback": "Toggle the panel between its closed and open geometry instantly, with every link at full opacity and no stagger.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "hero.home",
+   "content": {
+    "heading": "Your catalog,",
+    "headingAccent": "instantly re-shot.",
+    "copyrightYear": "2026",
+    "scrollCue": "scroll down",
+    "scrollCueHref": "/#what-is-fourmula",
+    "sliderItems": [
+     "PDPs",
+     "UGC",
+     "Lifestyle shots",
+     "Ads",
+     "Stories",
+     "Street style"
+    ],
+    "uploadPrompt": "Upload or drop your assets",
+    "carouselImages": [
+     {
+      "assetRole": "hero-carousel-photo",
+      "assetRef": "/assets/6939a23cab969012e24ba09f_c04b802c31239400042e400a54d04909_hero-load-01.avif",
+      "alt": "Woman in oversized gray blazer and light blue dress holding a red handbag and wearing green heels."
+     },
+     {
+      "assetRole": "hero-carousel-photo",
+      "assetRef": "/assets/6939a23cf317e2c1522cced9_8641f04d89cd55c8eebf8497f27a1aa3_hero-load-02.avif",
+      "alt": "Smiling man wearing a navy blue zip-up jacket with the text AMILA on the front."
+     },
+     {
+      "assetRole": "hero-carousel-photo",
+      "assetRef": "/assets/6939a23c4a9e3e28661c0ceb_38a07b3bf64cc9acf342df9a33b937e4_hero-load-03.avif",
+      "alt": "Person wearing an oversized green jacket, white t-shirt, plaid skirt and black tights."
+     },
+     {
+      "assetRole": "hero-carousel-photo",
+      "assetRef": "/assets/6939a23c6723eadc91210ade_6d965782e0ccedbe7d7bd322d202488d_hero-load-04.avif",
+      "alt": "Person in a beige outfit, brown boots and a white hat sitting sideways on a brown leather sofa."
+     },
+     {
+      "assetRole": "hero-carousel-photo",
+      "assetRef": "/assets/6939a23c4fc089b2812b9d5c_62ddd7be268edacfe9c9dc778fecafe6_hero-load-05.avif",
+      "alt": "Woman with curly hair lying on a wooden floor wearing a maroon leather jacket and black heels."
+     },
+     {
+      "assetRole": "hero-carousel-photo",
+      "assetRef": "/assets/6939a23cc0f89e21b0fe7c98_795e9025f45162bfde189191421814cf_hero-load-06.avif",
+      "alt": "Black and white photo of a woman in a dark textured sweater and a short skirt."
+     },
+     {
+      "assetRole": "hero-carousel-photo",
+      "assetRef": "/assets/6939a23c04412d3f16007b22_f28274dae9c94f66d31e483913bb79d4_hero-load-07.avif",
+      "alt": "Man wearing a long gray coat, white shirt and dark pants standing against a building."
+     },
+     {
+      "assetRole": "hero-carousel-photo",
+      "assetRef": "/assets/6939a23c78d0b447681dd9f5_hero-load-08.avif",
+      "alt": "Woman with dark hair wearing a soft blue scarf wrapped around her head and neck."
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "hero-reveal",
+    "reducedMotionFallback": "Show the title, the copyright stamp and the scroll cue at final opacity with no stagger; freeze the label marquee and the photograph ring on their first frames; keep the dropzone interactive.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "content.what-intro",
+   "content": {
+    "eyebrow": "What you can do",
+    "headingLines": [
+     "On-brand visuals.",
+     "Made by AI."
+    ],
+    "anchorId": "what-is-fourmula"
+   },
+   "motion": {
+    "pattern": "flash-word-reveal",
+    "reducedMotionFallback": "Render the heading as one unsplit block at full strength, with no colour sequence.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "showcase.ai-capabilities",
+   "content": {
+    "blocks": [
+     {
+      "anchorId": "pdp",
+      "pillHref": "/start",
+      "pillGlyph": {
+       "assetRole": "ui-icon-glyph",
+       "accessibleLabel": "fourmula.ai"
+      },
+      "tagLabel": "AI Fashion Photoshoot",
+      "heading": "Studio-quality,",
+      "headingSecondLine": "without the studio.",
+      "body": "Upload one product and get all the angles, looks and moods you need for PDPs and campaigns without booking a studio.",
+      "collage": {
+       "arrangement": "two-up-with-arrow",
+       "images": [
+        {
+         "assetRole": "product-shot-photo",
+         "assetRef": "/assets/6945380ffd909e695e6958fb_grid-01-dark.avif",
+         "alt": "Dark green liquid soap dispenser bottle labeled FOURMULA with a black pump and a leafy plant branch.",
+         "themePairRef": "/assets/693937f3690e191b2167d7bb_grid-01.avif"
+        },
+        {
+         "assetRole": "product-shot-photo",
+         "assetRef": "/assets/694538517850f85ae8067eb2_4d2933c653ce924af87d0d40e3147507_grid-02-dark.avif",
+         "alt": "Dark green liquid soap dispenser bottle labeled FOURMULA with a black pump and a leafy plant branch.",
+         "themePairRef": "/assets/69453851539228fb17965aa9_d6caa2e9ceee3ce7f5a88cdeebc694f8_grid-02-light.avif"
+        }
+       ],
+       "videos": []
+      }
+     },
+     {
+      "anchorId": "products",
+      "pillHref": "/start",
+      "pillGlyph": {
+       "assetRole": "ui-icon-glyph",
+       "accessibleLabel": "fourmula.ai"
+      },
+      "tagLabel": "AI Product Shots",
+      "heading": "Your product, new scenes on demand.",
+      "body": "Drop a product photo and we build clean packshots and styled lifestyle scenes around it.",
+      "collage": {
+       "arrangement": "five-image-collage",
+       "images": [
+        {
+         "assetRole": "product-shot-photo",
+         "assetRef": "/assets/6939359154acf38540fb2876_ai-img-01.avif",
+         "alt": "Amber glass bottle of 4MLA Eye Contour Serum with a black cap on a sunlit wooden surface.",
+         "crossFadeTwinRef": "/assets/69456d0c94811137595c41d6_ai-img-01-upd.avif"
+        },
+        {
+         "assetRole": "product-shot-photo",
+         "assetRef": "/assets/69393591c0db7a93ad17c69a_ai-img-02.avif",
+         "alt": "Dark green liquid soap dispenser bottle labeled FOURMULA with a black pump and a leafy plant branch.",
+         "crossFadeTwinRef": "/assets/69456d0cc0395327dac15946_ai-img-02-upd.avif"
+        },
+        {
+         "assetRole": "product-shot-photo",
+         "assetRef": "/assets/693935905cc0a72a36f3ba85_ai-img-03.avif",
+         "alt": "Bottle of Aurexon 4MLA Wash and a natural sponge by a window, framed by a bent arm and leg.",
+         "crossFadeTwinRef": "/assets/69456d0c7b5715f088e10305_ai-img-03-upd.avif"
+        },
+        {
+         "assetRole": "product-shot-photo",
+         "assetRef": "/assets/69393590b7fe4ae0d3422092_ai-img-04.avif",
+         "alt": "Close-up of a tilted perfume bottle labeled 4MLA Arkena Eau De Parfum with amber liquid inside.",
+         "crossFadeTwinRef": "/assets/69456d0c368c1b015320d951_ai-img-04-upd.avif"
+        },
+        {
+         "assetRole": "product-shot-photo",
+         "assetRef": "/assets/693935912d59ea84ce08101c_ai-img-05.avif",
+         "alt": "A clear glass perfume bottle with a wooden cap labeled 4MLA SILVANE resting on mossy rocks.",
+         "crossFadeTwinRef": "/assets/69456d0c2eb18e060792390f_ai-img-05-upd.avif"
+        }
+       ],
+       "videos": []
+      }
+     },
+     {
+      "anchorId": "video",
+      "pillHref": "/start",
+      "pillGlyph": {
+       "assetRole": "ui-icon-glyph",
+       "accessibleLabel": "fourmula.ai"
+      },
+      "tagLabel": "AI Video Production",
+      "heading": "Campaign-ready",
+      "headingSecondLine": "video in minutes.",
+      "body": "Create on-brand clips for Reels, TikTok and ads without a shoot.",
+      "collage": {
+       "arrangement": "three-video-collage",
+       "images": [],
+       "videos": [
+        {
+         "assetRole": "showcase-video",
+         "assetRef": "/assets/video/69456b3ff768a79ef91d6909_FLORA-original-1594ecae.mp4"
+        },
+        {
+         "assetRole": "showcase-video",
+         "assetRef": "/assets/video/69456b69a52563a6be8b6b5f_FLORA-original-5cbd7204.mp4"
+        },
+        {
+         "assetRole": "showcase-video",
+         "assetRef": "/assets/video/69456b8f0d7d2e0199eab56c_FLORA-original-649cc677.mp4"
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "flash-word-reveal",
+    "reducedMotionFallback": "Render all three headings unsplit; hold the image cross-fades on their base frame; leave the three background videos paused on their poster, which m27 already does.",
+    "reducedMotionFallbackKind": "mixed"
+   }
+  },
+  {
+   "type": "marquee.how-trusted",
+   "content": {
+    "eyebrow": "How It Works",
+    "headingLead": "AI that",
+    "capabilities": [
+     "Create Images",
+     "Makes videos",
+     "Stays on-brand"
+    ],
+    "cta": {
+     "label": "Get started",
+     "href": "/start",
+     "hoverStagger": true
+    },
+    "trustedEyebrow": "Trusted By",
+    "trustedLogos": [
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     },
+     {
+      "assetRole": "trusted-partner-logo"
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "marquee-scroll",
+    "reducedMotionFallback": "Freeze both marquees on their first frame, showing the first capability and the first run of logos, and render the heading unsplit.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "steps.pinned-list",
+   "content": {
+    "headingLines": [
+     "From idea to assets",
+     "in four steps."
+    ],
+    "subCopyLines": [
+     "Sign up for free and supercharge",
+     "your creative workflow."
+    ],
+    "anchorId": "list",
+    "slides": [
+     {
+      "variant": "is-first",
+      "headingLines": [
+       "Add products",
+       "and brand."
+      ],
+      "stepTag": "(PB)",
+      "stepNumber": "01",
+      "infoTags": [
+       "14+ model presets",
+       "Multiple pose options"
+      ],
+      "infoCopyLines": [
+       "Store your products,",
+       "shots and brand look",
+       "in one place."
+      ],
+      "cta": {
+       "label": "Get started",
+       "href": "/start",
+       "hoverStagger": true
+      },
+      "artwork": {
+       "assetRole": "step-artwork",
+       "assetRef": "/assets/695285eb1a7c1e461a8e3489_2959bc51690633d518682e82d0869c44_list-art-01.avif",
+       "alt": "Add products and brand."
+      },
+      "pinned": true
+     },
+     {
+      "variant": "is-second",
+      "headingLines": [
+       "AI generates",
+       "options."
+      ],
+      "stepTag": "(GO)",
+      "stepNumber": "02",
+      "infoTags": [
+       "Concept & scene variations",
+       "Multiple visual directions"
+      ],
+      "infoCopyLines": [
+       "Use AI to",
+       "create new concepts,",
+       "scenes and ideas."
+      ],
+      "cta": {
+       "label": "Get started",
+       "href": "/start",
+       "hoverStagger": true
+      },
+      "artwork": {
+       "assetRole": "step-artwork",
+       "assetRef": "/assets/695285eadfe460db808df85c_a83c0be402f848e5277c603ffbd2bf5d_list-art-02.avif",
+       "alt": "AI generates options."
+      },
+      "pinned": true
+     },
+     {
+      "variant": "is-third",
+      "headingLines": [
+       "Choose ones",
+       "the best."
+      ],
+      "stepTag": "(CB)",
+      "stepNumber": "03",
+      "infoTags": [
+       "Side-by-side comparison",
+       "Easy selection & review"
+      ],
+      "infoCopyLines": [
+       "Pick the versions",
+       "you like from",
+       "the generations."
+      ],
+      "cta": {
+       "label": "Get started",
+       "href": "/start",
+       "hoverStagger": true
+      },
+      "artwork": {
+       "assetRole": "step-artwork",
+       "assetRef": "/assets/695285ec309bc9ba563ac9fa_8938603754349097db62e383fda7849a_list-art-03.avif",
+       "alt": "Choose ones the best."
+      },
+      "pinned": true
+     },
+     {
+      "variant": "is-fourth",
+      "headingLines": [
+       "Ready-made",
+       "assets export."
+      ],
+      "stepTag": "(AX)",
+      "stepNumber": "04",
+      "infoTags": [
+       "Optimized for PDP & ads",
+       "One-click export"
+      ],
+      "infoCopyLines": [
+       "Export ready-made",
+       "files to your store,",
+       "ads and social."
+      ],
+      "cta": {
+       "label": "Get started",
+       "href": "/start",
+       "hoverStagger": true
+      },
+      "artwork": {
+       "assetRole": "step-artwork",
+       "assetRef": "/assets/695285eb1da163ec4719a91b_c573a981b6a7c44bdeae41ab1bcf0e35_list-art-04.avif",
+       "alt": "Ready-made assets export."
+      },
+      "pinned": false
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "pinned-3d-stack",
+    "reducedMotionFallback": "Render the four slides as a plain vertical stack with no pinning, no 3D rotation and no perspective, each heading and numeral unsplit at its final colour.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "faq.accordion",
+   "content": {
+    "eyebrow": "FAQs",
+    "headingLines": [
+     "Not AI-gen answers.",
+     "Real ones here."
+    ],
+    "items": [
+     {
+      "question": "What can AI FOURMULA create for my brand?",
+      "answer": "Product images, fashion shots, lifestyle scenes and short videos for PDPs, social, ads and email.",
+      "icon": "+"
+     },
+     {
+      "question": "What do I need to start?",
+      "answer": "Just a store link or a product photo. We use it to generate on-brand visuals automatically.",
+      "icon": "+"
+     },
+     {
+      "question": "Will the visuals match our brand look?",
+      "answer": "Yes. We learn from your existing images and keep colours, lighting and style consistent.",
+      "icon": "+"
+     },
+     {
+      "question": "Do I own the assets you generate?",
+      "answer": "Yes. All approved outputs are yours to use across any channel.",
+      "icon": "+"
+     },
+     {
+      "question": "How fast do I get results?",
+      "answer": "Usually in seconds or a few minutes, depending on how many assets you request.",
+      "icon": "+"
+     },
+     {
+      "question": "Does this replace my creative team?",
+      "answer": "No. It speeds up production so your team can focus on ideas, not manual reshoots and cropping.",
+      "icon": "+"
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "flash-word-reveal",
+    "reducedMotionFallback": "Render the heading unsplit and open or close each item instantly with no height animation, keeping every item closed on load as the source does.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.footer",
+   "content": {
+    "logo": {
+     "assetRole": "brand-wordmark",
+     "accessibleLabel": "fourmula.ai",
+     "href": "/"
+    },
+    "linkLists": [
+     {
+      "emphasis": "primary",
+      "layout": "column",
+      "links": [
+       {
+        "label": "PDP's",
+        "href": "/#pdp"
+       },
+       {
+        "label": "Videos",
+        "href": "/#video"
+       }
+      ]
+     },
+     {
+      "emphasis": "secondary",
+      "layout": "column",
+      "links": [
+       {
+        "label": "Privacy Policy",
+        "href": "/privacy-policy"
+       },
+       {
+        "label": "Terms of Service",
+        "href": "/terms-of-service"
+       },
+       {
+        "label": "Cookie Policy",
+        "href": "/#"
+       }
+      ]
+     },
+     {
+      "emphasis": "primary",
+      "layout": "column",
+      "links": [
+       {
+        "label": "Products",
+        "href": "/#products"
+       },
+       {
+        "label": "Our features",
+        "href": "/#list"
+       }
+      ]
+     },
+     {
+      "emphasis": "secondary",
+      "layout": "row",
+      "links": [
+       {
+        "label": "Instagram",
+        "href": "#"
+       },
+       {
+        "label": "Facebook",
+        "href": "/#",
+        "hidden": true
+       },
+       {
+        "label": "Youtube",
+        "href": "/#",
+        "hidden": true
+       }
+      ]
+     }
+    ],
+    "legalLine": "2026, Fourmula ltd. UK, London. All rights reserved.",
+    "registrationLine": "Registered in England & Wales No.: 13044361",
+    "dotsField": {
+     "rows": 14,
+     "colsDesktop": 52
+    }
+   },
+   "motion": {
+    "pattern": "dots-field-wave",
+    "reducedMotionFallback": "Render the footer and the full dot grid statically at the dots resting opacity of 0.15, with no idle wave and no cursor response.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.awards-badge",
+   "content": {
+    "href": "#",
+    "artwork": {
+     "assetRole": "ui-icon-glyph"
+    }
+   },
+   "motion": {
+    "pattern": "static",
+    "reducedMotionFallback": "Unchanged, because this section has no motion to reduce.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  }
+ ]
+}

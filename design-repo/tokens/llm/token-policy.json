@@ -1,0 +1,118 @@
+{
+  "$description": "Token usage policy for generators. rawValueRestrictions keys are EXACTLY the category keys of tokens/llm/token-catalog.json, so extraction/verify_all.py check [k] can resolve one against the other and fails if either side is renamed.",
+  "policyVersion": "1.0.0",
+  "enforcementLegend": {
+    "enforced": "A script fails the run if violated; `enforcedBy` names it. Every `enforced` entry below is implemented in extraction/verify_all.py check [k] and exercised by extraction/prove_drift.py.",
+    "convention": "A documented rule that NO script checks. Never describe a convention rule as validated."
+  },
+  "enforced": [
+    {
+      "check": "catalog/policy category parity",
+      "rule": "rawValueRestrictions keys == token-catalog.json categories keys",
+      "enforcedBy": "extraction/verify_all.py [k]"
+    },
+    {
+      "check": "token id resolution",
+      "rule": "every $ref / $refDark / $refLight / resolvesTo points at an existing token id",
+      "enforcedBy": "extraction/verify_all.py [k]"
+    },
+    {
+      "check": "theme completeness",
+      "rule": "tokens/themes/light.json AND tokens/themes/dark.json each resolve every semantic id, and nothing else",
+      "enforcedBy": "extraction/verify_all.py [k]"
+    },
+    {
+      "check": "contract token references",
+      "rule": "every id in a primitive/component/section contract's `tokens` array exists",
+      "enforcedBy": "extraction/verify_all.py [k]"
+    },
+    {
+      "check": "colour provenance",
+      "rule": "every foundation colour literal really appears in src/styles/fourmula-base.css, src/styles/fourmula-head.css, src/components/Footer.jsx or public/motion/*.js (WARN-skipped when the source project is not beside this package)",
+      "enforcedBy": "extraction/verify_all.py [k]"
+    }
+  ],
+  "convention": [
+    "Reference semantic roles, not foundation ids",
+    "No raw hex, px, rem or ms in generated output",
+    "Never treat .body.dark as the dark theme - it is the LIGHT palette and it is the default",
+    "Never convert a rem token to px without applying the fluid root font-size formula",
+    "No box-shadow: the site-authored stylesheet has none",
+    "Never reuse a vendor.cookie-* colour for brand UI"
+  ],
+  "rawValueRestrictions": {
+    "color": {
+      "rule": "Never write a raw colour. Reference a semantic role. Themed roles resolve per palette; literal roles are palette-independent. #3898ec, #ddd, #ccc, #222, #333, #fafafa, #c8c8c8, #999, #5d6c7b and #e2e2e2 are Webflow framework reset values and are NOT tokens.",
+      "enforcement": "convention"
+    },
+    "typography": {
+      "rule": "Only the 16 type steps through their semantic roles. No raw font-size, line-height or font-family. The Webflow reset sizes 38/32/24/18/14/12px are NOT part of the scale.",
+      "enforcement": "convention"
+    },
+    "spacing": {
+      "rule": "Only the 47 measured rem steps (35 positive, 12 negative) through their semantic roles. The scale is 0.25rem-based with documented hand-tuned outliers.",
+      "enforcement": "convention"
+    },
+    "radius": {
+      "rule": "Only the 17 measured radius values. radius.md (3rem) and radius.pill (99rem) dominate.",
+      "enforcement": "convention"
+    },
+    "breakpoint": {
+      "rule": "Only 991px, 767px and 479px switch layout, plus the single min-width:992px query that flips the hero marquee axis and the two min-width:768px uses. 2560px and 1728px are root-font-size stops ONLY - never use them for layout.",
+      "enforcement": "convention"
+    },
+    "elevation": {
+      "rule": "No box-shadow at all. Only the 10 documented z-index layers and the two inline blur filters.",
+      "enforcement": "convention"
+    },
+    "iconSize": {
+      "rule": "Glyphs are inline SVG at width/height 100%; the viewBox fixes only the aspect ratio and the wrapper's CSS sets the size. Never hard-code a pixel icon size.",
+      "enforcement": "convention"
+    },
+    "motion": {
+      "rule": "Only the closed motion.* vocabulary. Every section node needs a reducedMotionFallback; only the background-video slot may call it `mirrored`.",
+      "enforcement": "convention"
+    },
+    "semanticColor": {
+      "rule": "Semantic colour roles are the API for generators; each must resolve to a foundation token in BOTH tokens/themes/light.json and tokens/themes/dark.json.",
+      "enforcement": "enforced",
+      "enforcedBy": "extraction/verify_all.py [k]: theme completeness, both themes"
+    },
+    "semanticTypography": {
+      "rule": "Reference the semantic type roles, which resolve to the 16 fluid steps.",
+      "enforcement": "enforced",
+      "enforcedBy": "extraction/verify_all.py [k]: $ref resolution"
+    },
+    "semanticShapeSpace": {
+      "rule": "Reference the semantic radius and spacing roles.",
+      "enforcement": "enforced",
+      "enforcedBy": "extraction/verify_all.py [k]: $ref resolution"
+    },
+    "component": {
+      "rule": "Component tokens are owned by component and section contracts. A PageSpec never sets one.",
+      "enforcement": "convention"
+    },
+    "layout": {
+      "rule": "Structural decisions come from layout.* only. Note layout.dots-field.width (103rem) is the dot grid's own width, NOT a content max-width.",
+      "enforcement": "convention"
+    }
+  },
+  "overrides": {
+    "perInstanceOverrideField": "none",
+    "statement": "A PageSpec carries NO per-instance style or token-override field; schema/pagespec.schema.json rejects a `tokens` key at page level and at node level. Styling is owned entirely by the section and component contracts, so there is nothing in a PageSpec that could reference or override a token. No such field has been invented just to have something to validate, and no PageSpec-level token mutation exists in the adversarial suite (MASTER-GUIDE 3.21). Token-layer safety is tested one layer down instead, by injecting drift into a scratch copy of this repository and asserting verify_all.py fails."
+  },
+  "themeModel": {
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "default": "light",
+    "inverted": true,
+    "invertedDetail": ".body = DARK values, .body.dark = LIGHT values, shipped <body class=\"body dark\"> => the default rendered theme is LIGHT.",
+    "evidence": [
+      "cit-theme-body-dark-palette",
+      "cit-theme-body-dark-light-palette",
+      "cit-theme-index-html"
+    ]
+  }
+}

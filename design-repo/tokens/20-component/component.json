@@ -1,0 +1,230 @@
+{
+  "$description": "Component-scoped tokens: the colour/shape decisions owned by a specific component rather than by a page. A $ref here always points at a SEMANTIC role, never at a foundation value, except the gradient tokens whose `stops` are foundation colour ids (a gradient is not a single value, so it cannot be a theme-resolvable semantic role).",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "tokens": {
+    "component.button.primary.fill": {
+      "$type": "color",
+      "$ref": "text.primary",
+      "note": "background-color: var(--fonts-100) - the primary button inverts the text colour into a fill, so it is white on the dark palette and near-black on the light (default) one.",
+      "evidence": [
+        "cit-comp-btn-primary"
+      ]
+    },
+    "component.button.primary.text": {
+      "$type": "color",
+      "$ref": "surface.page",
+      "note": "color: var(--mainbg) - the inverse of the fill.",
+      "evidence": [
+        "cit-comp-btn-primary"
+      ]
+    },
+    "component.button.primary.fill-hover": {
+      "$type": "color",
+      "$ref": "accent.hover",
+      "note": "The ONLY place accent.hover appears on a button.",
+      "evidence": [
+        "cit-col-accent-hover"
+      ]
+    },
+    "component.button.primary.radius": {
+      "$type": "dimension",
+      "$ref": "radius.control",
+      "evidence": [
+        "cit-sem-radius-pill"
+      ]
+    },
+    "component.button.outline.border": {
+      "$type": "color",
+      "$ref": "border.hairline",
+      "evidence": [
+        "cit-comp-btn-outline"
+      ]
+    },
+    "component.button.outline.text": {
+      "$type": "color",
+      "$ref": "text.primary",
+      "evidence": [
+        "cit-comp-btn-outline"
+      ]
+    },
+    "component.button.outline.fill-cookies": {
+      "$type": "color",
+      "$ref": "surface.dots",
+      "note": "Only the .is-cookies modifier gets a resting fill.",
+      "evidence": [
+        "cit-comp-btn-outline-cookies"
+      ]
+    },
+    "component.ai-pill.fill": {
+      "$type": "color",
+      "$ref": "surface.invert-pill",
+      "evidence": [
+        "cit-col-ai-btn"
+      ]
+    },
+    "component.ai-pill.text": {
+      "$type": "color",
+      "$ref": "text.on-invert-pill",
+      "evidence": [
+        "cit-col-ai-btn"
+      ]
+    },
+    "component.ai-pill.fill-hover": {
+      "$type": "color",
+      "$ref": "accent.hover",
+      "note": "Hover also applies transform: scale(.9).",
+      "evidence": [
+        "cit-col-accent-hover"
+      ]
+    },
+    "component.theme-toggle.border-hover": {
+      "$type": "color",
+      "$ref": "border.toggle-hover",
+      "evidence": [
+        "cit-col-theme-hover"
+      ]
+    },
+    "component.dots-field.dot-fill": {
+      "$type": "color",
+      "$ref": "text.primary",
+      "note": "background: var(--fonts-100) at opacity .15, declared in the inline <style> block inside src/components/Footer.jsx.",
+      "evidence": [
+        "cit-radius-dot"
+      ]
+    },
+    "component.dots-field.dot-size": {
+      "$type": "dimension",
+      "$ref": "space.stack",
+      "note": "1rem from min-width:768px, 0.5rem below it; the gap matches the size.",
+      "evidence": [
+        "cit-bp-min768-dots"
+      ]
+    },
+    "component.step-slide.gradient-first": {
+      "$type": "gradient",
+      "stops": [
+        "color.flash-orange",
+        "color.flash-amber"
+      ],
+      "css": "linear-gradient(#f94a00, #fd7b03)",
+      "variant": "is-first",
+      "evidence": [
+        "cit-col-grad-first"
+      ]
+    },
+    "component.step-slide.gradient-second": {
+      "$type": "gradient",
+      "stops": [
+        "color.grad-second-start",
+        "color.flash-amber"
+      ],
+      "css": "linear-gradient(#48a3d1, #fd7b03)",
+      "variant": "is-second",
+      "evidence": [
+        "cit-col-grad-second"
+      ]
+    },
+    "component.step-slide.gradient-third": {
+      "$type": "gradient",
+      "stops": [
+        "color.grad-third-start",
+        "color.grad-third-mid",
+        "color.flash-amber"
+      ],
+      "css": "linear-gradient(#3a54ff, #7a67c5 23%, #fd7b03)",
+      "variant": "is-third",
+      "evidence": [
+        "cit-col-grad-third"
+      ]
+    },
+    "component.step-slide.gradient-fourth": {
+      "$type": "gradient",
+      "stops": [
+        "color.grad-fourth-start",
+        "color.flash-amber"
+      ],
+      "css": "linear-gradient(#9a0101, #fd7b03)",
+      "variant": "is-fourth",
+      "evidence": [
+        "cit-col-grad-fourth"
+      ]
+    },
+    "component.step-slide.scrim": {
+      "$type": "gradient",
+      "stops": [
+        "color.step-scrim-transparent",
+        "color.step-scrim"
+      ],
+      "css": "linear-gradient(#fc730300, #fc7303)",
+      "note": "The 10rem-tall .list__main__bottom-gradient scrim, shared by all four slides.",
+      "evidence": [
+        "cit-col-step-scrim"
+      ]
+    },
+    "component.table.cell-border": {
+      "$type": "color",
+      "$ref": "border.table-cell",
+      "evidence": [
+        "cit-col-table-cell"
+      ]
+    },
+    "component.table.head-fill": {
+      "$type": "color",
+      "$ref": "surface.table-head",
+      "evidence": [
+        "cit-col-table-head"
+      ]
+    },
+    "component.table.head-border": {
+      "$type": "color",
+      "$ref": "border.table-head",
+      "evidence": [
+        "cit-col-table-head"
+      ]
+    },
+    "component.cookie-modal.accent": {
+      "$type": "color",
+      "$ref": "vendor.cookie-accent",
+      "note": "VENDORED. Finsweet's own accent, applied to the is-cookies button hovers, the close-button hover and the CHECKED checkbox state.",
+      "evidence": [
+        "cit-col-fs-accent",
+        "cit-col-fs-accent-checked"
+      ]
+    },
+    "component.cookie-modal.accent-soft": {
+      "$type": "color",
+      "$ref": "vendor.cookie-accent-soft",
+      "note": "VENDORED.",
+      "evidence": [
+        "cit-col-fs-soft"
+      ]
+    },
+    "component.cookie-modal.tray-fill": {
+      "$type": "color",
+      "$ref": "vendor.cookie-surface",
+      "note": "VENDORED.",
+      "evidence": [
+        "cit-col-fs-surface"
+      ]
+    },
+    "component.cookie-modal.hairline": {
+      "$type": "color",
+      "$ref": "vendor.cookie-hairline",
+      "note": "VENDORED.",
+      "evidence": [
+        "cit-col-fs-hairline"
+      ]
+    },
+    "component.flash-word.sequence": {
+      "$type": "other",
+      "$value": "accent.flash-start -> accent.flash-mid -> (accent.flash-end | text.primary)",
+      "note": "Set at RUNTIME by public/motion/m23.js, m24.js and m25.js. m24 ends on the #FFFFFF literal; m23 and m25 end on var(--fonts-100), i.e. text.primary. The spans themselves are created by m22.js's splitToWords(), which carries no colour.",
+      "evidence": [
+        "cit-col-flash-1",
+        "cit-col-flash-3",
+        "cit-col-flash-fonts100",
+        "cit-col-m22-no-colour"
+      ]
+    }
+  }
+}

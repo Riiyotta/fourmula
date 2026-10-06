@@ -1,0 +1,282 @@
+{
+  "id": "steps.pinned-list",
+  "kind": "section",
+  "category": "scroll-stage",
+  "purpose": "The four-step 'idea to assets' sequence as pinned, 3D-rotating gradient slides.",
+  "content": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "headingLines": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type": "string",
+          "maxWords": 5
+        },
+        "note": "Exactly 2 lines separated by a <br/>. Measured: \"From idea to assets\" (4) and \"in four steps.\" (3)."
+      },
+      "subCopyLines": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type": "string",
+          "maxWords": 7
+        },
+        "note": "Exactly 2 lines separated by a <br/>. Measured: \"Sign up for free and supercharge\" (6) and \"your creative workflow.\" (3)."
+      },
+      "anchorId": {
+        "type": "string",
+        "enum": [
+          "list"
+        ],
+        "note": "The inner wrapper carries id=\"list\", the target of the menu's \"Our features\" link."
+      },
+      "slides": {
+        "type": "array",
+        "minItems": 4,
+        "maxItems": 4,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "variant": {
+              "type": "string",
+              "enum": [
+                "is-first",
+                "is-second",
+                "is-third",
+                "is-fourth"
+              ]
+            },
+            "headingLines": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 2,
+              "items": {
+                "type": "string",
+                "maxWords": 4
+              },
+              "note": "Measured 1-2 lines, 1-2 words each."
+            },
+            "stepTag": {
+              "type": "string",
+              "maxWords": 2,
+              "note": "Measured: a 2-letter code in parentheses - (PB), (GO), (CB), (AX)."
+            },
+            "stepNumber": {
+              "type": "string",
+              "enum": [
+                "01",
+                "02",
+                "03",
+                "04"
+              ]
+            },
+            "infoTags": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "string",
+                "maxWords": 5
+              },
+              "note": "Exactly 2 per slide, measured 2-5 words each."
+            },
+            "infoCopyLines": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 3,
+              "items": {
+                "type": "string",
+                "maxWords": 5
+              },
+              "note": "Measured 2-3 lines, 2-4 words each. The first line carries .u-indent and the rest .u-fonts-50-stb."
+            },
+            "cta": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "maxWords": 3
+                },
+                "href": {
+                  "type": "string",
+                  "format": "route-or-inert-hash"
+                },
+                "hoverStagger": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "label",
+                "href"
+              ]
+            },
+            "artwork": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "assetRole": {
+                  "type": "string",
+                  "enum": [
+                    "step-artwork"
+                  ]
+                },
+                "assetRef": {
+                  "type": "string",
+                  "format": "local-asset-path"
+                },
+                "alt": {
+                  "type": "string",
+                  "maxWords": 28,
+                  "note": "Required on every content image. Measured 3-27 words across the real images (longest: a 27-word hero carousel description); the four decorative preloader images ship alt=\"\", which is why the empty string is allowed. alt is accessibility text, not visible page copy, so it carries its own budget but is excluded from contentMaxWordsTotal.",
+                  "allowEmpty": true,
+                  "countsTowardTotal": false
+                }
+              },
+              "required": [
+                "assetRole"
+              ]
+            },
+            "pinned": {
+              "type": "boolean",
+              "note": "true on slides 1-3, which ship a Webflow .pin-spacer; false on slide 4, the resting slide, which has none."
+            }
+          },
+          "required": [
+            "variant",
+            "headingLines",
+            "stepTag",
+            "stepNumber",
+            "infoTags",
+            "infoCopyLines",
+            "cta",
+            "artwork",
+            "pinned"
+          ]
+        },
+        "note": "Exactly 4 slides, one per gradient variant, in order."
+      }
+    },
+    "required": [
+      "headingLines",
+      "subCopyLines",
+      "anchorId",
+      "slides"
+    ]
+  },
+  "contentMaxWordsTotal": 140,
+  "usedOn": [
+    "/"
+  ],
+  "evidence": {
+    "structure": "Structure, layout and motion measured against the live original. A pixel audit verified 1382/1382 elements at a 1440px viewport and 962/962 at 390px with zero deltas. Copy is the original's own.",
+    "copy": "a-exact"
+  },
+  "bodyCopyFields": [],
+  "variants": {},
+  "constraints": {
+    "onePerPage": true,
+    "maxPerPage": 1,
+    "homeRouteOnly": true,
+    "verification": "src/pages/Home.jsx:16 renders <ListSection /> fifth. Checked against all 5 real templates: it appears only in `home`, immediately after marquee.how-trusted. It is ONE section element containing four slides, not four sections, so onePerPage is correct and no NO_ADJACENT rule applies to the slides."
+  },
+  "media": {
+    "artwork": {
+      "assetRole": [
+        "step-artwork"
+      ],
+      "policy": "must-not-fabricate",
+      "count": 4
+    }
+  },
+  "motion": {
+    "pattern": "pinned-3d-stack",
+    "detail": "public/motion/m29.js pins each .list__main__slide with ScrollTrigger and rotates .list__main__content in 3D on power1.in. The content wrapper has perspective: 250vw. Every slide heading and step numeral carries data-flash-stb, which public/motion/m24.js reveals through the #F94A00 -> #FD7B03 -> #FFFFFF sequence (note: m24 ends on the white LITERAL, unlike m23 which ends on var(--fonts-100)).",
+    "reducedMotionFallback": "Render the four slides as a plain vertical stack with no pinning, no 3D rotation and no perspective, each heading and numeral unsplit at its final colour.",
+    "reducedMotionFallbackKind": "design-rule (the source ships NO prefers-reduced-motion handling for this section, so the fallback is prescribed by this repository, not mirrored)"
+  },
+  "responsive": {
+    "structured": true,
+    "breakpoint": "991px / 767px",
+    "base": "pinned 3D stack; heading.page 5.5rem, heading.step 4rem, heading.display 7.5rem",
+    "max-991px": "heading.page drops to 4.5rem and heading.display to 5.5rem; heading.step stays 4rem",
+    "max-767px": "heading.page 2.5rem, heading.step 2.25rem and heading.display 2.25rem, so the slide heading and the step numeral render at the SAME size"
+  },
+  "tokens": [
+    "heading.page",
+    "heading.step",
+    "heading.display",
+    "label.tag",
+    "label.emphasis",
+    "label.secondary",
+    "text.primary",
+    "component.step-slide.gradient-first",
+    "component.step-slide.gradient-second",
+    "component.step-slide.gradient-third",
+    "component.step-slide.gradient-fourth",
+    "component.step-slide.scrim",
+    "radius.indicator",
+    "radius.control",
+    "elevation.z-raised",
+    "motion.flash.reveal-in",
+    "motion.flash.step",
+    "motion.flash.settle",
+    "motion.hover-stagger.step",
+    "layout.step-slide.viewport",
+    "space.gutter"
+  ],
+  "composes": [
+    "primitive.button-step",
+    "component.step-slide",
+    "component.media-image"
+  ],
+  "measuredFrom": [
+    {
+      "id": "cit-sec-list-root",
+      "source": "src/components/ListSection.jsx:4-5",
+      "quote": "<section className=\"list\">"
+    },
+    {
+      "id": "cit-sec-list-heading",
+      "source": "src/components/ListSection.jsx:7-9",
+      "quote": "list__title-h1 u-h1 u-fonts-100"
+    },
+    {
+      "id": "cit-sec-list-sub",
+      "source": "src/components/ListSection.jsx:10-10",
+      "quote": "Sign up for free and supercharge"
+    },
+    {
+      "id": "cit-sec-list-anchor",
+      "source": "src/components/ListSection.jsx:5-5",
+      "quote": "id=\"list\" className=\"list__wrap\""
+    },
+    {
+      "id": "cit-sec-list-slide1",
+      "source": "src/components/ListSection.jsx:12-43",
+      "quote": "list__main__content is-first"
+    },
+    {
+      "id": "cit-sec-list-slide4",
+      "source": "src/components/ListSection.jsx:112-143",
+      "quote": "list__main__content is-fourth"
+    },
+    {
+      "id": "cit-sec-list-nopin",
+      "source": "src/components/ListSection.jsx:112-113",
+      "quote": "<div className=\"list__main__content__wrap\">"
+    },
+    {
+      "id": "cit-sec-list-home",
+      "source": "src/pages/Home.jsx:16-16",
+      "quote": "<ListSection />"
+    }
+  ],
+  "notes": "FOUR gradient variants, not three - see components/component-step-slide.json for the correction and the citations.",
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum)."
+}

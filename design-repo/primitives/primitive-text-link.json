@@ -1,0 +1,64 @@
+{
+  "id": "primitive.text-link",
+  "kind": "primitive",
+  "category": "navigation",
+  "purpose": "A plain navigation link. Used by the menu panel, the footer link columns and the legal-page anchor index.",
+  "cssClasses": [
+    ".menu__link",
+    ".footer__main__link",
+    ".footer__main__link-small",
+    ".fs-cc_link",
+    "modifier: .is-hide (ships hidden)"
+  ],
+  "props": {
+    "label": "1-3 words observed",
+    "href": "one of the six routes, '#', or a '/#anchor'",
+    "hoverStagger": "boolean - every .menu__link and .footer__main__link carries [hover-stagger]",
+    "activeState": "React adds aria-current=\"page\" and Webflow's .w--current when href matches the current route"
+  },
+  "states": {
+    "rest": "text.primary or text.muted",
+    "hover": "per-character stagger sweep (m26.js), 0.2s power1.inOut",
+    "hoverFinsweet": "the vendored .fs-cc_link turns accent.hover (#ff6b02)",
+    "focus": "NONE - see primitive.button-primary."
+  },
+  "tokens": [
+    "label.primary",
+    "label.secondary",
+    "label.emphasis",
+    "text.primary",
+    "text.muted",
+    "accent.hover",
+    "motion.hover-stagger.step"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "stacked lists inside the menu/footer columns",
+    "max-991px": "the menu panel resizes (18rem -> 16.2rem open width, m19.js)",
+    "max-767px": "the closed menu panel becomes 15.5rem wide with y 0.5rem (m19.js)"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-link-menu",
+      "source": "src/components/Menu.jsx:12-13",
+      "quote": "menu__link u-title-3 u-fonts-100"
+    },
+    {
+      "id": "cit-prim-link-footer",
+      "source": "src/components/Footer.jsx:17-18",
+      "quote": "footer__main__link u-title-1 u-fonts-100"
+    },
+    {
+      "id": "cit-prim-link-active",
+      "source": "src/components/Menu.jsx:2-3",
+      "quote": "current === h ? { \"aria-current\": \"page\" }"
+    },
+    {
+      "id": "cit-prim-link-hide",
+      "source": "src/components/Menu.jsx:34-34",
+      "quote": "menu__link u-title-2 u-fonts-100 is-hide"
+    }
+  ],
+  "notes": "Three links ship with .is-hide and are therefore invisible: Linkedin and Youtube in the menu, plus the two matching footer social links. The markup keeps them because the original does."
+}

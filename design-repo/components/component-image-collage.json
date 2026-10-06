@@ -1,0 +1,88 @@
+{
+  "id": "component.image-collage",
+  "kind": "component",
+  "category": "media",
+  "purpose": "The three asymmetric image arrangements inside the .ai section. Not a grid component with a column count - each is a hand-placed set of named slots.",
+  "cssClasses": [
+    ".ai__grid",
+    ".ai__grid-card",
+    ".ai__grid-screen",
+    ".ai__grid-arrow",
+    ".ai__grid-alt",
+    ".ai__grid-alt__side",
+    ".ai__grid-alt__md",
+    ".ai__grid-small",
+    ".ai__grid-small-left",
+    ".ai__grid-small-collage",
+    ".ai__grid-small-md",
+    ".ai__grid-small-bottom",
+    ".ai__grid-small-right",
+    ".ai__grid-small-lg"
+  ],
+  "arrangements": {
+    "two-up-with-arrow": {
+      "selector": ".ai__grid",
+      "slots": 2,
+      "detail": "a source card and a result screen separated by a 1.5rem arrow glyph at text.faint; BOTH slots are theme pairs, so 4 <img> elements for 2 visible images."
+    },
+    "mobile-six-tile": {
+      "selector": ".ai__grid-alt",
+      "slots": 6,
+      "detail": "three columns (side / md / side), two tiles each, from the grid-mob-01..06 files. NOT theme-paired."
+    },
+    "five-image-collage": {
+      "selector": ".ai__grid-small",
+      "slots": 5,
+      "detail": "left, a nested collage of three, and right. Every slot has an -upd cross-fade twin carrying .is-img-anima-1..5, so 10 <img> elements for 5 visible images."
+    },
+    "three-video-collage": {
+      "selector": ".ai__grid-small (video block)",
+      "slots": 3,
+      "detail": "the same .ai__grid-small skeleton filled with three component.background-video blocks instead of images."
+    }
+  },
+  "props": {
+    "arrangement": "one of the four above",
+    "images": "component.media-image per slot"
+  },
+  "tokens": [
+    "radius.panel",
+    "radius.card",
+    "text.faint",
+    "icon-size.ui-glyph-24",
+    "space.stack"
+  ],
+  "composes": [
+    "component.media-image",
+    "component.background-video",
+    "primitive.inline-icon"
+  ],
+  "responsive": {
+    "structured": true,
+    "base": "the .ai__grid two-up is shown and .ai__grid-alt is hidden",
+    "max-991px": "no documented change",
+    "max-767px": "the two-up is hidden and the six-tile .ai__grid-alt collage is shown instead - a different element set rather than a reflow"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-collage-grid",
+      "source": "src/components/AiSection.jsx:19-27",
+      "quote": "ai__grid"
+    },
+    {
+      "id": "cit-comp-collage-alt",
+      "source": "src/components/AiSection.jsx:28-43",
+      "quote": "ai__grid-alt"
+    },
+    {
+      "id": "cit-comp-collage-small",
+      "source": "src/components/AiSection.jsx:54-72",
+      "quote": "ai__grid-small"
+    },
+    {
+      "id": "cit-comp-collage-arrow",
+      "source": "src/styles/fourmula-base.css:3373-3377",
+      "quote": "color: var(--fonts-30);"
+    }
+  ]
+}

@@ -1,0 +1,383 @@
+{
+  "$description": "16 fluid type steps plus one family and two weights. Every step is declared three times in src/styles/fourmula-base.css - in :root (2094-2127) for the base tier, in body inside @media (max-width:991px) (4766-4784) and in body inside @media (max-width:767px) (5140-5158). The .u-<name> utility classes at 2298-2412, 3829-3833 and 4105-4109 bind each step to a family and a weight.",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "ROOT_FONT_SIZE_IS_FLUID": {
+    "warning": "THE SINGLE MOST IMPORTANT STRUCTURAL FACT IN THIS PROJECT. Every rem above scales with the viewport because the root font-size is itself a viewport-width function. A design-repo consumer that multiplies these rem values by 16 will be wrong at EVERY viewport.",
+    "declaration": "html { font-size: calc(1.484375rem * var(--user-zoom)); }",
+    "mediaOverrides": {
+      "max-width:2560px": "calc((-0.006009615384615419rem + 0.9314903846153846vw) * var(--user-zoom))",
+      "max-width:1728px": "calc((-0.009345794392523143rem + 0.9345794392523362vw) * var(--user-zoom))",
+      "max-width:991px": "calc((0.021640258215962493rem + 1.8779342723004695vw) * var(--user-zoom))",
+      "max-width:767px": "calc((-0.0025905678851174934rem + 4.14490861618799vw) * var(--user-zoom))"
+    },
+    "userZoom": "--user-zoom defaults to 1 (index.html:7 and fourmula-base.css/head.css :root) and is driven by public/motion/m06.js via localStorage key site-user-zoom in steps of 0.1.",
+    "workedExample": "At a 1920px viewport the 2560px branch applies: 0.9314903846153846 * 19.20 - 0.006009615384615419 * 16 = 17.7885px, i.e. 1.11178x the 16px default.",
+    "measuredRealValues": {
+      "1440px": "13.3084px",
+      "390px": "16.1237px",
+      "note": "Measured identically on the live original and on this clone."
+    },
+    "evidence": [
+      "cit-type-fluid-root",
+      "cit-type-fluid-media",
+      "cit-type-userzoom",
+      "cit-type-fluid-measured"
+    ]
+  },
+  "selfHostedFonts": {
+    "files": [
+      "/assets/fonts/SF-Pro-Display-Regular.otf",
+      "/assets/fonts/SF-Pro-Display-Medium.otf"
+    ],
+    "faces": "fourmula-base.css 2078-2084 (weight 500) and 2086-2092 (weight 400), both font-display: swap.",
+    "licensing": "SF Pro Display is Apple-licensed. It may not be redistributed or served publicly. See assets/asset-roles.json role brand-typeface-file (policy must-not-redistribute, pinned).",
+    "evidence": [
+      "cit-type-fontface-medium",
+      "cit-type-fontface-regular"
+    ]
+  },
+  "notTokens": {
+    "frameworkResetFontSizes": [
+      "38px",
+      "32px",
+      "24px",
+      "18px",
+      "14px",
+      "12px"
+    ],
+    "reason": "Webflow base-reset h1-h6 and body sizes (fourmula-base.css 408-448 and 2174-2227). They are overridden everywhere by the .u-* utilities and are NOT part of the type scale.",
+    "evidence": [
+      "cit-type-framework-reset"
+    ]
+  },
+  "tokens": {
+    "type.h1": {
+      "$type": "fontSize",
+      "$value": "5.5rem",
+      "responsive": {
+        "base": "5.5rem",
+        "max-991px": "4.5rem",
+        "max-767px": "2.5rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---h1",
+      "utilityClass": ".u-h1",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-h1"
+      ]
+    },
+    "type.h2": {
+      "$type": "fontSize",
+      "$value": "7.5rem",
+      "responsive": {
+        "base": "7.5rem",
+        "max-991px": "5.5rem",
+        "max-767px": "2.25rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---h2",
+      "utilityClass": ".u-h2",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-h2"
+      ]
+    },
+    "type.h2-5": {
+      "$type": "fontSize",
+      "$value": "4rem",
+      "responsive": {
+        "base": "4rem",
+        "max-991px": "4rem",
+        "max-767px": "2.25rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---h2-5",
+      "utilityClass": ".u-h2-5",
+      "fontWeight": 500,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-h2-5"
+      ]
+    },
+    "type.h3": {
+      "$type": "fontSize",
+      "$value": "3.25rem",
+      "responsive": {
+        "base": "3.25rem",
+        "max-991px": "3.25rem",
+        "max-767px": "1.5rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---h3",
+      "utilityClass": ".u-h3",
+      "fontWeight": 500,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-h3"
+      ]
+    },
+    "type.h4": {
+      "$type": "fontSize",
+      "$value": "2.25rem",
+      "responsive": {
+        "base": "2.25rem",
+        "max-991px": "2.25rem",
+        "max-767px": "2rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---h4",
+      "utilityClass": ".u-h4",
+      "fontWeight": 500,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-h4"
+      ]
+    },
+    "type.body-1": {
+      "$type": "fontSize",
+      "$value": "1.125rem",
+      "responsive": {
+        "base": "1.125rem",
+        "max-991px": "1.125rem",
+        "max-767px": "1rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---body-1",
+      "utilityClass": ".u-body-1",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-body-1"
+      ]
+    },
+    "type.body-2": {
+      "$type": "fontSize",
+      "$value": "1rem",
+      "responsive": {
+        "base": "1rem",
+        "max-991px": "1rem",
+        "max-767px": "0.875rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---body-2",
+      "utilityClass": ".u-body-2",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-body-2"
+      ]
+    },
+    "type.body-3": {
+      "$type": "fontSize",
+      "$value": "1.25rem",
+      "responsive": {
+        "base": "1.25rem",
+        "max-991px": "1.25rem",
+        "max-767px": "1rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---body-3",
+      "utilityClass": ".u-body-3",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-body-3"
+      ]
+    },
+    "type.tag": {
+      "$type": "fontSize",
+      "$value": "1.125rem",
+      "responsive": {
+        "base": "1.125rem",
+        "max-991px": "1.125rem",
+        "max-767px": "1rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---tag",
+      "utilityClass": ".u-tag",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-tag"
+      ]
+    },
+    "type.tag-small": {
+      "$type": "fontSize",
+      "$value": "1.125rem",
+      "responsive": {
+        "base": "1.125rem",
+        "max-991px": "1.125rem",
+        "max-767px": "1.125rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---tag-small",
+      "utilityClass": ".u-tag-small",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-tag-small"
+      ]
+    },
+    "type.title-1": {
+      "$type": "fontSize",
+      "$value": "1rem",
+      "responsive": {
+        "base": "1rem",
+        "max-991px": "1rem",
+        "max-767px": "1rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---title-1",
+      "utilityClass": ".u-title-1",
+      "fontWeight": 500,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-title-1"
+      ]
+    },
+    "type.title-2": {
+      "$type": "fontSize",
+      "$value": "0.875rem",
+      "responsive": {
+        "base": "0.875rem",
+        "max-991px": "0.875rem",
+        "max-767px": "0.875rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---title-2",
+      "utilityClass": ".u-title-2",
+      "fontWeight": 500,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-title-2"
+      ]
+    },
+    "type.title-3": {
+      "$type": "fontSize",
+      "$value": "1.5rem",
+      "responsive": {
+        "base": "1.5rem",
+        "max-991px": "1.5rem",
+        "max-767px": "1.5rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---title-3",
+      "utilityClass": ".u-title-3",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-title-3"
+      ]
+    },
+    "type.btn": {
+      "$type": "fontSize",
+      "$value": "1.0625rem",
+      "responsive": {
+        "base": "1.0625rem",
+        "max-991px": "1.0625rem",
+        "max-767px": "1.0625rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---btn",
+      "utilityClass": ".u-btn",
+      "fontWeight": 500,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-btn"
+      ]
+    },
+    "type.small-text-1": {
+      "$type": "fontSize",
+      "$value": "0.75rem",
+      "responsive": {
+        "base": "0.75rem",
+        "max-991px": "0.75rem",
+        "max-767px": "0.75rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---small-text-1",
+      "utilityClass": ".u-small-text-1",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-small-text-1"
+      ]
+    },
+    "type.small-text-2": {
+      "$type": "fontSize",
+      "$value": "0.625rem",
+      "responsive": {
+        "base": "0.625rem",
+        "max-991px": "0.625rem",
+        "max-767px": "0.625rem"
+      },
+      "fluid": true,
+      "cssVar": "--_fonts---small-text-2",
+      "utilityClass": ".u-small-text-2",
+      "fontWeight": 400,
+      "evidence": [
+        "cit-type-root",
+        "cit-type-991",
+        "cit-type-767",
+        "cit-type-util-small-text-2"
+      ]
+    },
+    "font.family.sans": {
+      "$type": "fontFamily",
+      "$value": "\"Sf Pro Display\", Arial, sans-serif",
+      "cssVar": "--_font-family---font-family",
+      "evidence": [
+        "cit-type-root"
+      ]
+    },
+    "font.weight.regular": {
+      "$type": "fontWeight",
+      "$value": 400,
+      "cssVar": "--_font-family---regular",
+      "evidence": [
+        "cit-type-root"
+      ]
+    },
+    "font.weight.medium": {
+      "$type": "fontWeight",
+      "$value": 500,
+      "cssVar": "--_font-family---medium",
+      "evidence": [
+        "cit-type-root"
+      ]
+    }
+  }
+}

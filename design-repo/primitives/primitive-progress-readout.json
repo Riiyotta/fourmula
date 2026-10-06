@@ -1,0 +1,43 @@
+{
+  "id": "primitive.progress-readout",
+  "kind": "primitive",
+  "category": "text",
+  "purpose": "The live scroll-progress percentage in the header. It lives in Header.jsx, NOT in Footer.jsx, so it is present on EVERY route including the 404.",
+  "cssClasses": [
+    ".header__prc",
+    ".header__prc-txt .u-btn"
+  ],
+  "props": {
+    "id": "progress - the element public/motion/m12.js writes to",
+    "initialText": "\"0%\""
+  },
+  "states": {
+    "rest": "label.button at text.primary, updated every animation frame",
+    "hover": "n/a",
+    "focus": "n/a"
+  },
+  "tokens": [
+    "label.button",
+    "text.primary"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "header centre group",
+    "max-991px": "unchanged",
+    "max-767px": "unchanged"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-progress",
+      "source": "src/components/Header.jsx:22-23",
+      "quote": "<div id=\"progress\" className=\"header__prc-txt u-btn\">0%</div>"
+    },
+    {
+      "id": "cit-prim-progress-m12",
+      "source": "public/motion/m12.js:2-5",
+      "quote": "document.getElementById(\"progress\")"
+    }
+  ],
+  "notes": "CORRECTION TO THE BUILD GROUNDWORK: #progress was described as living inside Footer, and therefore as absent from the 404. It does not. grep -rn 'id=\"progress\"' src returns exactly one hit, src/components/Header.jsx:23, and Layout renders Header unconditionally on every route. Only #dotsField (src/components/Footer.jsx:85) is genuinely absent from the 404."
+}

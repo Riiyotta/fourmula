@@ -1,0 +1,57 @@
+{
+  "id": "primitive.button-primary",
+  "kind": "primitive",
+  "category": "control",
+  "purpose": "The filled pill CTA. Inverts the text colour into a fill, so it is a white pill on the dark palette and a near-black pill on the light (default) one.",
+  "cssClasses": [
+    ".btn-primary",
+    ".u-btn",
+    "modifiers: .is-header-btn, .is-menu, .is-how, .is-cookies"
+  ],
+  "props": {
+    "label": "1-2 words observed (\"Get started\", \"Accept all\", \"Continue\")",
+    "href": "one of the six routes, '#', or a '/#anchor'",
+    "hoverStagger": "boolean - wrapped in [hover-stagger-wrap] with an inner [hover-stagger] div on 5 of 7 occurrences"
+  },
+  "states": {
+    "rest": "fill component.button.primary.fill, text component.button.primary.text",
+    "hover": "fill component.button.primary.fill-hover (#ff6b02) over motion.transition.fast",
+    "focus": "NONE - the stylesheet declares *:focus { outline: none } and no replacement focus ring. This is an accessibility gap in the source, recorded not fixed."
+  },
+  "tokens": [
+    "component.button.primary.fill",
+    "component.button.primary.text",
+    "component.button.primary.fill-hover",
+    "component.button.primary.radius",
+    "label.button",
+    "weight.medium",
+    "motion.transition.fast",
+    "motion.hover-stagger.step"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "inline-flex pill",
+    "max-991px": "unchanged",
+    "max-767px": "unchanged",
+    "note": "label.button (1.0625rem) is the one type step that does NOT change across the three tiers, so the button keeps a constant rem size and only scales with the fluid root."
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-btn-primary-css",
+      "source": "src/styles/fourmula-base.css:2444-2446",
+      "quote": ".btn-primary:hover"
+    },
+    {
+      "id": "cit-prim-btn-primary-use",
+      "source": "src/components/Header.jsx:29-31",
+      "quote": "btn-primary u-btn is-header-btn w-inline-block"
+    },
+    {
+      "id": "cit-prim-btn-primary-focus",
+      "source": "src/styles/fourmula-head.css:36-36",
+      "quote": "*:focus { outline: none; }"
+    }
+  ],
+  "notes": "There are 7 .btn-primary occurrences in src/**/*.jsx: Header, Menu, How, and four step slides use the -stb sibling instead. The Menu instance ships the original's own typo \"Ge tstarted\" (Menu.jsx:41) - preserved verbatim; do not correct it in generated output claiming fidelity to the source, and do not copy the typo into NEW copy either."
+}

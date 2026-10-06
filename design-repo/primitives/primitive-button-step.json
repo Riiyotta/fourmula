@@ -1,0 +1,46 @@
+{
+  "id": "primitive.button-step",
+  "kind": "primitive",
+  "category": "control",
+  "purpose": "The pill CTA used ONLY inside the four pinned step slides, where it sits on a saturated gradient and therefore needs its own fixed colouring rather than the themed pair.",
+  "cssClasses": [
+    ".btn-primary-stb",
+    ".u-btn"
+  ],
+  "props": {
+    "label": "\"Get started\" on all four occurrences",
+    "href": "/start on all four occurrences",
+    "hoverStagger": "always true - all four are wrapped in [hover-stagger-wrap]"
+  },
+  "states": {
+    "rest": "fixed light pill on the slide gradient",
+    "hover": "hover-stagger character sweep",
+    "focus": "NONE - see primitive.button-primary."
+  },
+  "tokens": [
+    "label.button",
+    "radius.control",
+    "motion.hover-stagger.step",
+    "motion.transition.fast"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "inline-flex pill inside the slide",
+    "max-991px": "unchanged",
+    "max-767px": "unchanged"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-btn-step",
+      "source": "src/components/ListSection.jsx:38-40",
+      "quote": "btn-primary-stb u-btn w-inline-block"
+    },
+    {
+      "id": "cit-prim-btn-step-4",
+      "source": "src/components/ListSection.jsx:138-140",
+      "quote": "btn-primary-stb u-btn w-inline-block"
+    }
+  ],
+  "notes": "The -stb suffix also appears on .u-fonts-50-stb and the [data-flash-stb] motion hook: it marks the fixed-palette variants that live on the step gradients."
+}

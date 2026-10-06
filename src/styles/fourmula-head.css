@@ -1,0 +1,160 @@
+/* Inline <style> blocks from the original document head, in document order.
+ * These were NOT in fourmula-ai.shared.css and carry the fluid root
+ * font-size, the CSS marquees, and the preloader states. */
+
+/* ---- head style block 1 ---- */
+.wf-force-outline-none[tabindex="-1"]:focus{outline:none;}
+
+/* ---- head style block 2 ---- */
+html.is-loading .preloader {
+  opacity: 1;
+}
+html.is-loading .preloader > * {
+  opacity: 0;
+  visibility: hidden;
+}
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+.preloader > * {
+  will-change: opacity, filter;
+}
+
+/* ---- head style block 3 ---- */
+[fs-cc="banner"],[fs-cc="manager"],[fs-cc="preferences"],[fs-cc="interaction"]{display:none}
+
+/* ---- head style block 4 ---- */
+html, body { overscroll-behavior: none; }
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+}
+*:focus { outline: none; }
+:root { --user-zoom: 1; }
+
+html { font-size: calc(1.484375rem * var(--user-zoom)); }
+
+@media screen and (max-width:2560px) {
+  html { font-size: calc((-0.006009615384615419rem + 0.9314903846153846vw) * var(--user-zoom)); }
+}
+@media screen and (max-width:1728px) {
+  html { font-size: calc((-0.009345794392523143rem + 0.9345794392523362vw) * var(--user-zoom)); }
+}
+@media screen and (max-width:991px) {
+  html { font-size: calc((0.021640258215962493rem + 1.8779342723004695vw) * var(--user-zoom)); }
+}
+@media screen and (max-width:767px) {
+  html { font-size: calc((-0.0025905678851174934rem + 4.14490861618799vw) * var(--user-zoom)); }
+}
+
+/* ---- head style block 5 ---- */
+.how__bottom-row {
+  animation: marquee 24s linear infinite;
+}
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ---- head style block 6 ---- */
+.how__column {
+  animation: columnanima 24s linear infinite;
+}
+
+@keyframes columnanima {
+  0% { transform: translateY(0%); }
+  100% { transform: translateY(-100%); }
+}
+
+/* ---- head style block 7 ---- */
+.hero__slider__row {
+  animation: hero-row 24s linear infinite;
+}
+
+@keyframes hero-row {
+  0% { transform: translate(var(--tx,0%),var(--ty,0%)); }
+  100% { transform: translate(var(--tx-end,0%),var(--ty-end,-100%)); }
+}
+
+@media (min-width: 992px) {
+  .hero__slider__row {
+    --tx: 0%;
+    --ty: 0%;
+    --tx-end: 0%;
+    --ty-end: -100%;
+  }
+}
+
+@media (max-width: 991px) {
+  .hero__slider__row {
+    --tx: 0%;
+    --ty: 0%;
+    --tx-end: -100%;
+    --ty-end: 0%;
+  }
+}
+
+/* ---- head style block 8 ---- */
+.menu__wrap {
+  width: 15rem;
+  height: 0rem;
+  padding: 0rem;
+  transform: translateY(2rem);
+}
+
+/* ---- head style block 9 ---- */
+.preloader__loader {
+  animation: spinStep 1s steps(8) infinite;
+}
+
+@keyframes spinStep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- head style block 10 ---- */
+.video-poster {
+  position:absolute; inset:0;
+  background:center/cover no-repeat transparent;
+  transition: opacity .25s ease;
+}
+.bg-video {
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+}
+.video-faded { opacity:0; }
+
+/* ---- head style block 11 ---- */
+.list__main__wrap .scroll {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.list__main__wrap .list__main__content__wrap {
+    width: 100%;
+    height: 100%;
+    
+    perspective: 250vw;
+}
+.list__main__wrap .list__main__content {
+    position: absolute;
+    inset: 0;
+    /* The original ships this as `transform-style: preserve-3d` with NO
+       semicolon, followed by `transform-origin: 50% 10%;`. Browsers treat
+       that as one malformed declaration and discard it, so NEITHER property
+       applies on the live site. Kept commented out to match the real
+       rendering rather than introducing a difference.
+       transform-style: preserve-3d;
+       transform-origin: 50% 10%; */
+}

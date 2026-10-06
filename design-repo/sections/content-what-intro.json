@@ -1,0 +1,110 @@
+{
+  "id": "content.what-intro",
+  "kind": "section",
+  "category": "content",
+  "purpose": "A minimal two-column statement block: an eyebrow label opposite a two-line h2. The smallest real section on the site.",
+  "content": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "eyebrow": {
+        "type": "string",
+        "maxWords": 5,
+        "note": "Measured: 4 words, \"What you can do\"."
+      },
+      "headingLines": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type": "string",
+          "maxWords": 4
+        },
+        "note": "Exactly 2 lines separated by a <br/>. Measured: \"On-brand visuals.\" (2) and \"Made by AI.\" (3)."
+      },
+      "anchorId": {
+        "type": "string",
+        "enum": [
+          "what-is-fourmula"
+        ],
+        "note": "The section carries id=\"what-is-fourmula\", which is the target of the hero's scroll cue."
+      }
+    },
+    "required": [
+      "eyebrow",
+      "headingLines",
+      "anchorId"
+    ]
+  },
+  "contentMaxWordsTotal": 11,
+  "usedOn": [
+    "/"
+  ],
+  "evidence": {
+    "structure": "Structure, layout and motion measured against the live original. A pixel audit verified 1382/1382 elements at a 1440px viewport and 962/962 at 390px with zero deltas. Copy is the original's own.",
+    "copy": "a-exact"
+  },
+  "bodyCopyFields": [],
+  "variants": {},
+  "constraints": {
+    "onePerPage": true,
+    "maxPerPage": 1,
+    "homeRouteOnly": true,
+    "verification": "src/pages/Home.jsx:13 renders <What /> second. Checked against all 5 real templates: it appears only in `home`, immediately after hero.home."
+  },
+  "media": {},
+  "motion": {
+    "pattern": "flash-word-reveal",
+    "detail": "The h2 carries data-flash, so public/motion/m22.js splits it into .flash-word spans and m23.js reveals them on a ScrollTrigger: opacity 0 -> 1 at #F94A00 over 0.2s power2.out, then to #FD7B03 over 0.05s, then to var(--fonts-100) over 0.1s.",
+    "reducedMotionFallback": "Render the heading as one unsplit block at text.primary and full opacity, with no colour sequence.",
+    "reducedMotionFallbackKind": "design-rule (the source ships NO prefers-reduced-motion handling for this section, so the fallback is prescribed by this repository, not mirrored)"
+  },
+  "responsive": {
+    "structured": true,
+    "breakpoint": "991px / 767px",
+    "base": "two columns: eyebrow left, heading right",
+    "max-991px": "heading.display drops 7.5rem -> 5.5rem; label.tag stays 1.125rem",
+    "max-767px": "heading.display drops to 2.25rem and label.tag to 1rem"
+  },
+  "tokens": [
+    "label.tag",
+    "heading.display",
+    "text.primary",
+    "accent.flash-start",
+    "accent.flash-mid",
+    "motion.flash.reveal-in",
+    "motion.flash.step",
+    "motion.flash.settle"
+  ],
+  "composes": [
+    "primitive.eyebrow-tag"
+  ],
+  "measuredFrom": [
+    {
+      "id": "cit-sec-what-root",
+      "source": "src/components/What.jsx:4-4",
+      "quote": "<section id=\"what-is-fourmula\" className=\"what\">"
+    },
+    {
+      "id": "cit-sec-what-eyebrow",
+      "source": "src/components/What.jsx:6-6",
+      "quote": "What you can do"
+    },
+    {
+      "id": "cit-sec-what-h2",
+      "source": "src/components/What.jsx:8-11",
+      "quote": "what__title u-h2 u-fonts-100"
+    },
+    {
+      "id": "cit-sec-what-flash",
+      "source": "src/components/What.jsx:8-8",
+      "quote": "data-flash=\"\""
+    },
+    {
+      "id": "cit-sec-what-home",
+      "source": "src/pages/Home.jsx:13-13",
+      "quote": "<What />"
+    }
+  ],
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 13, which was unreachable."
+}

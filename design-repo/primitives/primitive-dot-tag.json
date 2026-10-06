@@ -1,0 +1,44 @@
+{
+  "id": "primitive.dot-tag",
+  "kind": "primitive",
+  "category": "text",
+  "purpose": "A capability label preceded by a small filled dot. Three instances, one per .ai block.",
+  "cssClasses": [
+    ".ai__tag",
+    ".ai__dot",
+    ".ai__txt .u-title-2"
+  ],
+  "props": {
+    "label": "3 words on all three occurrences: \"AI Fashion Photoshoot\", \"AI Product Shots\", \"AI Video Production\""
+  },
+  "states": {
+    "rest": "dot filled with text.faint (var(--fonts-30)), label at label.secondary",
+    "hover": "n/a",
+    "focus": "n/a"
+  },
+  "tokens": [
+    "label.secondary",
+    "text.primary",
+    "text.faint",
+    "radius.indicator"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "inline row",
+    "max-991px": "unchanged",
+    "max-767px": "label.secondary stays 0.875rem"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-dottag",
+      "source": "src/components/AiSection.jsx:11-13",
+      "quote": "ai__tag"
+    },
+    {
+      "id": "cit-prim-dottag-dot",
+      "source": "src/styles/fourmula-base.css:2873-2875",
+      "quote": "background-color: var(--fonts-30);"
+    }
+  ]
+}

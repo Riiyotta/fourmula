@@ -1,0 +1,366 @@
+{
+  "$description": "One template per distinct PAGE SHAPE. 5 shapes cover the 6 real routes 1:1. `nodes` are STRUCTURED OBJECTS, never bare strings, so `required` and `repeatable` are machine-enforceable. No node in any template is repeatable: no section legitimately repeats on any real page.",
+  "derivation": {
+    "method": "Derived by running a real first-party classifier, extraction/classify_routes.py, against the source project's own JSX - not by inspecting a grouping or trusting a prose description (MASTER-GUIDE 3.22). Run `python3 extraction/classify_routes.py` beside the source project to reproduce it, or `--check` to assert these node lists still match the real pages.",
+    "nodeListOnly": "Grouping on the node list ALONE collapses 6 routes into 3 shapes, because /privacy-policy, /terms-of-service, /start and /auth all produce the identical list [chrome.cookie-consent, chrome.header, chrome.menu, content.tech, chrome.footer, chrome.awards-badge]. That grouping would be wrong.",
+    "structuralSlots": "The classifier therefore also compares STRUCTURAL SLOTS - inertForm, longFormProse, anchorIndex, ctaRow, proseTable - which is what actually decides shape. Result: {longFormProse, anchorIndex} for privacy+terms, {ctaRow} for /start, {ctaRow, inertForm} for /auth.",
+    "proseTableExcluded": "proseTable is deliberately left out of the shape key: /privacy-policy has two tables and /terms-of-service none, but both fill the same long-form legal rich-text slot, so a table is instance content rather than a different page shape.",
+    "result": "6 routes -> 5 templates. Only /privacy-policy and /terms-of-service genuinely share one.",
+    "nodeOrderSource": "src/layout/Layout.jsx composes global chrome in a fixed order: preloader (flagged), cookies (unconditional), then <section className=\"page\"> wrapping header (unconditional), menu (flagged), the page's own content, footer (flagged); then the awards badge OUTSIDE that wrapper. Every template's node order follows it."
+  },
+  "evidenceLevels": {
+    "measured": "Structure, layout, motion and copy measured against the live original. Templates: home, not-found.",
+    "measured-scaffolding-placeholder-prose": "DOM scaffolding measured against the live original, but the body prose is deliberate placeholder filler, so no measured copy budget exists for it. Template: legal.",
+    "composed-not-measured": "No source existed to measure. An ORIGINAL COMPOSITION from this project's own design system. Templates: app-onboarding, app-auth.",
+    "rule": "Recorded per template and never flattened. Two templates sharing a node list do NOT share an evidence level."
+  },
+  "routeTemplate1to1": {
+    "routes": 6,
+    "templates": 5,
+    "map": {
+      "/": "home",
+      "/privacy-policy": "legal",
+      "/terms-of-service": "legal",
+      "/start": "app-onboarding",
+      "/auth": "app-auth",
+      "/404": "not-found"
+    },
+    "verified": "Every route appears in exactly one template's `routes` array: no gaps, no double-assignment. Machine-checked by extraction/verify_all.py check [g], which also cross-checks registry.manifest.json's routeTemplateMap."
+  },
+  "version": "1.0.0",
+  "templates": [
+    {
+      "id": "home",
+      "name": "Home page",
+      "description": "The only marketing page: hero, statement, three-capability showcase, trusted marquee, four pinned steps, FAQ.",
+      "purpose": "Single-route shape for /. The ONLY template containing hero.home, content.what-intro, showcase.ai-capabilities, marquee.how-trusted, steps.pinned-list and faq.accordion - all six are home-only.",
+      "routes": [
+        "/"
+      ],
+      "nodeCount": 12,
+      "evidenceLevel": "measured",
+      "evidence": "Structure, layout and motion measured against the live original; a pixel audit verified 1382/1382 elements at 1440px and 962/962 at 390px with zero deltas. Copy is the original's own.",
+      "derivedNodeList": [
+        "chrome.preloader",
+        "chrome.cookie-consent",
+        "chrome.header",
+        "chrome.menu",
+        "hero.home",
+        "content.what-intro",
+        "showcase.ai-capabilities",
+        "marquee.how-trusted",
+        "steps.pinned-list",
+        "faq.accordion",
+        "chrome.footer",
+        "chrome.awards-badge"
+      ],
+      "derivedFrom": "extraction/classify_routes.py over src/App.jsx, src/layout/Layout.jsx, src/pages/Home.jsx and the six home components.",
+      "layoutFlags": {
+        "preloader": true,
+        "menu": true,
+        "footer": true
+      },
+      "nodes": [
+        {
+          "section": "chrome.preloader",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.cookie-consent",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.header",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.menu",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "hero.home",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "content.what-intro",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "showcase.ai-capabilities",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "marquee.how-trusted",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "steps.pinned-list",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "faq.accordion",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.footer",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.awards-badge",
+          "required": true,
+          "repeatable": false
+        }
+      ]
+    },
+    {
+      "id": "legal",
+      "name": "Legal prose page",
+      "description": "An inner section.tech page carrying a long-form legal document: title, intro line, anchor index and 12-16 numbered sections.",
+      "purpose": "The ONE genuinely shared shape: /privacy-policy and /terms-of-service produce the same node list AND the same structural slots {longFormProse, anchorIndex}. They differ only in tag counts (12 vs 16 h2; 2 vs 0 tables), which is instance content.",
+      "routes": [
+        "/privacy-policy",
+        "/terms-of-service"
+      ],
+      "nodeCount": 6,
+      "evidenceLevel": "measured-scaffolding-placeholder-prose",
+      "evidence": "DOM scaffolding measured against the live original and independently re-counted from the real JSX (/privacy-policy h1:1 h2:12 h3:2 p:39 li:31 a:15 table:2 tr:25 td:105; /terms-of-service h1:1 h2:16 h3:1 p:63 li:30 a:21 - both match exactly). THE BODY PROSE IS DELIBERATE PLACEHOLDER FILLER, not the original's copy. Word budgets derived from these pages measure the filler, not real copy.",
+      "derivedNodeList": [
+        "chrome.cookie-consent",
+        "chrome.header",
+        "chrome.menu",
+        "content.tech",
+        "chrome.footer",
+        "chrome.awards-badge"
+      ],
+      "derivedFrom": "extraction/classify_routes.py over src/App.jsx, src/layout/Layout.jsx, src/pages/Privacy.jsx, src/pages/Terms.jsx and their *Content.jsx bodies.",
+      "layoutFlags": {
+        "preloader": false,
+        "menu": true,
+        "footer": true
+      },
+      "nodes": [
+        {
+          "section": "chrome.cookie-consent",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.header",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.menu",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "content.tech",
+          "required": true,
+          "repeatable": false,
+          "variant": "legal-prose"
+        },
+        {
+          "section": "chrome.footer",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.awards-badge",
+          "required": true,
+          "repeatable": false
+        }
+      ]
+    },
+    {
+      "id": "app-onboarding",
+      "name": "Onboarding stand-in page",
+      "description": "An inner section.tech page composed as a local stand-in for the product onboarding flow: two-line title, one paragraph, two CTAs.",
+      "purpose": "Single-route shape for /start. Kept SEPARATE from app-auth because the real classifier reports structural slots {ctaRow} here against {ctaRow, inertForm} on /auth - /auth carries a real <form> node this page does not.",
+      "routes": [
+        "/start"
+      ],
+      "nodeCount": 6,
+      "evidenceLevel": "composed-not-measured",
+      "evidence": "COMPOSED, NOT MEASURED. The real target app.fourmula.ai/start is a Next.js app emitting BAILOUT_TO_CLIENT_SIDE_RENDERING with an empty shell (11-18 characters of body text, zero forms, zero inputs), so there was no source to transcribe. This page is an ORIGINAL COMPOSITION from this project's own design system. Its structure and copy are NOT evidence about fourmula.ai.",
+      "derivedNodeList": [
+        "chrome.cookie-consent",
+        "chrome.header",
+        "chrome.menu",
+        "content.tech",
+        "chrome.footer",
+        "chrome.awards-badge"
+      ],
+      "derivedFrom": "extraction/classify_routes.py over src/App.jsx, src/layout/Layout.jsx and src/pages/Start.jsx.",
+      "layoutFlags": {
+        "preloader": false,
+        "menu": true,
+        "footer": true
+      },
+      "layoutFlagNote": "src/pages/Start.jsx:15 passes only current=\"/start\", so preloader inherits Layout's default of false. This was read from the real call site, not from Layout.jsx's docstring table, which omits /start entirely.",
+      "nodes": [
+        {
+          "section": "chrome.cookie-consent",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.header",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.menu",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "content.tech",
+          "required": true,
+          "repeatable": false,
+          "variant": "onboarding-cta"
+        },
+        {
+          "section": "chrome.footer",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.awards-badge",
+          "required": true,
+          "repeatable": false
+        }
+      ]
+    },
+    {
+      "id": "app-auth",
+      "name": "Sign-in stand-in page",
+      "description": "An inner section.tech page composed as a local stand-in for the sign-in screen: two-line title, one paragraph, ONE DELIBERATELY INERT single-field form, one CTA.",
+      "purpose": "Single-route shape for /auth. The ONLY template whose content contract contains a form, and the only one that binds the pinned auth-inert-form asset role.",
+      "routes": [
+        "/auth"
+      ],
+      "nodeCount": 6,
+      "evidenceLevel": "composed-not-measured",
+      "evidence": "COMPOSED, NOT MEASURED. The real target app.fourmula.ai/auth renders entirely client-side behind sign-in, so there was no markup to transcribe. This page is an ORIGINAL COMPOSITION from this project's own design system. Its structure and copy are NOT evidence about fourmula.ai.",
+      "complianceNote": "The form is INERT by design: no action, no handler beyond preventDefault, no state, no network call, nothing read or stored. assets/asset-roles.json pins the auth-inert-form role to must-not-wire-up and extraction/verify_all.py check [j] enforces that exact value. Generated output MUST keep it inert.",
+      "derivedNodeList": [
+        "chrome.cookie-consent",
+        "chrome.header",
+        "chrome.menu",
+        "content.tech",
+        "chrome.footer",
+        "chrome.awards-badge"
+      ],
+      "derivedFrom": "extraction/classify_routes.py over src/App.jsx, src/layout/Layout.jsx and src/pages/Auth.jsx.",
+      "layoutFlags": {
+        "preloader": false,
+        "menu": true,
+        "footer": true
+      },
+      "layoutFlagNote": "src/pages/Auth.jsx:17 passes only current=\"/auth\", so preloader inherits Layout's default of false.",
+      "nodes": [
+        {
+          "section": "chrome.cookie-consent",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.header",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.menu",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "content.tech",
+          "required": true,
+          "repeatable": false,
+          "variant": "auth-form"
+        },
+        {
+          "section": "chrome.footer",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.awards-badge",
+          "required": true,
+          "repeatable": false
+        }
+      ]
+    },
+    {
+      "id": "not-found",
+      "name": "404 page",
+      "description": "The catch-all page: preloader, cookie banner, header, the 404 hero and the badge. NO menu and NO footer.",
+      "purpose": "Shape for the catch-all route. The ONLY template with no chrome.menu and no chrome.footer, and therefore the only one without #dotsField. Several blanket graph rules carry a named exception for it.",
+      "routes": [
+        "/404"
+      ],
+      "nodeCount": 5,
+      "routeNote": "src/App.jsx:21 declares this as path=\"*\"; src/pages/NotFound.jsx:7 passes current=\"/404\". The route id /404 is this repository's name for that catch-all.",
+      "evidenceLevel": "measured",
+      "evidence": "Structure and copy measured from the live original's own 404 page.",
+      "derivedNodeList": [
+        "chrome.preloader",
+        "chrome.cookie-consent",
+        "chrome.header",
+        "hero.not-found",
+        "chrome.awards-badge"
+      ],
+      "derivedFrom": "extraction/classify_routes.py over src/App.jsx, src/layout/Layout.jsx, src/pages/NotFound.jsx and src/pages/NotFoundContent.jsx.",
+      "layoutFlags": {
+        "preloader": true,
+        "menu": false,
+        "footer": false
+      },
+      "absentChrome": {
+        "chrome.menu": "src/pages/NotFound.jsx:7 passes menu={false}.",
+        "chrome.footer": "src/pages/NotFound.jsx:7 passes footer={false}. This is why #dotsField is absent here.",
+        "stillPresent": "#progress IS present, because it lives in src/components/Header.jsx:23 and Layout renders Header unconditionally. Only #dotsField is genuinely missing from this page."
+      },
+      "nodes": [
+        {
+          "section": "chrome.preloader",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.cookie-consent",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.header",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "hero.not-found",
+          "required": true,
+          "repeatable": false
+        },
+        {
+          "section": "chrome.awards-badge",
+          "required": true,
+          "repeatable": false
+        }
+      ]
+    }
+  ]
+}

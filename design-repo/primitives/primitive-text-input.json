@@ -1,0 +1,51 @@
+{
+  "id": "primitive.text-input",
+  "kind": "primitive",
+  "category": "control",
+  "purpose": "A single-line text field. It appears exactly ONCE in the whole project: the email field of the deliberately inert /auth form.",
+  "cssClasses": [
+    ".w-input"
+  ],
+  "props": {
+    "type": "text (NOT type=email - the source uses type=\"text\")",
+    "placeholder": "\"you@company.com\"",
+    "id": "auth-email, paired with a <label htmlFor>",
+    "behaviour": "INERT. No value, no onChange, no state, no name attribute, nothing read or stored."
+  },
+  "states": {
+    "rest": "Webflow .w-input defaults, re-declared in the framework partition of the stylesheet",
+    "hover": "none declared",
+    "focus": "NONE - *:focus { outline: none } with no replacement ring."
+  },
+  "tokens": [
+    "label.secondary",
+    "text.muted",
+    "border.hairline"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "inside a 22rem max-width form",
+    "max-991px": "unchanged",
+    "max-767px": "unchanged"
+  },
+  "assetRole": "auth-inert-form",
+  "measuredFrom": [
+    {
+      "id": "cit-prim-input",
+      "source": "src/pages/Auth.jsx:36-42",
+      "quote": "className=\"w-input\""
+    },
+    {
+      "id": "cit-prim-input-label",
+      "source": "src/pages/Auth.jsx:33-35",
+      "quote": "htmlFor=\"auth-email\""
+    },
+    {
+      "id": "cit-prim-input-inert",
+      "source": "src/pages/Auth.jsx:28-32",
+      "quote": "onSubmit={(e) => e.preventDefault()}"
+    }
+  ],
+  "notes": "COMPLIANCE: this primitive carries the pinned auth-inert-form asset role. It must stay inert in any generated output. See assets/asset-roles.json."
+}

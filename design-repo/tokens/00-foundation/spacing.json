@@ -1,0 +1,434 @@
+{
+  "$description": "Site-authored spacing scale, measured by histogram over margin/padding/gap/grid-*-gap/column-gap/row-gap/top/bottom/left/right/inset declarations in SITE-AUTHORED rules of src/styles/fourmula-base.css only (554 of its 934 rules; the Webflow partition is excluded). 47 distinct rem values: 35 positive, 12 negative. Every value is a multiple of 0.05rem and the top eight (1, 2, 0.5, 1.5, 0.75, 3, 0.25, 5) are all 0.25rem multiples, so the scale is 0.25rem-based with hand-tuned outliers (0.65, 0.3, 0.15, 0.55, 4.8, 5.25, 1.1, 1.2, 1.35).",
+  "idConvention": "Token ids are dotted, lower-case, tier-prefix-free. Foundation ids are <category>.<name> (color.mainbg-dark, type.h1, spacing.1, radius.md, breakpoint.tablet, elevation.z-header, icon-size.header-logo, motion.transition.fast). Semantic ids are <role>.<variant> (text.primary, surface.page, border.hairline, accent.primary). Component ids start with component.<name>.<slot>, layout ids with layout.<name>. A \"$ref\" is always another token id.",
+  "measurementMethod": "Counted by the histogram described above. A narrower property set (margin/padding/gap only, no positional offsets) yields 50 distinct values with slightly different counts; this file states the wider measurement it actually used so the numbers are reproducible.",
+  "fluidWarning": "Every value is a rem and the root font-size is fluid - see tokens/00-foundation/typography.json ROOT_FONT_SIZE_IS_FLUID.",
+  "evidence": [
+    "cit-space-histogram"
+  ],
+  "tokens": {
+    "spacing.1": {
+      "$type": "dimension",
+      "$value": "1rem",
+      "usageTotal": 93,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.2": {
+      "$type": "dimension",
+      "$value": "2rem",
+      "usageTotal": 71,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p5": {
+      "$type": "dimension",
+      "$value": "0.5rem",
+      "usageTotal": 45,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.1p5": {
+      "$type": "dimension",
+      "$value": "1.5rem",
+      "usageTotal": 32,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p75": {
+      "$type": "dimension",
+      "$value": "0.75rem",
+      "usageTotal": 25,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.3": {
+      "$type": "dimension",
+      "$value": "3rem",
+      "usageTotal": 20,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p25": {
+      "$type": "dimension",
+      "$value": "0.25rem",
+      "usageTotal": 17,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.5": {
+      "$type": "dimension",
+      "$value": "5rem",
+      "usageTotal": 16,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.2p5": {
+      "$type": "dimension",
+      "$value": "2.5rem",
+      "usageTotal": 16,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.10": {
+      "$type": "dimension",
+      "$value": "10rem",
+      "usageTotal": 10,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.4": {
+      "$type": "dimension",
+      "$value": "4rem",
+      "usageTotal": 9,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.6": {
+      "$type": "dimension",
+      "$value": "6rem",
+      "usageTotal": 8,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.6p5": {
+      "$type": "dimension",
+      "$value": "6.5rem",
+      "usageTotal": 7,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.3p5": {
+      "$type": "dimension",
+      "$value": "3.5rem",
+      "usageTotal": 6,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p65": {
+      "$type": "dimension",
+      "$value": "0.65rem",
+      "usageTotal": 5,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.5p25": {
+      "$type": "dimension",
+      "$value": "5.25rem",
+      "usageTotal": 5,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.8": {
+      "$type": "dimension",
+      "$value": "8rem",
+      "usageTotal": 4,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.4p8": {
+      "$type": "dimension",
+      "$value": "4.8rem",
+      "usageTotal": 4,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p875": {
+      "$type": "dimension",
+      "$value": "0.875rem",
+      "usageTotal": 3,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.1p25": {
+      "$type": "dimension",
+      "$value": "1.25rem",
+      "usageTotal": 3,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.1p75": {
+      "$type": "dimension",
+      "$value": "1.75rem",
+      "usageTotal": 3,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p3": {
+      "$type": "dimension",
+      "$value": "0.3rem",
+      "usageTotal": 3,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.7p5": {
+      "$type": "dimension",
+      "$value": "7.5rem",
+      "usageTotal": 2,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p2": {
+      "$type": "dimension",
+      "$value": "0.2rem",
+      "usageTotal": 2,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p15": {
+      "$type": "dimension",
+      "$value": "0.15rem",
+      "usageTotal": 2,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p125": {
+      "$type": "dimension",
+      "$value": "0.125rem",
+      "usageTotal": 2,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p55": {
+      "$type": "dimension",
+      "$value": "0.55rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p35": {
+      "$type": "dimension",
+      "$value": "0.35rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.0p4": {
+      "$type": "dimension",
+      "$value": "0.4rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.5p5": {
+      "$type": "dimension",
+      "$value": "5.5rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.9": {
+      "$type": "dimension",
+      "$value": "9rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.1p1": {
+      "$type": "dimension",
+      "$value": "1.1rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.1p2": {
+      "$type": "dimension",
+      "$value": "1.2rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.1p35": {
+      "$type": "dimension",
+      "$value": "1.35rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.12": {
+      "$type": "dimension",
+      "$value": "12rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-1p5": {
+      "$type": "dimension",
+      "$value": "-1.5rem",
+      "usageTotal": 5,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-6p5": {
+      "$type": "dimension",
+      "$value": "-6.5rem",
+      "usageTotal": 4,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-2": {
+      "$type": "dimension",
+      "$value": "-2rem",
+      "usageTotal": 4,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-0p5": {
+      "$type": "dimension",
+      "$value": "-0.5rem",
+      "usageTotal": 3,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-1": {
+      "$type": "dimension",
+      "$value": "-1rem",
+      "usageTotal": 2,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-0p25": {
+      "$type": "dimension",
+      "$value": "-0.25rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-2p25": {
+      "$type": "dimension",
+      "$value": "-2.25rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-5": {
+      "$type": "dimension",
+      "$value": "-5rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-8": {
+      "$type": "dimension",
+      "$value": "-8rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-10": {
+      "$type": "dimension",
+      "$value": "-10rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-12": {
+      "$type": "dimension",
+      "$value": "-12rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    },
+    "spacing.neg-15": {
+      "$type": "dimension",
+      "$value": "-15rem",
+      "usageTotal": 1,
+      "fluid": true,
+      "evidence": [
+        "cit-space-histogram"
+      ]
+    }
+  }
+}

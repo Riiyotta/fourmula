@@ -1,0 +1,122 @@
+{
+  "id": "component.step-slide",
+  "kind": "component",
+  "category": "scroll-stage",
+  "purpose": "One pinned, 3D-rotating step panel. FOUR instances, each with its own gradient.",
+  "cssClasses": [
+    ".list__main__slide",
+    ".list__main__content__wrap",
+    ".list__main__content",
+    "variants: .is-first, .is-second, .is-third, .is-fourth",
+    ".list__main__bottom",
+    ".list__main__bottom-gradient",
+    ".pin-spacer"
+  ],
+  "variants": {
+    "is-first": {
+      "gradient": "component.step-slide.gradient-first",
+      "css": "linear-gradient(#f94a00, #fd7b03)",
+      "step": "01",
+      "tag": "(PB)"
+    },
+    "is-second": {
+      "gradient": "component.step-slide.gradient-second",
+      "css": "linear-gradient(#48a3d1, #fd7b03)",
+      "step": "02",
+      "tag": "(GO)"
+    },
+    "is-third": {
+      "gradient": "component.step-slide.gradient-third",
+      "css": "linear-gradient(#3a54ff, #7a67c5 23%, #fd7b03)",
+      "step": "03",
+      "tag": "(CB)"
+    },
+    "is-fourth": {
+      "gradient": "component.step-slide.gradient-fourth",
+      "css": "linear-gradient(#9a0101, #fd7b03)",
+      "step": "04",
+      "tag": "(AX)"
+    }
+  },
+  "props": {
+    "heading": "heading.step, 3-4 words",
+    "stepNumber": "heading.display, two digits",
+    "stepTag": "label.emphasis, a 2-letter code in parentheses",
+    "infoTags": "exactly 2 per slide, label.secondary, 2-4 words each",
+    "infoCopy": "label.emphasis, split across an .u-indent first line and an .u-fonts-50-stb remainder",
+    "cta": "primitive.button-step",
+    "artwork": "component.media-image with assetRole step-artwork"
+  },
+  "behaviour": "public/motion/m29.js pins .list__main__slide instances with ScrollTrigger and rotates .list__main__content in 3D on power1.in. Slides 1-3 ship a Webflow .pin-spacer with baked inline geometry (1920x1872 with 936px bottom padding); the FOURTH slide has no .pin-spacer, so it is the resting slide. [data-flash-stb] on the heading and the step numeral hooks the m24 flash reveal.",
+  "tokens": [
+    "component.step-slide.gradient-first",
+    "component.step-slide.gradient-second",
+    "component.step-slide.gradient-third",
+    "component.step-slide.gradient-fourth",
+    "component.step-slide.scrim",
+    "heading.step",
+    "heading.display",
+    "label.emphasis",
+    "label.secondary",
+    "radius.indicator",
+    "space.gutter"
+  ],
+  "composes": [
+    "primitive.button-step",
+    "component.media-image"
+  ],
+  "responsive": {
+    "structured": true,
+    "base": "pinned 3D stack with perspective 250vw on the content wrapper",
+    "max-991px": "heading.step stays 4rem and heading.display drops 7.5rem -> 5.5rem",
+    "max-767px": "heading.step and heading.display both become 2.25rem, so the heading and the step numeral render at the same size"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-step-first",
+      "source": "src/styles/fourmula-base.css:4024-4027",
+      "quote": "linear-gradient(#f94a00, #fd7b03)"
+    },
+    {
+      "id": "cit-comp-step-second",
+      "source": "src/styles/fourmula-base.css:4029-4031",
+      "quote": "linear-gradient(#48a3d1, #fd7b03)"
+    },
+    {
+      "id": "cit-comp-step-third",
+      "source": "src/styles/fourmula-base.css:4033-4035",
+      "quote": "linear-gradient(#3a54ff, #7a67c5 23%, #fd7b03)"
+    },
+    {
+      "id": "cit-comp-step-fourth",
+      "source": "src/styles/fourmula-base.css:4037-4039",
+      "quote": "linear-gradient(#9a0101, #fd7b03)"
+    },
+    {
+      "id": "cit-comp-step-scrim",
+      "source": "src/styles/fourmula-base.css:4211-4214",
+      "quote": "linear-gradient(#fc730300, #fc7303)"
+    },
+    {
+      "id": "cit-comp-step-markup",
+      "source": "src/components/ListSection.jsx:15-43",
+      "quote": "list__main__content is-first"
+    },
+    {
+      "id": "cit-comp-step-fourth-markup",
+      "source": "src/components/ListSection.jsx:112-114",
+      "quote": "list__main__content is-fourth"
+    },
+    {
+      "id": "cit-comp-step-m29",
+      "source": "public/motion/m29.js:1-39",
+      "quote": "list__main__slide"
+    },
+    {
+      "id": "cit-comp-step-perspective",
+      "source": "src/styles/fourmula-head.css:144-149",
+      "quote": "perspective: 250vw;"
+    }
+  ],
+  "notes": "CORRECTION TO THE BUILD GROUNDWORK: the step gradients were described as a three-variant set (.is-first / .is-second / .is-third). There are FOUR. .is-fourth exists in the stylesheet at fourmula-base.css:4037-4039 as linear-gradient(#9a0101, #fd7b03) and in the markup at ListSection.jsx:114. A fifth gradient, the shared .list__main__bottom-gradient scrim (#fc730300 -> #fc7303, 10rem tall) was also unrecorded. SEPARATELY, the malformed-CSS quirk lives here: src/styles/fourmula-head.css:150-159 keeps `transform-style: preserve-3d` and `transform-origin: 50% 10%` COMMENTED OUT because the original ships the first without a semicolon, so browsers discard both. DO NOT 'FIX' IT - doing so creates a visible divergence from the original."
+}

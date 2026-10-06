@@ -1,0 +1,58 @@
+{
+  "id": "primitive.checkbox",
+  "kind": "primitive",
+  "category": "control",
+  "purpose": "The custom checkbox of the vendored Finsweet cookie-preference panel. Four instances: one always-on, three toggleable.",
+  "cssClasses": [
+    ".w-checkbox",
+    ".fs-cc_checkbox",
+    ".fs-cc_checkbox-button",
+    ".w-checkbox-input--inputType-custom",
+    "states: .w--redirected-checked (real), ._w--redirected-checked (the always-on one)"
+  ],
+  "props": {
+    "label": "1-2 words plus an explanatory line: Marketing, Personalization, Analytics, \"Strictly necessary (always active)\"",
+    "name": "Fs-Marketing / Fs-Personalization / Fs-Analytics",
+    "fsCcCheckbox": "marketing / personalization / analytics"
+  },
+  "states": {
+    "rest": "1px border, transparent",
+    "checked": "fill vendor.cookie-accent with radio__checkmark.svg as background-image",
+    "hover": "text turns vendor.cookie-accent-soft, fill becomes surface.page",
+    "focus": "box-shadow: none is declared explicitly on .fs-cc_checkbox-button.w--redirected-focus, i.e. Webflow's focus ring is deliberately removed."
+  },
+  "tokens": [
+    "component.cookie-modal.accent",
+    "component.cookie-modal.accent-soft",
+    "label.primary",
+    "label.secondary",
+    "radius.hairline",
+    "motion.easing.webflow-quad"
+  ],
+  "composes": [],
+  "assetRole": "form-control-checkmark",
+  "responsive": {
+    "structured": true,
+    "base": "stacked rows in the preference modal",
+    "max-991px": "unchanged",
+    "max-767px": "unchanged"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-prim-checkbox",
+      "source": "src/components/Cookies.jsx:34-38",
+      "quote": "w-checkbox fs-cc_checkbox w-clearfix"
+    },
+    {
+      "id": "cit-prim-checkbox-checked",
+      "source": "src/styles/fourmula-base.css:4406-4409",
+      "quote": "background-image: url(\"/assets/radio__checkmark.svg\")"
+    },
+    {
+      "id": "cit-prim-checkbox-focus",
+      "source": "src/styles/fourmula-base.css:4415-4417",
+      "quote": "box-shadow: none;"
+    }
+  ],
+  "notes": "VENDORED Finsweet component. Its colours are namespaced vendor.cookie-* precisely so a generator cannot mistake #146ef5 for a Fourmula brand colour. The form it sits in carries a Cloudflare Turnstile sitekey attribute (data-turnstile-sitekey) that is inert in this clone."
+}

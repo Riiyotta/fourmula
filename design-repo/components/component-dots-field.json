@@ -1,0 +1,68 @@
+{
+  "id": "component.dots-field",
+  "kind": "component",
+  "category": "motion",
+  "purpose": "The interactive dot grid at the bottom of the footer. One instance, and it is the ONE element genuinely absent from the 404 (because it lives in Footer.jsx, which the 404 does not render).",
+  "cssClasses": [
+    "#dotsField",
+    ".dots-field",
+    ".dot"
+  ],
+  "grid": {
+    "rows": 14,
+    "colsDesktop": 52,
+    "colsTablet": 24,
+    "colsMobile": 22,
+    "dotsDesktop": 728,
+    "dotsTablet": 336,
+    "dotsMobile": 308,
+    "dotSize": "1rem from min-width 768px, 0.5rem below; the gap always equals the size",
+    "widthDesktop": "52 x 1rem + 51 x 1rem gap = 103rem, which is exactly the declared .dots-field width"
+  },
+  "props": {
+    "dataIndex": "0..(cols*rows-1)",
+    "dataCol": "0..cols-1",
+    "dataRow": "0..13",
+    "--i": "the index, as a CSS custom property"
+  },
+  "behaviour": "public/motion/m07.js rebuilds the whole field on resize at its own JS thresholds (>=992 desktop, >=768 tablet, else mobile) with ROWS fixed at 14. m08.js runs an idle wave from the grid centre using steps(2). m09.js adds a cursor-proximity opacity response at 0.2s power2.out. Every dot ships opacity 0.15 and will-change: opacity.",
+  "tokens": [
+    "component.dots-field.dot-fill",
+    "component.dots-field.dot-size",
+    "radius.indicator",
+    "layout.dots-field.width",
+    "layout.dots-field.grid",
+    "motion.dots.proximity",
+    "text.primary"
+  ],
+  "composes": [],
+  "responsive": {
+    "structured": true,
+    "base": "52 x 14 = 728 dots at 1rem, field 103rem wide",
+    "max-991px": "m07.js rebuilds at 24 x 14 = 336 dots from 768px up; dots stay 1rem (the CSS min-width:768px branch)",
+    "max-767px": "m07.js rebuilds at 22 x 14 = 308 dots and the CSS drops the dot size and gap to 0.5rem"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-dots-markup",
+      "source": "src/components/Footer.jsx:85-86",
+      "quote": "id=\"dotsField\" className=\"dots-field\""
+    },
+    {
+      "id": "cit-comp-dots-css",
+      "source": "src/components/Footer.jsx:44-81",
+      "quote": ".dots-field {"
+    },
+    {
+      "id": "cit-comp-dots-m07",
+      "source": "public/motion/m07.js:20-37",
+      "quote": "const ROWS = 14;"
+    },
+    {
+      "id": "cit-comp-dots-m08",
+      "source": "public/motion/m08.js:15-18",
+      "quote": "const COLS = Math.max(...dots.map(d => +d.dataset.col)) + 1;"
+    }
+  ],
+  "notes": "CORRECTION TO CLONE_SPEC.md: its motion table (CLONE_SPEC.md:107) says \"732 dots\". The real count is 728. Measured three independent ways: grep -c 'className=\"dot\"' src/components/Footer.jsx = 728; the distinct data-row values are 0..13 and data-col 0..51, so 14 x 52 = 728; and the highest data-index is 727. m07.js's own arithmetic (COLS * ROWS with ROWS = 14 and COLS = 52) agrees."
+}

@@ -1,0 +1,98 @@
+{
+  "id": "component.cookie-modal",
+  "kind": "component",
+  "category": "overlay",
+  "purpose": "The vendored Finsweet Cookie Consent UI: a banner plus a four-row preference modal.",
+  "cssClasses": [
+    ".cookies__modal__wrap",
+    ".cookies__modal__main",
+    ".cookies__modal__close",
+    ".cookies__modal__copy",
+    ".cookies__modal__title",
+    ".cookies__modal__text",
+    ".fs-cc_modal-buttons",
+    ".cookies__list__wrap",
+    ".cookie-preference_wrapper",
+    ".fs-cc_modal",
+    ".fs-cc_form",
+    ".fs-cc_preferences",
+    ".fs-cc_checkbox",
+    ".fs-cc_titles",
+    ".fs-cc_link",
+    ".fs-cc_button",
+    ".cookie-preference_background"
+  ],
+  "fsCcAttributes": [
+    "banner",
+    "preferences",
+    "close",
+    "allow",
+    "open-preferences",
+    "submit"
+  ],
+  "props": {
+    "title": "\"Cookie settings\" on both the banner and the modal",
+    "body": "one sentence with an inline privacy-policy link",
+    "bannerActions": "exactly 2 - \"Accept all\" (primary) and \"Settings\" (outline)",
+    "modalActions": "exactly 2 - \"Accept all\" (primary) and \"Save changes\" (outline)",
+    "categories": "exactly 4 - Strictly necessary (always active, non-interactive), Marketing, Personalization, Analytics"
+  },
+  "behaviour": "The head <style> block ships [fs-cc=\"banner\"|\"manager\"|\"preferences\"|\"interaction\"] {display:none}; the banner then ships an inline display:flex and the preferences panel an inline display:none. public/motion/m30.js reveals .cookies over 0.8s power2.out. The embedded <form id=\"ck-form\" method=\"get\"> carries a data-turnstile-sitekey attribute and is INERT in this clone - no Finsweet runtime and no Turnstile script are loaded.",
+  "tokens": [
+    "component.cookie-modal.accent",
+    "component.cookie-modal.accent-soft",
+    "component.cookie-modal.tray-fill",
+    "component.cookie-modal.hairline",
+    "component.button.outline.fill-cookies",
+    "label.emphasis",
+    "label.secondary",
+    "label.primary",
+    "elevation.z-cookie-banner",
+    "elevation.z-preloader",
+    "elevation.z-close-button",
+    "motion.cookies.reveal",
+    "accent.hover",
+    "radius.control"
+  ],
+  "composes": [
+    "primitive.button-primary",
+    "primitive.button-outline",
+    "primitive.checkbox",
+    "primitive.inline-icon",
+    "primitive.text-link"
+  ],
+  "responsive": {
+    "structured": true,
+    "base": "fixed banner plus a centred modal over a scrim",
+    "max-991px": "no documented change",
+    "max-767px": "no documented change"
+  },
+  "measuredFrom": [
+    {
+      "id": "cit-comp-cookie-banner",
+      "source": "src/components/Cookies.jsx:5-6",
+      "quote": "fs-cc=\"banner\""
+    },
+    {
+      "id": "cit-comp-cookie-prefs",
+      "source": "src/components/Cookies.jsx:19-21",
+      "quote": "fs-cc=\"preferences\""
+    },
+    {
+      "id": "cit-comp-cookie-hide",
+      "source": "src/styles/fourmula-head.css:27-27",
+      "quote": "[fs-cc=\"banner\"]"
+    },
+    {
+      "id": "cit-comp-cookie-form",
+      "source": "src/components/Cookies.jsx:30-30",
+      "quote": "data-turnstile-sitekey"
+    },
+    {
+      "id": "cit-comp-cookie-m30",
+      "source": "public/motion/m30.js:1-23",
+      "quote": "querySelector('.cookies"
+    }
+  ],
+  "notes": "VENDORED THIRD PARTY. All four of its colours are namespaced vendor.cookie-* so that #146ef5, #468df7, #f8f8f8 and #0000001a are never mistaken for Fourmula brand values."
+}
