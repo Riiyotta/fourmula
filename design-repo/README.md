@@ -55,7 +55,7 @@ shown in the default light rendering is the one whose filename ends `-dark.avif`
 `tailwindcss ^3.4.13` is installed but **deliberately unused**: `src/index.css` removed the `@tailwind` directives
 because Preflight, loaded after the site's own stylesheets, overrode the ported cascade. `tailwind.config.js` and
 `postcss.config.js` remain on disk, inert. Styling is a vendored Webflow stylesheet plus 11 ported inline head
-`<style>` blocks. (`CLONE_SPEC.md:13` calls it a Tailwind project; that is wrong — see the CHANGELOG.)
+`<style>` blocks. (An earlier `CLONE_SPEC.md` described it as a Tailwind project; that was wrong and has been corrected — see the CHANGELOG.)
 
 ### 4. Zero external links is an enforced build constraint.
 
@@ -85,7 +85,7 @@ honest caveat: two `mailto:` hrefs survive inside the legal pages' placeholder f
 ## How to run (Python 3 with the `jsonschema` package, from the repository root)
 
 ```
-python3 extraction/verify_all.py                                   # 15 checks, PASS/FAIL/WARN each, non-zero exit on any failure
+python3 extraction/verify_all.py                                   # 16 checks, PASS/FAIL/WARN each, non-zero exit on any failure
 python3 schema/tests/adversarial_test.py                           # controls + mutations + CLI + drift-injection layers
 python3 extraction/prove_drift.py                                  # injects drift into scratch copies; verify_all.py must fail on each
 python3 schema/semantic_validate.py schema/example.pagespec.json   # validate one PageSpec (0 valid, 1 errors, 2 unreadable)
@@ -118,7 +118,7 @@ exits 0 with no source tree.
   network call, no analytics event. Role `auth-inert-form` is pinned `must-not-wire-up`.
 - Nothing here grants any right to fourmula.ai's copy, marks or assets. **Do not publish or make this repository
   public without the owner's licence review.**
-- Packaging: the source project is **not** a git repository, so nothing can currently be tracked; `design-repo.zip`
+- Packaging: at extraction time the source project was not yet a git repository (it is now maintained and published through GitHub); `design-repo.zip`
   is nonetheless listed by name in the project's `.gitignore`, and is regenerated fresh and last, with the CLI
   `zip` tool, after every check passes.
 

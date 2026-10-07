@@ -10,14 +10,14 @@ estimated by eye.
 
 ## 1. Stack
 
-React 18 + Vite 5 + Tailwind v3. GSAP 3.12.5 + ScrollTrigger + SplitText +
-SplitType loaded as classic scripts from `public/vendor/`.
+React 18 + Vite 5, styled by vendored Webflow CSS + inline head styles (no Tailwind). GSAP
+3.12.5 + ScrollTrigger + SplitText + SplitType load as classic scripts from `public/vendor/`.
 
 Fidelity approach: the original is a Webflow site whose design system lives in one
 102KB stylesheet plus 11 inline head `<style>` blocks, and whose motion lives in 26
 inline scripts. Rather than re-derive those by eye, all three are ported verbatim
-and the markup is transcribed from the saved document. Tailwind tokens mirror the
-original's custom properties for any new work.
+and the markup is transcribed from the saved document. The original's CSS custom
+properties are the source of truth for tokens; any new work should reference them.
 
 ## 2. Root font-size — FLUID (read this first)
 
