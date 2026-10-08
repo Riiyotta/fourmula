@@ -45,7 +45,7 @@
     "routes": 6,
     "graphRules": 20,
     "assetRoles": 14,
-    "citations": 336,
+    "citations": 334,
     "motionPatterns": 10
   },
   "countsNote": "Every number here is recomputed from the real files by extraction/verify_all.py check [f], which fails the run on any mismatch. extraction/prove_drift.py proves that by injecting wrong counts into a scratch copy.",
@@ -80,7 +80,7 @@
   },
   "constraints": {
     "noExternalRequests": "All images, video, fonts and SVGs are local; 51 local references, all resolving, zero remote. grep -rhoE '(href|src)=\"https?://' src --include='*.jsx' returns ZERO matches. A generated PageSpec must never reference a remote URL, a protocol-relative // URL, a scheme, or a path containing '..'; the schema pattern, the semantic validator and the NO_EXTERNAL_LINKS graph rule all reject them, and the adversarial suite proves it.",
-    "knownMailtoResidue": "The zero-external-links claim is exactly true for http: and https: in href/src, but TWO mailto: hrefs survive inside the legal pages' placeholder filler prose, both with nonsense link text: mailto:support@fourmula.ai (src/pages/TermsContent.jsx:168) and mailto:infot@fourmeta.com (src/pages/PrivacyContent.jsx:273), the second at an unrelated domain with a malformed local part. Neither reaches any PageSpec field, so the rule rejects every scheme without rejecting real structure. Generated output must not reproduce either address.",
+    "knownMailtoResidue": "None. Two filler-prose mailto: hrefs were recorded at the initial build but are gone from src/ (grep -rn mailto src public returns zero); the zero-external-links claim now holds for every URL scheme, and NO_EXTERNAL_LINKS still rejects them.",
     "realCompany": "The source is a REAL, LIVE COMPANY. Real people appear in 8 hero photographs and 4 preloader images; 11 REAL THIRD-PARTY COMPANY LOGOS appear in a 'Trusted By' marquee; 20 real product images and 3 real produced videos appear in the showcase. Generated output must NEVER reproduce, redraw, approximate or fabricate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's likeness, any third-party mark, or its real copy. See assets/asset-roles.json, where 12 of the 14 roles carry a PINNED generationPolicy that check [j] enforces by value.",
     "licensing": "Do not publish or make this repository public without the owner's licence review. SF Pro Display (public/assets/fonts/*.otf) is APPLE-LICENSED and may not be redistributed or served publicly. GSAP SplitText (public/vendor/SplitText.min.js) is a PAID Club GreenSock plugin under the same restriction. Both are role brand-typeface-file, pinned must-not-redistribute.",
     "inertAuthForm": "/auth carries the project's only <form> and it is DELIBERATELY INERT: no action, no handler beyond preventDefault, no state, no network call, nothing read or stored. The asset-role registry pins its role auth-inert-form to must-not-wire-up and check [j] compares that exact VALUE, not just membership in the policy enum - because may-generate-new is a valid enum member that would be wrong here. The adversarial suite mutates it to a different-but-valid value to prove the check catches it.",

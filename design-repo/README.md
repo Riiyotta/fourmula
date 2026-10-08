@@ -11,7 +11,7 @@ library.
 <!-- counts:begin -->
 - Tokens: 270 total (foundation 173, semantic 61, component 26, layout 10); catalog entries 270
 - Primitives 11, components 11, sections 14
-- Templates 5, routes 6 (1:1), graph rules 20, motion patterns 10, asset roles 14, ledger citations 336
+- Templates 5, routes 6 (1:1), graph rules 20, motion patterns 10, asset roles 14, ledger citations 334
 <!-- counts:end -->
 
 Routes to templates, each route served by exactly one template: `/` -> home; `/privacy-policy` and
@@ -62,9 +62,8 @@ because Preflight, loaded after the site's own stylesheets, overrode the ported 
 `grep -rhoE '(href|src)="https?://' src --include='*.jsx'` returns **zero** matches. Formerly-external links became
 local routes (`/start`, `/auth`) or inert hashes on purpose. A generated PageSpec may never introduce a remote URL,
 a protocol-relative `//` URL, any URL scheme, or a `..` traversal — the schema pattern, the semantic validator and
-the `NO_EXTERNAL_LINKS` graph rule all reject them, and the adversarial suite proves it in both directions. One
-honest caveat: two `mailto:` hrefs survive inside the legal pages' placeholder filler prose (see
-`registry.manifest.json` -> `constraints.knownMailtoResidue`); neither reaches any PageSpec field.
+the `NO_EXTERNAL_LINKS` graph rule all reject them, and the adversarial suite proves it in both directions. No `mailto:` or other
+non-http scheme remains in `src/` either (the two filler-prose `mailto:` hrefs recorded at the initial build have since been removed).
 
 ---
 

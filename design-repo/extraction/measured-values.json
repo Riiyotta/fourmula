@@ -128,11 +128,9 @@
   },
   {
    "claim": "Groundwork - \"zero external links\"; the only remaining http:// strings are SVG xmlns namespaces.",
-   "finding": "True for http: and https: in href/src, and the xmlns claim needs one addition: src/loadSite.js:5 also holds a commented-out cdnjs URL documenting the original's 404ing ScrambleTextPlugin. But two mailto: hrefs survive in the legal pages' filler prose - mailto:support@fourmula.ai (TermsContent.jsx:168) and mailto:infot@fourmeta.com (PrivacyContent.jsx:273), the second at an unrelated domain. Neither reaches a PageSpec field, so NO_EXTERNAL_LINKS rejects every scheme without rejecting real structure.",
+   "finding": "True for http: and https: in href/src, and the xmlns claim needs one addition: src/loadSite.js:5 also holds a commented-out cdnjs URL documenting the original's 404ing ScrambleTextPlugin. The two mailto: hrefs this ledger once recorded in the legal pages' filler prose (TermsContent.jsx, PrivacyContent.jsx) no longer exist in src/ (`grep -rn mailto src public` returns zero), so the claim is now true for every scheme; NO_EXTERNAL_LINKS still rejects every scheme.",
    "evidence": [
-    "cit-constraint-no-external",
-    "cit-constraint-mailto-terms",
-    "cit-constraint-mailto-privacy"
+    "cit-constraint-no-external"
    ]
   },
   {
@@ -1191,20 +1189,6 @@
    "quote": "local stand-ins for app.fourmula.ai",
    "kind": "inferred",
    "note": "THE ZERO-EXTERNAL-LINKS CONSTRAINT. grep -rhoE '(href|src)=\"https?://' src --include='*.jsx' returns ZERO matches. Formerly-external links became the local routes /start and /auth (App.jsx:17-19) or inert hashes. The only http strings left in src/ are the SVG xmlns namespace and one commented-out cdnjs URL in loadSite.js:5."
-  },
-  {
-   "id": "cit-constraint-mailto-terms",
-   "source": "src/pages/TermsContent.jsx:168-168",
-   "quote": "href=\"mailto:support@fourmula.ai\"",
-   "kind": "inferred",
-   "note": "A surviving mailto: href inside the legal page's PLACEHOLDER FILLER prose, with nonsense link text (\"Typography.\"). The zero-external-links claim holds for http(s) but not for every scheme."
-  },
-  {
-   "id": "cit-constraint-mailto-privacy",
-   "source": "src/pages/PrivacyContent.jsx:273-273",
-   "quote": "href=\"mailto:infot@fourmeta.com\"",
-   "kind": "inferred",
-   "note": "The second surviving mailto:, also in filler prose with nonsense link text (\"Body.\"). Note the address is at an UNRELATED domain (fourmeta.com) with a malformed local part - a filler artifact, not a real contact address."
   },
   {
    "id": "cit-asset-inventory",

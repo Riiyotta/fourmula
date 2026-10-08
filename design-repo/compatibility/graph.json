@@ -165,15 +165,7 @@
       "description": "No href, assetRef or any other URL-bearing field may contain a remote URL (http:, https:), a protocol-relative // URL, a mailto: or tel: scheme, or a path containing '..'. Links may only be '#', '/#', a '#anchor' or '/#anchor' in-page anchor, or one of the 6 real routes; asset paths may only be local absolute paths. This encodes the project's ZERO-EXTERNAL-LINKS build constraint: grep -rhoE '(href|src)=\"https?://\" src --include=*.jsx' returns ZERO matches, and formerly-external links became local routes (/start, /auth) or inert hashes on purpose. No exceptions on any template.",
       "exceptions": [],
       "evidence": "cit-constraint-no-external",
-      "knownSourceExceptionsOutsideThisRule": {
-        "finding": "The zero-external-links claim is exactly true for http: and https: in href/src, but it is NOT true for every scheme. Two mailto: hrefs survive in the source: src/pages/TermsContent.jsx:168 (mailto:support@fourmula.ai, link text \"Typography.\") and src/pages/PrivacyContent.jsx:273 (mailto:infot@fourmeta.com, link text \"Body.\"). Both sit inside the legal pages' placeholder filler prose and both have nonsense link text, so they are filler artifacts rather than real contact links - and the second points at an unrelated domain (fourmeta.com) with a malformed local part.",
-        "consequence": "Neither reaches a PageSpec: the legal-prose content branch has no href field at all, because its prose is unbudgeted placeholder filler. So this rule can reject mailto: outright without rejecting any real, correct structure. Generated output must not reproduce either address.",
-        "evidence": [
-          "cit-constraint-mailto-terms",
-          "cit-constraint-mailto-privacy"
-        ]
-      },
-      "onlyRemainingHttpStrings": "Two: the SVG xmlns namespace http://www.w3.org/2000/svg, and the commented-out cdnjs ScrambleTextPlugin URL in src/loadSite.js:5 which documents the original's 404ing script. Neither is a fetched reference."
+            "onlyRemainingHttpStrings": "Two: the SVG xmlns namespace http://www.w3.org/2000/svg, and the commented-out cdnjs ScrambleTextPlugin URL in src/loadSite.js:5 which documents the original's 404ing script. Neither is a fetched reference."
     },
     {
       "id": "NO_ADJACENT_SAME_SECTION",

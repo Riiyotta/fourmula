@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.1 — citation drift fix
+
+- Removed `cit-constraint-mailto-terms` / `cit-constraint-mailto-privacy` and every claim resting on them. The two
+  `mailto:` hrefs they cited (`TermsContent.jsx:168`, `PrivacyContent.jsx:273`) no longer exist in `src/`
+  (`grep -rn mailto src public` returns zero), so `verify_all.py` check [i] failed. Corrected in
+  `extraction/measured-values.json`, `compatibility/graph.json` (`NO_EXTERNAL_LINKS` rule prose; the rule itself and
+  the validator are unchanged and still reject every scheme), `registry.manifest.json`, `README.md`.
+  Item 10 below is the historical record of the original finding.
+
 ## 1.0.0 — initial build (from scratch; no design-repo existed before)
 
 Built bottom-up: tokens -> primitives -> components -> sections -> templates -> compatibility graph ->
