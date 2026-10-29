@@ -1,0 +1,201 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "Fourmula section contract",
+ "description": "CLOSED shape of every sections/*.json contract (R7/R8). additionalProperties is false: a contract key not listed here fails extraction/verify_all.py check [s]. source = traceable DOM provenance (written by extraction/build_provenance.py), semantic = the AI-facing taxonomy; semantic.id must equal id and source.id must not. retrievalEligible is a required closed boolean, and false requires a retrievalReason of 30+ characters.",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "id",
+  "kind",
+  "category",
+  "source",
+  "semantic",
+  "purpose",
+  "content",
+  "usedOn",
+  "retrievalEligible",
+  "generatedAssetRoles",
+  "motion",
+  "media",
+  "tokens",
+  "measuredFrom",
+  "constraints",
+  "variants",
+  "evidence"
+ ],
+ "properties": {
+  "bodyCopyFields": {},
+  "category": {
+   "type": "string",
+   "enum": [
+    "chrome",
+    "content",
+    "faq",
+    "hero",
+    "marquee",
+    "showcase",
+    "scroll-stage"
+   ]
+  },
+  "composes": {},
+  "constraints": {
+   "type": "object"
+  },
+  "content": {
+   "type": "object"
+  },
+  "contentMaxWordsTotal": {},
+  "contentMaxWordsTotalNote": {},
+  "evidence": {
+   "type": "object"
+  },
+  "generatedAssetRoles": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   },
+   "uniqueItems": true
+  },
+  "id": {
+   "type": "string",
+   "pattern": "^[a-z]+\\.[a-z0-9-]+$"
+  },
+  "kind": {
+   "const": "section"
+  },
+  "measuredFrom": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "source"
+    ]
+   }
+  },
+  "media": {
+   "type": "object"
+  },
+  "motion": {
+   "type": "object",
+   "required": [
+    "pattern",
+    "reducedMotionFallback"
+   ]
+  },
+  "notes": {},
+  "purpose": {
+   "type": "string",
+   "minLength": 10
+  },
+  "responsive": {},
+  "retrievalEligible": {
+   "type": "boolean"
+  },
+  "retrievalReason": {
+   "type": "string",
+   "minLength": 30
+  },
+  "semantic": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "id",
+    "category"
+   ],
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "category": {
+     "type": "string"
+    }
+   }
+  },
+  "shapeDecision": {},
+  "source": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "id",
+    "tag",
+    "file",
+    "lines"
+   ],
+   "properties": {
+    "id": {
+     "type": "string",
+     "pattern": "^dom:"
+    },
+    "tag": {
+     "type": "string",
+     "pattern": "^<"
+    },
+    "file": {
+     "type": "string",
+     "pattern": "^src/[A-Za-z0-9_./-]+\\.(jsx|js|html)$"
+    },
+    "lines": {
+     "type": "string",
+     "pattern": "^[0-9]+-[0-9]+$"
+    }
+   }
+  },
+  "tokens": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "unbudgetedFields": {},
+  "unbudgetedFieldsNote": {},
+  "usedOn": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   },
+   "minItems": 1
+  },
+  "variants": {
+   "type": "object"
+  }
+ },
+ "allOf": [
+  {
+   "if": {
+    "properties": {
+     "retrievalEligible": {
+      "const": false
+     }
+    },
+    "required": [
+     "retrievalEligible"
+    ]
+   },
+   "then": {
+    "required": [
+     "retrievalReason"
+    ]
+   }
+  },
+  {
+   "if": {
+    "properties": {
+     "retrievalEligible": {
+      "const": true
+     }
+    },
+    "required": [
+     "retrievalEligible"
+    ]
+   },
+   "then": {
+    "not": {
+     "required": [
+      "retrievalReason"
+     ]
+    }
+   }
+  }
+ ]
+}

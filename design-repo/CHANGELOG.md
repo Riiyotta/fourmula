@@ -1,5 +1,44 @@
 # Changelog
 
+## 1.1.0 — baseline revision (R1-R10) and approval requirements
+
+Situation B: the skill's baseline audit was run first (6 pass / 15 fail) and every FAIL was taken into scope.
+
+- **R1 mode**: PageSpec 2.0.0 requires a closed `mode` (`clone` | `generation`); the generator
+  (`extraction/build_pagespec_schema.py`) emits it, plus an optional `theme` and an optional closed `styleTokens`
+  node field. The existing example became `mode: clone`.
+- **R2 generation rules**: nine `GENERATION_MODE_*` graph rules, with patterns derived by the new
+  `extraction/build_leakage_patterns.py` from the real source (file:line evidence; copy as hashed 5-word shingles;
+  NFKC / zero-width / quote / dash normalisation). Seeds that are not found in the source abort the build.
+  String-based; can be evaded by paraphrase; no human review of the patterns.
+- **R3 availability**: closed `availability` on all 23 roles, `generationSafeSubstitutes`, `generatedModeGuidance`;
+  eight generation-safe roles added (placeholder brand mark, user/operator-supplied asset, generated illustration,
+  placeholder screenshot, fictional person/avatar, placeholder customer logo, placeholder URL, original copy) and wired
+  into every slot; `PINNED_AVAILABILITY` in both `verify_all.py` ([u]) and `semantic_validate.py`
+  (`ASSET_AVAILABILITY_PINNED`). New policy value `operator-supplied-only`.
+- **Real defect found while doing R3**: the fixed Awwwards badge was filed as `ui-icon-glyph` / may-generate-new,
+  i.e. a generator could have drawn a "new" award. New role `third-party-award-badge` (clone-only, pinned
+  must-not-fabricate).
+- **R4**: one generation example per template in `schema/examples/` (fictional brand Kestrelwave).
+- **R6**: measured heights exposed the legal body as a whole-document section (86% / 88% of the page). Decomposed into
+  `content.legal-header` + `content.legal-chapter` (repeatable 12-16); `classify_routes.py` derives the split from
+  the real h2 boundaries and `--check` verifies counts. `content.tech` keeps the two composed variants only.
+  `content.what-intro` gains the neutral anchor alias `intro` because the real id embeds the brand.
+- **R7**: closed `source` / `semantic` on every section contract (`extraction/build_provenance.py`), closed
+  `schema/section-contract.schema.json`, check [s].
+- **R8**: `retrievalEligible` on every contract (4 false with reasons), pinned in both validators and the allowlist,
+  check [t], node-level `RETRIEVAL_PIN`.
+- **R9**: `extraction/wrapper_gate.py` (thresholds pinned in code), `extraction/measure_sections.mjs`, measured
+  `sectionHeights` for all 6 routes at 1440px from the built clone, check [q]. Whitelist empty.
+- **R10**: token catalog / policy / motion patterns registered in the manifest (`tokenRegistration`, entryPoints);
+  check [w] verifies each catalog category against its real token file. Six TOKEN_* rules.
+- **Requirement 10**: `category: saas`, `designPolicy` bound to `n0-saas-design-constraints-common` 0.1.0 with a
+  computed `contentHash`; `policy/design-policy.json` records the evidence. Agent attestation, not a human sign-off.
+- **Verification**: `verify_all.py` 16 -> 23 checks; adversarial suite 70 -> 121 mutations plus generation, mode and
+  gate controls; `prove_drift.py` gains `--scratch DIR` and 32 -> 55 drift cases.
+- Not done / not claimed: no clone-vs-live visual parity was measured; no IR file was generated; typography,
+  responsive and motion values were not re-measured in this revision beyond section heights.
+
 ## 1.0.1 — citation drift fix
 
 - Removed `cit-constraint-mailto-terms` / `cit-constraint-mailto-privacy` and every claim resting on them. The two

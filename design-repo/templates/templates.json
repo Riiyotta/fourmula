@@ -1,5 +1,5 @@
 {
-  "$description": "One template per distinct PAGE SHAPE. 5 shapes cover the 6 real routes 1:1. `nodes` are STRUCTURED OBJECTS, never bare strings, so `required` and `repeatable` are machine-enforceable. No node in any template is repeatable: no section legitimately repeats on any real page.",
+  "$description": "One template per distinct PAGE SHAPE. 5 shapes cover the 6 real routes 1:1. `nodes` are STRUCTURED OBJECTS, never bare strings, so `required` and `repeatable` are machine-enforceable. Exactly one node is repeatable: content.legal-chapter on `legal` (count 12-16), one node per real h2 chapter. Nothing else repeats on any real page.",
   "derivation": {
     "method": "Derived by running a real first-party classifier, extraction/classify_routes.py, against the source project's own JSX - not by inspecting a grouping or trusting a prose description (MASTER-GUIDE 3.22). Run `python3 extraction/classify_routes.py` beside the source project to reproduce it, or `--check` to assert these node lists still match the real pages.",
     "nodeListOnly": "Grouping on the node list ALONE collapses 6 routes into 3 shapes, because /privacy-policy, /terms-of-service, /start and /auth all produce the identical list [chrome.cookie-consent, chrome.header, chrome.menu, content.tech, chrome.footer, chrome.awards-badge]. That grouping would be wrong.",
@@ -126,20 +126,21 @@
     {
       "id": "legal",
       "name": "Legal prose page",
-      "description": "An inner section.tech page carrying a long-form legal document: title, intro line, anchor index and 12-16 numbered sections.",
+      "description": "A legal document page: a legal header (title, intro line, anchor index) followed by 12-16 heading-bounded chapters.",
       "purpose": "The ONE genuinely shared shape: /privacy-policy and /terms-of-service produce the same node list AND the same structural slots {longFormProse, anchorIndex}. They differ only in tag counts (12 vs 16 h2; 2 vs 0 tables), which is instance content.",
       "routes": [
         "/privacy-policy",
         "/terms-of-service"
       ],
-      "nodeCount": 6,
+      "nodeCount": 7,
       "evidenceLevel": "measured-scaffolding-placeholder-prose",
       "evidence": "DOM scaffolding measured against the live original and independently re-counted from the real JSX (/privacy-policy h1:1 h2:12 h3:2 p:39 li:31 a:15 table:2 tr:25 td:105; /terms-of-service h1:1 h2:16 h3:1 p:63 li:30 a:21 - both match exactly). THE BODY PROSE IS DELIBERATE PLACEHOLDER FILLER, not the original's copy. Word budgets derived from these pages measure the filler, not real copy.",
       "derivedNodeList": [
         "chrome.cookie-consent",
         "chrome.header",
         "chrome.menu",
-        "content.tech",
+        "content.legal-header",
+        "content.legal-chapter",
         "chrome.footer",
         "chrome.awards-badge"
       ],
@@ -166,10 +167,19 @@
           "repeatable": false
         },
         {
-          "section": "content.tech",
+          "section": "content.legal-header",
           "required": true,
-          "repeatable": false,
-          "variant": "legal-prose"
+          "repeatable": false
+        },
+        {
+          "section": "content.legal-chapter",
+          "required": true,
+          "repeatable": true,
+          "count": {
+            "min": 12,
+            "max": 16
+          },
+          "countEvidence": "12 h2 chapters on /privacy-policy, 16 on /terms-of-service (src/pages/PrivacyContent.jsx, src/pages/TermsContent.jsx)."
         },
         {
           "section": "chrome.footer",
@@ -181,7 +191,8 @@
           "required": true,
           "repeatable": false
         }
-      ]
+      ],
+      "decomposition": "Revision 1.1: /privacy-policy and /terms-of-service still render through <section className=\"tech\">, but measured at 1440px that one node was 6011px of a 6956px page (86%) and 6660px of 7605px (88%) - a whole legal document in one section. R6 requires a legal document to be decomposed by its own heading boundaries, so the legal template now uses content.legal-header + content.legal-chapter x12-16 instead of content.tech. Same DOM, different purpose."
     },
     {
       "id": "app-onboarding",

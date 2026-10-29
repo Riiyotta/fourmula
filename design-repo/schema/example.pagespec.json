@@ -1,6 +1,7 @@
 {
  "$schema": "pagespec.schema.json",
- "pageSpecVersion": "1.0.0",
+ "pageSpecVersion": "2.0.0",
+ "mode": "clone",
  "template": "home",
  "route": "/",
  "nodes": [
@@ -767,7 +768,7 @@
    "content": {
     "href": "#",
     "artwork": {
-     "assetRole": "ui-icon-glyph"
+     "assetRole": "third-party-award-badge"
     }
    },
    "motion": {

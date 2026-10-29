@@ -2,6 +2,16 @@
   "id": "content.what-intro",
   "kind": "section",
   "category": "content",
+  "source": {
+    "id": "dom:What:what-is-fourmula",
+    "tag": "<section id=\"what-is-fourmula\" className=\"what\">",
+    "file": "src/components/What.jsx",
+    "lines": "4-11"
+  },
+  "semantic": {
+    "id": "content.what-intro",
+    "category": "content"
+  },
   "purpose": "A minimal two-column statement block: an eyebrow label opposite a two-line h2. The smallest real section on the site.",
   "content": {
     "type": "object",
@@ -25,9 +35,10 @@
       "anchorId": {
         "type": "string",
         "enum": [
-          "what-is-fourmula"
+          "what-is-fourmula",
+          "intro"
         ],
-        "note": "The section carries id=\"what-is-fourmula\", which is the target of the hero's scroll cue."
+        "note": "The section carries id=\"what-is-fourmula\" (src/components/What.jsx:4), the target of the hero's scroll cue. That id embeds the source brand, so generated pages use the neutral alias `intro` (with scrollCueHref /#intro); GENERATION_MODE_BRAND rejects the real id in mode=generation."
       }
     },
     "required": [
@@ -106,5 +117,7 @@
       "quote": "<What />"
     }
   ],
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 13, which was unreachable."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 13, which was unreachable.",
+  "generatedAssetRoles": [],
+  "retrievalEligible": true
 }

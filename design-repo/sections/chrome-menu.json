@@ -2,6 +2,16 @@
   "id": "chrome.menu",
   "kind": "section",
   "category": "chrome",
+  "source": {
+    "id": "dom:Menu:menu",
+    "tag": "<section className=\"menu\">",
+    "file": "src/components/Menu.jsx",
+    "lines": "6-45"
+  },
+  "semantic": {
+    "id": "chrome.menu",
+    "category": "chrome"
+  },
   "purpose": "The slide-out navigation panel. Present on 4 of the 6 routes; the 404 does not render it.",
   "content": {
     "type": "object",
@@ -149,7 +159,10 @@
       "assetRole": [
         "ui-icon-glyph"
       ],
-      "policy": "may-generate-new"
+      "policy": "may-generate-new",
+      "generatedAssetRoles": [
+        "ui-icon-glyph"
+      ]
     }
   },
   "motion": {
@@ -221,5 +234,10 @@
     }
   ],
   "notes": "The menu's Social media group lists Instagram / Linkedin / Youtube while chrome.footer's equivalent group lists Instagram / Facebook / Youtube. The two lists genuinely disagree in the source. Both second and third entries carry .is-hide in both places, so neither is visible; the discrepancy is recorded, not reconciled.",
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum)."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum).",
+  "generatedAssetRoles": [
+    "ui-icon-glyph"
+  ],
+  "retrievalEligible": false,
+  "retrievalReason": "Runtime drawer: the fixed burger-menu panel that expands over the page on demand. It is navigation chrome shown only on interaction, not a content section, so it is excluded from retrieval."
 }

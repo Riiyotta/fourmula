@@ -18,6 +18,16 @@ What validate() checks (schema errors and semantic errors are both returned in `
   SEM-WORDS    per-instance maxWords and contentMaxWordsTotal. A word count is ALWAYS len(text.split()).
   SEM-ASSET    assetRole is in the closed global enum AND in this slot's allowed subset; asset paths
                are local only; link fields are an inert hash, an in-page anchor or a real route.
+  MODE (1.1)   `mode` is required (clone | generation). In mode=generation the GENERATION_MODE_BRAND / _ASSET /
+               _PERSON / _CUSTOMER / _SCREENSHOT / _COPY / _CLAIM / _URL / _EMBED graph rules reject source
+               identity and content, reading schema/generation-leakage.json (derived from the real source by
+               extraction/build_leakage_patterns.py). Text is normalised by normalise() (NFKC, zero-width
+               removal, quote/dash folding) before matching; copy is compared as hashed 5-word shingles.
+               Detection is string-based and can be evaded by paraphrase; no human reviewed the patterns.
+  PINS (1.1)   PINNED_AVAILABILITY (ASSET_AVAILABILITY_PINNED) and RETRIEVAL_INELIGIBLE (RETRIEVAL_PIN) are
+               held here in code, independently of the registries; verify_all.py holds its own copies.
+  TOKENS (1.1) the optional closed node.styleTokens is checked by TOKEN_UNKNOWN / _RAW_COLOR /
+               _ARBITRARY_SPACING / _UNSUPPORTED_FONT / _THEME_MISMATCH / _CATEGORY_MISMATCH.
 
 The declared `template` is ALWAYS cross-referenced against that template's real node list in
 templates/templates.json. nodes[] is never validated in isolation - a PageSpec that contradicts its
@@ -28,10 +38,12 @@ positions. On any other section, mustBeFirstInBody / mustBeLastInBody are relati
 i.e. the nodes after the last leading chrome.* node and before the first trailing chrome.* node.
 """
 import glob
+import hashlib
 import json
 import os
 import re
 import sys
+import unicodedata
 
 SCHEMA_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_REPO = os.path.dirname(SCHEMA_DIR)
@@ -57,7 +69,52 @@ STRUCTURAL_KEYS = ("type", "variant", "id", "pattern", "reducedMotionFallbackKin
                    "arrangement", "inputType", "dataThemeState", "stepNumber", "icon",
                    "anchorPattern")
 MAX_FALLBACK_WORDS = 60
-INERT_HREFS = {"#", "/#", "/#what-is-fourmula", "/#pdp", "/#products", "/#video", "/#list"}
+INERT_HREFS = {"#", "/#", "/#what-is-fourmula", "/#intro", "/#pdp", "/#products", "/#video", "/#list"}
+
+# ---------------------------------------------------------------- pins (independent of the registries)
+# Asset availability PINNED IN CODE. It must equal assets/asset-roles.json role by role (rule
+# ASSET_AVAILABILITY_PINNED here, check [u] in extraction/verify_all.py, which holds its own copy), so
+# editing the registry alone can never loosen a role. Generation mode admits only generation-safe roles.
+PINNED_AVAILABILITY = {
+    "hero-carousel-photo": "clone-only", "preloader-photo": "clone-only", "product-shot-photo": "clone-only",
+    "step-artwork": "clone-only", "showcase-video": "clone-only", "not-found-artwork": "clone-only",
+    "brand-wordmark": "clone-only", "favicon": "clone-only", "third-party-award-badge": "clone-only",
+    "trusted-partner-logo": "blocked-for-generation", "brand-typeface-file": "blocked-for-generation",
+    "og-banner": "blocked-for-generation",
+    "ui-icon-glyph": "generation-safe", "form-control-checkmark": "generation-safe",
+    "auth-inert-form": "generation-safe", "placeholder-brand-mark": "generation-safe",
+    "user-supplied-asset": "generation-safe", "generated-illustration": "generation-safe",
+    "placeholder-screenshot": "generation-safe", "fictional-person-avatar": "generation-safe",
+    "placeholder-customer-logo": "generation-safe", "placeholder-url": "generation-safe",
+    "original-copy": "generation-safe",
+}
+# Runtime / utility UI that is NEVER retrieved as a section example (R8). Must equal the contracts'
+# retrievalEligible:false set and component-allowlist.json's retrievalIneligible list (verify_all [t]).
+RETRIEVAL_INELIGIBLE = {"chrome.cookie-consent", "chrome.preloader", "chrome.menu", "chrome.awards-badge"}
+MODES = ("clone", "generation")
+PAGESPEC_VERSION = "2.0.0"
+SHINGLE_N = 5
+_ZW = re.compile("[\u00ad\u180e\u200b-\u200f\u202a-\u202e\u2060-\u2064\ufeff]")
+_FOLD = str.maketrans({"\u2018": "'", "\u2019": "'", "\u201a": "'", "\u201b": "'", "\u2032": "'",
+                       "\u201c": '"', "\u201d": '"', "\u201e": '"', "\u201f": '"', "\u2033": '"',
+                       "\u00ab": '"', "\u00bb": '"', "\u2010": "-", "\u2011": "-", "\u2012": "-",
+                       "\u2013": "-", "\u2014": "-", "\u2015": "-", "\u2212": "-", "\ufe58": "-",
+                       "\ufe63": "-", "\uff0d": "-"})
+
+
+def normalise(text):
+    """The ONE normaliser shared with extraction/build_leakage_patterns.py: NFKC, zero-width removal,
+    curly quotes and dashes folded, lower-case, whitespace collapsed."""
+    t = _ZW.sub("", unicodedata.normalize("NFKC", str(text))).translate(_FOLD).lower()
+    return " ".join(t.split())
+
+
+def words(text):
+    return re.findall(r"[a-z0-9]+(?:['.-][a-z0-9]+)*", normalise(text))
+
+
+def shingle_hash(ws):
+    return hashlib.sha256(" ".join(ws).encode("utf-8")).hexdigest()[:16]
 
 
 def wc(text):
@@ -88,6 +145,14 @@ def load_repo(repo_root=None):
             "graph": j("compatibility", "graph.json"), "roles": j("assets", "asset-roles.json"),
             "schema": j("schema", "pagespec.schema.json")}
     repo["role_set"] = set(repo["roles"]["assetRoleEnum"])
+    repo["leakage"] = j("schema", "generation-leakage.json")
+    repo["manifest"] = j("registry.manifest.json")
+    cat = j("tokens", "llm", "token-catalog.json")["categories"]
+    repo["catalog"] = {t["id"]: name for name, c in cat.items() for t in c["tokens"]}
+    th = {}
+    for name in repo["manifest"].get("schemaValidatedThemes", []):
+        th[name] = {r["resolvesTo"] for r in j("tokens", "themes", name + ".json")["resolutions"].values()}
+    repo["theme_refs"] = th
     repo["routes"] = sorted({r for t in tpls.values() for r in t["routes"]})
     repo["hero_sections"] = {i for i, d in contracts.items() if d.get("category") == "hero"}
     _CACHE[root] = repo
@@ -430,6 +495,308 @@ def COMPOSED_EVIDENCE_DISCLOSED(c, r):
     return []
 
 
+# ------------------------------------------------------------------------------- R8 retrieval pin
+@rule
+def RETRIEVAL_PIN(c, r):
+    m = []
+    for i, n in enumerate(c.nodes):
+        v, t = n.get("retrievalEligible"), n.get("type")
+        if v is True and t in RETRIEVAL_INELIGIBLE:
+            m.append("nodes[%d] %s: runtime/utility UI is pinned retrievalEligible:false and may not be flipped "
+                     "to eligible on a node" % (i, t))
+        if v is False and t not in RETRIEVAL_INELIGIBLE:
+            m.append("nodes[%d] %s: a content section cannot be marked retrievalEligible:false - only the pinned "
+                     "runtime UI %s is ineligible" % (i, t, sorted(RETRIEVAL_INELIGIBLE)))
+    ct = c.repo["contracts"]
+    for sid, d in ct.items():
+        if (d.get("retrievalEligible") is False) != (sid in RETRIEVAL_INELIGIBLE) and sid in c.types:
+            m.append("contract %s retrievalEligible=%r disagrees with the pinned RETRIEVAL_INELIGIBLE set"
+                     % (sid, d.get("retrievalEligible")))
+    return m
+
+
+# ------------------------------------------------------------------------------- R3 availability pin
+def _roles_in(spec):
+    out = []
+
+    def walk(o, path):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                if k == "assetRole" and isinstance(v, str):
+                    out.append((path + ".assetRole", v))
+                else:
+                    walk(v, path + "." + str(k))
+        elif isinstance(o, list):
+            for i, v in enumerate(o):
+                walk(v, "%s[%d]" % (path, i))
+    walk(spec.get("nodes", []), "nodes")
+    return out
+
+
+@rule
+def ASSET_AVAILABILITY_PINNED(c, r):
+    reg = {x["id"]: x.get("availability") for x in c.repo["roles"]["roles"]}
+    m = []
+    for rid in sorted(set(reg) | set(PINNED_AVAILABILITY)):
+        if reg.get(rid) != PINNED_AVAILABILITY.get(rid):
+            m.append("assets/asset-roles.json role %r availability %r != the pinned %r - the registry was edited "
+                     "without the code pin" % (rid, reg.get(rid), PINNED_AVAILABILITY.get(rid)))
+    return m
+
+
+# ------------------------------------------------------------------------------- generation mode (R2)
+_SKIP_KEYS = {"type", "variant", "pattern", "reducedMotionFallbackKind", "assetRole", "fsCc", "fsCcCheckbox",
+              "style", "layout", "emphasis", "arrangement", "inputType", "dataThemeState", "icon", "anchorPattern",
+              "styleTokens"}
+_REF_KEYS = {"href", "assetRef", "themePairRef", "crossFadeTwinRef", "slug", "anchorId", "id", "scrollCueHref",
+             "pillHref"}
+_HOST_RE = re.compile(r"(?<![\w@/-])((?:[a-z0-9-]+\.)+[a-z]{2,})(?![\w-])")
+_EMBED_RE = re.compile(r"<\s*/?\s*(iframe|script|embed|object|svg|video|style|form|link|img)\b", re.I)
+
+
+def _strings(spec):
+    """[(path, key, text)] for every author-supplied string in the nodes, plus each array of strings
+    joined with spaces (so copy split across headingLines is still seen whole)."""
+    out = []
+
+    def walk(o, path, key):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                if k not in _SKIP_KEYS:
+                    walk(v, path + "." + str(k), k)
+        elif isinstance(o, list):
+            strs = [v for v in o if isinstance(v, str)]
+            if len(strs) > 1:
+                out.append((path + "[*]", key, " ".join(strs)))
+            for i, v in enumerate(o):
+                walk(v, "%s[%d]" % (path, i), key)
+        elif isinstance(o, str):
+            out.append((path, key, o))
+    walk(spec.get("nodes", []), "nodes", "")
+    return out
+
+
+def _gen(c):
+    return c.spec.get("mode") == "generation"
+
+
+def _term_hits(cat, text):
+    n = normalise(text)
+    compact, joined = re.sub(r"[^a-z0-9]", "", n), " ".join(words(n))
+    hits = []
+    for t in cat.get("terms", []):
+        if t["match"] == "compact":
+            if t["term"] in compact:
+                hits.append(t["term"])
+        elif re.search(r"(?<![a-z0-9])" + re.escape(t["term"]) + r"(?![a-z0-9])", joined):
+            hits.append(t["term"])
+    return hits
+
+
+def _role_hits(c, cat_id):
+    roles = set(c.repo["leakage"]["categories"][cat_id].get("roles", []))
+    return ["%s: role %r is a real source asset class (%s) and is not admitted in mode=generation"
+            % (p, v, cat_id) for p, v in _roles_in(c.spec) if v in roles]
+
+
+def _shingle_hits(c, cat_id, exact=False):
+    cat = c.repo["leakage"]["categories"][cat_id]
+    hs, ex, m = set(cat.get("shingles", [])), set(cat.get("exactPhrases", [])), []
+    for path, key, text in _strings(c.spec):
+        if key in _REF_KEYS:
+            continue
+        w = words(text)
+        hit = next((" ".join(w[i:i + SHINGLE_N]) for i in range(0, max(0, len(w) - SHINGLE_N + 1))
+                    if shingle_hash(w[i:i + SHINGLE_N]) in hs), None)
+        if hit is None and exact and 3 <= len(w) <= 4 and shingle_hash(w) in ex:
+            hit = " ".join(w)
+        if hit:
+            m.append("%s: reuses source text (%r) - mode=generation requires original copy" % (path, hit))
+    return m
+
+
+@rule
+def GENERATION_MODE_BRAND(c, r):
+    if not _gen(c):
+        return []
+    cat = c.repo["leakage"]["categories"]["GENERATION_MODE_BRAND"]
+    return ["%s: %r contains the source brand / product name %s" % (p, t[:70], h)
+            for p, k, t in _strings(c.spec) for h in [_term_hits(cat, t)] if h]
+
+
+@rule
+def GENERATION_MODE_CUSTOMER(c, r):
+    if not _gen(c):
+        return []
+    cat = c.repo["leakage"]["categories"]["GENERATION_MODE_CUSTOMER"]
+    return _role_hits(c, "GENERATION_MODE_CUSTOMER") + [
+        "%s: %r names a real third-party customer/partner brand %s" % (p, t[:70], h)
+        for p, k, t in _strings(c.spec) for h in [_term_hits(cat, t)] if h]
+
+
+@rule
+def GENERATION_MODE_CLAIM(c, r):
+    if not _gen(c):
+        return []
+    cat = c.repo["leakage"]["categories"]["GENERATION_MODE_CLAIM"]
+    return _role_hits(c, "GENERATION_MODE_CLAIM") + [
+        "%s: %r repeats a real source claim %s" % (p, t[:70], h)
+        for p, k, t in _strings(c.spec) for h in [_term_hits(cat, t)] if h]
+
+
+@rule
+def GENERATION_MODE_PERSON(c, r):
+    if not _gen(c):
+        return []
+    return _role_hits(c, "GENERATION_MODE_PERSON") + _shingle_hits(c, "GENERATION_MODE_PERSON")
+
+
+@rule
+def GENERATION_MODE_SCREENSHOT(c, r):
+    if not _gen(c):
+        return []
+    return _role_hits(c, "GENERATION_MODE_SCREENSHOT") + _shingle_hits(c, "GENERATION_MODE_SCREENSHOT")
+
+
+@rule
+def GENERATION_MODE_COPY(c, r):
+    if not _gen(c):
+        return []
+    return _shingle_hits(c, "GENERATION_MODE_COPY", exact=True)
+
+
+@rule
+def GENERATION_MODE_ASSET(c, r):
+    if not _gen(c):
+        return []
+    m = []
+    for p, v in _roles_in(c.spec):
+        av = PINNED_AVAILABILITY.get(v)
+        if av != "generation-safe":
+            subs = next((x.get("generationSafeSubstitutes") for x in c.repo["roles"]["roles"] if x["id"] == v), [])
+            m.append("%s: role %r is %s - mode=generation admits only generation-safe roles (use one of %s)"
+                     % (p, v, av, subs))
+    files = set(c.repo["leakage"]["categories"]["GENERATION_MODE_ASSET"]["assetFiles"])
+    for p, k, t in _strings(c.spec):
+        base = t.rsplit("/", 1)[-1]
+        if base in files or any(f in t for f in files if len(f) > 12):
+            m.append("%s: %r reuses a real source asset file name from public/assets" % (p, t[:80]))
+    return m
+
+
+@rule
+def GENERATION_MODE_URL(c, r):
+    if not _gen(c):
+        return []
+    cat = c.repo["leakage"]["categories"]["GENERATION_MODE_URL"]
+    src = {h["host"] for h in cat["hosts"]}
+    ok = tuple(cat["placeholderSuffixes"])
+    m = []
+    for p, k, t in _strings(c.spec):
+        if k in ("assetRef", "themePairRef", "crossFadeTwinRef"):
+            continue
+        for h in _HOST_RE.findall(normalise(t)):
+            if h in src or any(h.endswith("." + x) or h == x for x in src):
+                m.append("%s: %r names the source host %r" % (p, t[:70], h))
+            elif not h.endswith(ok):
+                m.append("%s: host %r is not a reserved placeholder domain (%s)" % (p, h, " / ".join(ok)))
+    return m
+
+
+@rule
+def GENERATION_MODE_EMBED(c, r):
+    if not _gen(c):
+        return []
+    return _role_hits(c, "GENERATION_MODE_EMBED") + [
+        "%s: raw markup / embed %r is not admitted in mode=generation" % (p, mm.group(0))
+        for p, k, t in _strings(c.spec) for mm in [_EMBED_RE.search(t)] if mm]
+
+
+# ------------------------------------------------------------------------------- R10 token policy
+STYLE_SLOTS = {"surface": ("semanticColor", "surface."), "text": ("semanticColor", "text."),
+               "accent": ("semanticColor", "accent."), "border": ("semanticColor", "border."),
+               "typography": ("semanticTypography", ""), "fontFamily": ("semanticTypography", "font."),
+               "spacing": ("semanticShapeSpace", "space."), "radius": ("semanticShapeSpace", "radius.")}
+_RAW_COLOR = re.compile(r"(?i)^\s*(#[0-9a-f]{3,8}|(rgb|rgba|hsl|hsla|hwb|lab|lch|oklch|color)\s*\(.*\)|"
+                        r"transparent|currentcolor|white|black|red|green|blue)\s*$")
+_RAW_LEN = re.compile(r"(?i)^\s*-?\d*\.?\d+\s*(px|rem|em|%|vw|vh|vmin|vmax|pt|ch)?\s*$|^\s*calc\(")
+_TOKEN_ID = re.compile(r"^[a-z0-9-]+(\.[a-z0-9-]+)+$")
+
+
+def _styles(c):
+    for i, n in enumerate(c.nodes):
+        st = n.get("styleTokens")
+        if isinstance(st, dict):
+            for k, v in st.items():
+                if isinstance(v, str):
+                    yield i, n.get("type"), k, v
+
+
+@rule
+def TOKEN_RAW_COLOR(c, r):
+    return ["nodes[%d].styleTokens.%s: raw colour %r - reference a semantic colour role" % (i, k, v)
+            for i, t, k, v in _styles(c) if _RAW_COLOR.match(v)]
+
+
+@rule
+def TOKEN_ARBITRARY_SPACING(c, r):
+    return ["nodes[%d].styleTokens.%s: arbitrary length %r - only the measured space.* / radius.* roles are "
+            "allowed (every length is a rem on a FLUID root)" % (i, k, v)
+            for i, t, k, v in _styles(c) if _RAW_LEN.match(v)]
+
+
+@rule
+def TOKEN_UNSUPPORTED_FONT(c, r):
+    m = []
+    for i, t, k, v in _styles(c):
+        if k == "fontFamily" and v != "font.body":
+            m.append("nodes[%d].styleTokens.fontFamily: %r is not supported - the only family is font.body "
+                     "(SF Pro Display with its Arial / sans-serif fallback)" % (i, v))
+        elif k == "typography" and not _TOKEN_ID.match(v) and not _RAW_LEN.match(v) and not _RAW_COLOR.match(v):
+            m.append("nodes[%d].styleTokens.typography: %r looks like a raw font, not a type role" % (i, v))
+    return m
+
+
+@rule
+def TOKEN_UNKNOWN(c, r):
+    return ["nodes[%d].styleTokens.%s: %r is not in tokens/llm/token-catalog.json" % (i, k, v)
+            for i, t, k, v in _styles(c)
+            if _TOKEN_ID.match(v) and v not in c.repo["catalog"] and not (k == "fontFamily")]
+
+
+@rule
+def TOKEN_THEME_MISMATCH(c, r):
+    theme = c.spec.get("theme") or c.repo["manifest"].get("defaultTheme")
+    refs = c.repo["theme_refs"]
+    m = []
+    if theme not in refs:
+        return ["theme %r is not one of the schema-validated themes %s" % (theme, sorted(refs))]
+    others = set().union(*[v for k, v in refs.items() if k != theme]) - refs[theme]
+    for i, t, k, v in _styles(c):
+        if v in others:
+            m.append("nodes[%d].styleTokens.%s: %r belongs to the other palette - it is not valid with theme %r "
+                     "(remember .body.dark is the LIGHT palette)" % (i, k, v, theme))
+    return m
+
+
+@rule
+def TOKEN_CATEGORY_MISMATCH(c, r):
+    m = []
+    for i, t, k, v in _styles(c):
+        cat = c.repo["catalog"].get(v)
+        if cat is None:
+            continue
+        want, prefix = STYLE_SLOTS.get(k, (None, None))
+        if v.startswith("vendor.cookie-") and t != "chrome.cookie-consent":
+            m.append("nodes[%d].styleTokens.%s: vendor.cookie-* colours belong to the consent UI only" % (i, k))
+        elif cat != want or not v.startswith(prefix):
+            m.append("nodes[%d].styleTokens.%s: %r is a %s token; this slot takes a %s role%s" % (
+                i, k, v, cat, want, " starting %r" % prefix if prefix else "")
+                + (" (foundation and component tokens are never set by a PageSpec)" if cat in (
+                    "color", "typography", "spacing", "radius", "component", "layout") else ""))
+    return m
+
+
 def graph_parity(repo_root=None):
     """(graph rule ids with no implementation, implemented ids missing from the graph)."""
     ids = [x["id"] for x in load_repo(repo_root)["graph"]["rules"]]
@@ -604,7 +971,7 @@ def _sample_obj(sch, repo):
     return o
 
 
-def synthesize_control(template_id, repo_root=None, branch=None):
+def synthesize_control(template_id, repo_root=None, branch=None, mode="clone"):
     """A minimal VALID PageSpec for a template, built from its own node list plus each section
     contract's required fields. Generic: a template added to templates.json is covered with no
     new code (MASTER-GUIDE 3.22)."""
@@ -636,8 +1003,11 @@ def synthesize_control(template_id, repo_root=None, branch=None):
         n["content"] = _sample_obj(content_sch, repo)
         n["motion"] = {"pattern": ct["motion"]["pattern"],
                        "reducedMotionFallback": "Render the final state with no animation."}
-        nodes.append(n)
-    return {"pageSpecVersion": "1.0.0", "template": template_id, "route": route, "nodes": nodes}
+        reps = (tn.get("count") or {}).get("min", 1) if tn.get("repeatable") else 1
+        for _ in range(reps):
+            nodes.append(json.loads(json.dumps(n)))
+    return {"pageSpecVersion": PAGESPEC_VERSION, "mode": mode, "template": template_id, "route": route,
+            "nodes": nodes}
 
 
 def main(argv):

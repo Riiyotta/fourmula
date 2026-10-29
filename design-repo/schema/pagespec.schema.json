@@ -1,11 +1,12 @@
 {
  "$schema": "http://json-schema.org/draft-07/schema#",
  "title": "Fourmula PageSpec",
- "description": "A generated page: one of the 5 closed templates, one of the 6 closed routes, and an ordered list of section instances. There is deliberately NO per-instance token or style override field - styling is owned entirely by the section and component contracts. The non-standard keywords maxWords and maxWordsTotal are annotations enforced by schema/semantic_validate.py, where a word count is always len(text.split()). Media use only local absolute paths and the closed assetRole enum from assets/asset-roles.json; remote, protocol-relative and '..' paths are rejected by pattern. EVERY length in the underlying token system is a rem on a FLUID root font-size - see tokens/00-foundation/typography.json before converting anything to px. Generated from the section contracts by extraction/build_pagespec_schema.py.",
+ "description": "A generated page: one of the 5 closed templates, one of the 6 closed routes, and an ordered list of section instances, with a REQUIRED closed mode (clone | generation). There is no free-form token or style override: the only styling field is the optional, closed node-level styleTokens, which takes semantic token REFERENCES only (TOKEN_* rules); styling is otherwise owned by the section and component contracts. The non-standard keywords maxWords and maxWordsTotal are annotations enforced by schema/semantic_validate.py, where a word count is always len(text.split()). Media use only local absolute paths and the closed assetRole enum from assets/asset-roles.json; remote, protocol-relative and '..' paths are rejected by pattern. EVERY length in the underlying token system is a rem on a FLUID root font-size - see tokens/00-foundation/typography.json before converting anything to px. Generated from the section contracts by extraction/build_pagespec_schema.py.",
  "type": "object",
  "additionalProperties": false,
  "required": [
   "pageSpecVersion",
+  "mode",
   "template",
   "route",
   "nodes"
@@ -15,7 +16,23 @@
    "type": "string"
   },
   "pageSpecVersion": {
-   "const": "1.0.0"
+   "const": "2.0.0"
+  },
+  "mode": {
+   "type": "string",
+   "enum": [
+    "clone",
+    "generation"
+   ],
+   "description": "REQUIRED and closed. clone = a faithful reconstruction of the source; real source copy and clone-only assets may be reused for fidelity. generation = a NEW page for someone else: schema/semantic_validate.py's GENERATION_MODE_* rules reject the source brand, assets, people, customers, product imagery, copy, claims, hosts and embeds, and only generation-safe asset roles are admitted."
+  },
+  "theme": {
+   "type": "string",
+   "enum": [
+    "light",
+    "dark"
+   ],
+   "description": "Optional; defaults to registry.manifest.json defaultTheme. Validated against styleTokens by TOKEN_THEME_MISMATCH. NOTE the source's inverted class names: the light palette is selected by .body.dark."
   },
   "template": {
    "type": "string",
@@ -41,11 +58,11 @@
   "nodes": {
    "type": "array",
    "minItems": 5,
-   "maxItems": 12,
+   "maxItems": 22,
    "items": {
     "$ref": "#/definitions/node"
    },
-   "description": "The real templates range from 5 nodes (not-found) to 12 (home)."
+   "description": "Computed from templates/templates.json: the smallest real template needs 5 nodes, the largest (legal, with 16 chapters) 22."
   }
  },
  "allOf": [
@@ -173,7 +190,16 @@
     "favicon",
     "brand-typeface-file",
     "og-banner",
-    "auth-inert-form"
+    "auth-inert-form",
+    "third-party-award-badge",
+    "placeholder-brand-mark",
+    "user-supplied-asset",
+    "generated-illustration",
+    "placeholder-screenshot",
+    "fictional-person-avatar",
+    "placeholder-customer-logo",
+    "placeholder-url",
+    "original-copy"
    ],
    "description": "Closed enum from assets/asset-roles.json. One member (auth-inert-form) describes a behaviour slot, not a file."
   },
@@ -240,6 +266,8 @@
       "chrome.header",
       "chrome.menu",
       "chrome.preloader",
+      "content.legal-chapter",
+      "content.legal-header",
       "content.tech",
       "content.what-intro",
       "faq.accordion",
@@ -258,6 +286,49 @@
     },
     "motion": {
      "$ref": "#/definitions/motion"
+    },
+    "retrievalEligible": {
+     "type": "boolean",
+     "description": "Optional echo of the section contract's retrievalEligible. RETRIEVAL_PIN rejects true on pinned runtime UI and false on a content section."
+    },
+    "styleTokens": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "surface": {
+       "type": "string",
+       "minLength": 1
+      },
+      "text": {
+       "type": "string",
+       "minLength": 1
+      },
+      "accent": {
+       "type": "string",
+       "minLength": 1
+      },
+      "border": {
+       "type": "string",
+       "minLength": 1
+      },
+      "typography": {
+       "type": "string",
+       "minLength": 1
+      },
+      "fontFamily": {
+       "type": "string",
+       "minLength": 1
+      },
+      "spacing": {
+       "type": "string",
+       "minLength": 1
+      },
+      "radius": {
+       "type": "string",
+       "minLength": 1
+      }
+     },
+     "description": "Optional, closed set of token REFERENCES (never values). Each value must be a semantic role id from tokens/llm/token-catalog.json for that slot; raw colours, raw lengths, unknown ids, unsupported fonts and other-palette ids are rejected by the TOKEN_* rules in schema/semantic_validate.py."
     }
    },
    "allOf": [
@@ -284,6 +355,7 @@
            "#",
            "/#",
            "/#what-is-fourmula",
+           "/#intro",
            "/#pdp",
            "/#products",
            "/#video",
@@ -308,7 +380,9 @@
              },
              {
               "enum": [
-               "ui-icon-glyph"
+               "third-party-award-badge",
+               "user-supplied-asset",
+               "placeholder-brand-mark"
               ]
              }
             ]
@@ -406,6 +480,7 @@
               "#",
               "/#",
               "/#what-is-fourmula",
+              "/#intro",
               "/#pdp",
               "/#products",
               "/#video",
@@ -462,6 +537,7 @@
               "#",
               "/#",
               "/#what-is-fourmula",
+              "/#intro",
               "/#pdp",
               "/#products",
               "/#video",
@@ -593,7 +669,9 @@
              },
              {
               "enum": [
-               "brand-wordmark"
+               "brand-wordmark",
+               "placeholder-brand-mark",
+               "user-supplied-asset"
               ]
              }
             ]
@@ -609,6 +687,7 @@
              "#",
              "/#",
              "/#what-is-fourmula",
+             "/#intro",
              "/#pdp",
              "/#products",
              "/#video",
@@ -668,6 +747,7 @@
                  "#",
                  "/#",
                  "/#what-is-fourmula",
+                 "/#intro",
                  "/#pdp",
                  "/#products",
                  "/#video",
@@ -783,7 +863,9 @@
              },
              {
               "enum": [
-               "brand-wordmark"
+               "brand-wordmark",
+               "placeholder-brand-mark",
+               "user-supplied-asset"
               ]
              }
             ]
@@ -799,6 +881,7 @@
              "#",
              "/#",
              "/#what-is-fourmula",
+             "/#intro",
              "/#pdp",
              "/#products",
              "/#video",
@@ -875,6 +958,7 @@
              "#",
              "/#",
              "/#what-is-fourmula",
+             "/#intro",
              "/#pdp",
              "/#products",
              "/#video",
@@ -908,6 +992,7 @@
              "#",
              "/#",
              "/#what-is-fourmula",
+             "/#intro",
              "/#pdp",
              "/#products",
              "/#video",
@@ -1017,6 +1102,7 @@
                  "#",
                  "/#",
                  "/#what-is-fourmula",
+                 "/#intro",
                  "/#pdp",
                  "/#products",
                  "/#video",
@@ -1063,6 +1149,7 @@
              "#",
              "/#",
              "/#what-is-fourmula",
+             "/#intro",
              "/#pdp",
              "/#products",
              "/#video",
@@ -1112,6 +1199,7 @@
              "#",
              "/#",
              "/#what-is-fourmula",
+             "/#intro",
              "/#pdp",
              "/#products",
              "/#video",
@@ -1186,7 +1274,9 @@
              },
              {
               "enum": [
-               "brand-wordmark"
+               "brand-wordmark",
+               "placeholder-brand-mark",
+               "user-supplied-asset"
               ]
              }
             ]
@@ -1234,7 +1324,10 @@
               },
               {
                "enum": [
-                "preloader-photo"
+                "preloader-photo",
+                "fictional-person-avatar",
+                "generated-illustration",
+                "user-supplied-asset"
                ]
               }
              ]
@@ -1280,6 +1373,215 @@
      "if": {
       "properties": {
        "type": {
+        "const": "content.legal-chapter"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "heading": {
+          "type": "string",
+          "maxWords": 10,
+          "minLength": 1
+         },
+         "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+         },
+         "anchorPattern": {
+          "type": "string",
+          "enum": [
+           "div-embed-only",
+           "div-embed-and-h2-id"
+          ]
+         },
+         "paragraphs": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 12,
+          "items": {
+           "type": "string"
+          }
+         },
+         "lists": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 6,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "ordered": {
+             "type": "boolean"
+            },
+            "items": {
+             "type": "array",
+             "minItems": 1,
+             "maxItems": 20,
+             "items": {
+              "type": "string"
+             }
+            }
+           },
+           "required": [
+            "ordered",
+            "items"
+           ]
+          }
+         },
+         "tables": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 2,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "headerCells": {
+             "type": "array",
+             "minItems": 1,
+             "maxItems": 6,
+             "items": {
+              "type": "string",
+              "maxWords": 6,
+              "minLength": 1
+             }
+            },
+            "rowCount": {
+             "type": "integer",
+             "minimum": 1,
+             "maximum": 30
+            }
+           },
+           "required": [
+            "headerCells",
+            "rowCount"
+           ]
+          }
+         },
+         "subHeadings": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 4,
+          "items": {
+           "type": "string",
+           "maxWords": 10,
+           "minLength": 1
+          }
+         }
+        },
+        "required": [
+         "heading",
+         "slug",
+         "anchorPattern"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "static"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
+        "const": "content.legal-header"
+       }
+      },
+      "required": [
+       "type"
+      ]
+     },
+     "then": {
+      "properties": {
+       "content": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+         "titleLines": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+           "type": "string",
+           "maxWords": 4,
+           "minLength": 1
+          }
+         },
+         "introParagraph": {
+          "type": "string"
+         },
+         "anchorIndexHeading": {
+          "type": "string",
+          "maxWords": 4,
+          "minLength": 1
+         },
+         "anchorIndex": {
+          "type": "array",
+          "minItems": 12,
+          "maxItems": 16,
+          "items": {
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+            "label": {
+             "type": "string",
+             "maxWords": 10,
+             "minLength": 1
+            },
+            "slug": {
+             "type": "string",
+             "pattern": "^[a-z0-9][a-z0-9-]*$"
+            }
+           },
+           "required": [
+            "label",
+            "slug"
+           ]
+          }
+         }
+        },
+        "required": [
+         "titleLines",
+         "anchorIndex"
+        ]
+       },
+       "motion": {
+        "properties": {
+         "pattern": {
+          "const": "static"
+         }
+        }
+       }
+      },
+      "not": {
+       "required": [
+        "variant"
+       ]
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "type": {
         "const": "content.tech"
        }
       },
@@ -1291,167 +1593,6 @@
       "properties": {
        "content": {
         "oneOf": [
-         {
-          "type": "object",
-          "additionalProperties": false,
-          "title": "legal-prose",
-          "description": "The long-form legal page body. DOM scaffolding measured against the live original; the PROSE ITSELF IS DELIBERATE PLACEHOLDER FILLER. Paragraph slots therefore carry NO maxWords: a budget derived from filler would be a fabricated measurement dressed up as a measured one.",
-          "properties": {
-           "titleLines": {
-            "type": "array",
-            "minItems": 1,
-            "maxItems": 2,
-            "items": {
-             "type": "string",
-             "maxWords": 4,
-             "minLength": 1
-            }
-           },
-           "introParagraph": {
-            "type": "string"
-           },
-           "anchorIndexHeading": {
-            "type": "string",
-            "maxWords": 4,
-            "minLength": 1
-           },
-           "anchorIndex": {
-            "type": "array",
-            "minItems": 12,
-            "maxItems": 16,
-            "items": {
-             "type": "object",
-             "additionalProperties": false,
-             "properties": {
-              "label": {
-               "type": "string",
-               "maxWords": 10,
-               "minLength": 1
-              },
-              "slug": {
-               "type": "string",
-               "pattern": "^[a-z0-9][a-z0-9-]*$"
-              }
-             },
-             "required": [
-              "label",
-              "slug"
-             ]
-            }
-           },
-           "sections": {
-            "type": "array",
-            "minItems": 12,
-            "maxItems": 16,
-            "items": {
-             "type": "object",
-             "additionalProperties": false,
-             "properties": {
-              "heading": {
-               "type": "string",
-               "maxWords": 10,
-               "minLength": 1
-              },
-              "slug": {
-               "type": "string",
-               "pattern": "^[a-z0-9][a-z0-9-]*$"
-              },
-              "anchorPattern": {
-               "type": "string",
-               "enum": [
-                "div-embed-only",
-                "div-embed-and-h2-id"
-               ]
-              },
-              "paragraphs": {
-               "type": "array",
-               "minItems": 0,
-               "maxItems": 12,
-               "items": {
-                "type": "string"
-               }
-              },
-              "lists": {
-               "type": "array",
-               "minItems": 0,
-               "maxItems": 6,
-               "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                 "ordered": {
-                  "type": "boolean"
-                 },
-                 "items": {
-                  "type": "array",
-                  "minItems": 1,
-                  "maxItems": 20,
-                  "items": {
-                   "type": "string"
-                  }
-                 }
-                },
-                "required": [
-                 "ordered",
-                 "items"
-                ]
-               }
-              },
-              "tables": {
-               "type": "array",
-               "minItems": 0,
-               "maxItems": 2,
-               "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                 "headerCells": {
-                  "type": "array",
-                  "minItems": 1,
-                  "maxItems": 6,
-                  "items": {
-                   "type": "string",
-                   "maxWords": 6,
-                   "minLength": 1
-                  }
-                 },
-                 "rowCount": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 30
-                 }
-                },
-                "required": [
-                 "headerCells",
-                 "rowCount"
-                ]
-               }
-              },
-              "subHeadings": {
-               "type": "array",
-               "minItems": 0,
-               "maxItems": 4,
-               "items": {
-                "type": "string",
-                "maxWords": 10,
-                "minLength": 1
-               }
-              }
-             },
-             "required": [
-              "heading",
-              "slug",
-              "anchorPattern"
-             ]
-            }
-           }
-          },
-          "required": [
-           "titleLines",
-           "anchorIndex",
-           "sections"
-          ]
-         },
          {
           "type": "object",
           "additionalProperties": false,
@@ -1499,6 +1640,7 @@
                 "#",
                 "/#",
                 "/#what-is-fourmula",
+                "/#intro",
                 "/#pdp",
                 "/#products",
                 "/#video",
@@ -1651,6 +1793,7 @@
                 "#",
                 "/#",
                 "/#what-is-fourmula",
+                "/#intro",
                 "/#pdp",
                 "/#products",
                 "/#video",
@@ -1695,7 +1838,6 @@
         "type": "string",
         "enum": [
          "auth-form",
-         "legal-prose",
          "onboarding-cta"
         ]
        }
@@ -1740,7 +1882,8 @@
          "anchorId": {
           "type": "string",
           "enum": [
-           "what-is-fourmula"
+           "what-is-fourmula",
+           "intro"
           ]
          }
         },
@@ -1893,6 +2036,7 @@
            "#",
            "/#",
            "/#what-is-fourmula",
+           "/#intro",
            "/#pdp",
            "/#products",
            "/#video",
@@ -1936,7 +2080,10 @@
               },
               {
                "enum": [
-                "hero-carousel-photo"
+                "hero-carousel-photo",
+                "fictional-person-avatar",
+                "generated-illustration",
+                "user-supplied-asset"
                ]
               }
              ]
@@ -2023,6 +2170,7 @@
              "#",
              "/#",
              "/#what-is-fourmula",
+             "/#intro",
              "/#pdp",
              "/#products",
              "/#video",
@@ -2056,7 +2204,9 @@
              },
              {
               "enum": [
-               "not-found-artwork"
+               "not-found-artwork",
+               "generated-illustration",
+               "user-supplied-asset"
               ]
              }
             ]
@@ -2153,6 +2303,7 @@
              "#",
              "/#",
              "/#what-is-fourmula",
+             "/#intro",
              "/#pdp",
              "/#products",
              "/#video",
@@ -2195,7 +2346,8 @@
               },
               {
                "enum": [
-                "trusted-partner-logo"
+                "trusted-partner-logo",
+                "placeholder-customer-logo"
                ]
               }
              ]
@@ -2275,6 +2427,7 @@
               "#",
               "/#",
               "/#what-is-fourmula",
+              "/#intro",
               "/#pdp",
               "/#products",
               "/#video",
@@ -2362,7 +2515,10 @@
                    },
                    {
                     "enum": [
-                     "product-shot-photo"
+                     "product-shot-photo",
+                     "placeholder-screenshot",
+                     "generated-illustration",
+                     "user-supplied-asset"
                     ]
                    }
                   ]
@@ -2405,7 +2561,8 @@
                    },
                    {
                     "enum": [
-                     "showcase-video"
+                     "showcase-video",
+                     "user-supplied-asset"
                     ]
                    }
                   ]
@@ -2580,6 +2737,7 @@
                 "#",
                 "/#",
                 "/#what-is-fourmula",
+                "/#intro",
                 "/#pdp",
                 "/#products",
                 "/#video",
@@ -2613,7 +2771,10 @@
                 },
                 {
                  "enum": [
-                  "step-artwork"
+                  "step-artwork",
+                  "generated-illustration",
+                  "placeholder-screenshot",
+                  "user-supplied-asset"
                  ]
                 }
                ]

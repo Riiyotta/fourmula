@@ -1,0 +1,93 @@
+{
+  "$description": "BINDING RECORD between this design repository and the N0 common design policy (Common Composition IR v0.5). The common SaaS policy itself is defined outside this package and is NOT vendored here; this file records which policy is bound, why (classification evidence from the clone, every quote checked by extraction/verify_all.py check [i]), how it is applied locally, and which files enforce it. registry.manifest.json.designPolicy.contentHash is the sha256 over the `enforcedBy` files listed below and is recomputed by verify_all check [r].",
+  "policyId": "n0-saas-design-constraints-common",
+  "policyVersion": "0.1.0",
+  "commonIrVersion": "0.5",
+  "enforcementMode": "hard-and-soft",
+  "boundPolicySource": "External N0 common policy (n0-saas-design-constraints-common v0.1.0). Not vendored in this package; only its binding and local application are recorded here.",
+  "classification": {
+    "productCategory": "saas",
+    "productDomain": "ai-generated-product-imagery-for-ecommerce-brands",
+    "isSaaS": true,
+    "marketModel": "B2B self-serve web application (sign up, upload a catalogue, generate and export assets)",
+    "surfaces": [
+      "marketing-site",
+      "legal",
+      "app-entry-stand-ins"
+    ],
+    "audiences": [
+      "e-commerce brands",
+      "creative and marketing teams",
+      "online store operators"
+    ],
+    "decision": "SaaS. The clone markets a hosted web application to businesses: a sign-up / sign-in app entry, a subscription-and-credits section in its terms, a B2B 'Trusted By' logo row, and copy addressed to a brand's store, catalogue and creative team. There is no consumer app-store product and no two-sided marketplace. Caveat: the clone has NO pricing-tier page and NO dashboard (the real app renders client-side only and was not reproduced), so pricing / dashboard constraints of the common policy have no template to apply to here.",
+    "evidence": [
+      {
+        "id": "cit-pol-signup",
+        "source": "src/components/ListSection.jsx:10-10",
+        "quote": "Sign up for free and supercharge",
+        "kind": "declaration",
+        "note": "Self-serve sign-up offer."
+      },
+      {
+        "id": "cit-pol-app-entry",
+        "source": "src/App.jsx:17-17",
+        "quote": "local stand-ins for app.fourmula.ai",
+        "kind": "declaration",
+        "note": "A hosted web application behind sign-in."
+      },
+      {
+        "id": "cit-pol-subscriptions",
+        "source": "src/pages/TermsContent.jsx:93-93",
+        "quote": "Fees, Subscriptions & Credits",
+        "kind": "declaration",
+        "note": "Measured legal scaffolding: a subscription/credits chapter heading (body prose is placeholder filler)."
+      },
+      {
+        "id": "cit-pol-trusted",
+        "source": "src/components/How.jsx:31-31",
+        "quote": "Trusted By",
+        "kind": "declaration",
+        "note": "B2B social proof: 11 real company logos."
+      },
+      {
+        "id": "cit-pol-store",
+        "source": "src/components/Faq.jsx:27-27",
+        "quote": "Just a store link or a product photo",
+        "kind": "declaration",
+        "note": "Addressed to an online store operator."
+      },
+      {
+        "id": "cit-pol-team",
+        "source": "src/components/Faq.jsx:48-48",
+        "quote": "Does this replace my creative team?",
+        "kind": "declaration",
+        "note": "Addressed to a business with a creative team."
+      }
+    ]
+  },
+  "notBoundTo": {},
+  "localApplication": [
+    "Pages are drawn only from the 5 templates and 16 section contracts in this repository; no pricing-table, feature-matrix, dashboard or changelog sections exist here and a generator must not introduce them.",
+    "mode is required on every PageSpec. mode=generation rejects the source brand, assets, people, customers, product imagery, copy, claims, hosts and embeds (GENERATION_MODE_* rules).",
+    "Only generation-safe asset roles in mode=generation; availability is pinned in code (PINNED_AVAILABILITY).",
+    "Runtime UI (consent, preloader, menu drawer, floating badge) is never retrievable (RETRIEVAL_INELIGIBLE).",
+    "Token references only through styleTokens and only semantic roles (TOKEN_* rules); no shadows; fluid-rem lengths only via tokens.",
+    "Whole-page sections are gated by measured heights (extraction/wrapper_gate.py)."
+  ],
+  "enforcedBy": [
+    "policy/design-policy.json",
+    "schema/pagespec.schema.json",
+    "schema/semantic_validate.py",
+    "schema/generation-leakage.json",
+    "compatibility/graph.json",
+    "assets/asset-roles.json",
+    "tokens/llm/token-policy.json",
+    "extraction/wrapper_gate.py"
+  ],
+  "approval": {
+    "policyDecision": "defined-pending-architecture-review",
+    "architectureDecisionRecorded": false,
+    "note": "The SaaS classification was made by an agent from the evidence above (agent attestation, not a human sign-off). A human architecture owner must ratify the binding. Licence review of the vendored fonts and GSAP plugin remains open and blocks production use."
+  }
+}

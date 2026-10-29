@@ -1,6 +1,6 @@
 {
   "$description": "Rhythm and position rules JSON Schema cannot express. Every rule carries severity error|warn and its named exceptions. Each rule id is implemented by a function of the same name in schema/semantic_validate.py's RULES dict; extraction/verify_all.py check [h] fails if the two sets ever diverge in either direction. EVERY rule below was verified against templates/templates.json's REAL node sequences at the moment it was written, by the build script that emitted this file - it refuses to write on any mismatch (MASTER-GUIDE 3.18). Rules read the PageSpec node order, which follows src/layout/Layout.jsx's own composition order.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "verifiedAgainst": {
     "file": "templates/templates.json",
     "sequences": {
@@ -22,7 +22,8 @@
         "chrome.cookie-consent",
         "chrome.header",
         "chrome.menu",
-        "content.tech",
+        "content.legal-header",
+        "content.legal-chapter",
         "chrome.footer",
         "chrome.awards-badge"
       ],
@@ -165,13 +166,18 @@
       "description": "No href, assetRef or any other URL-bearing field may contain a remote URL (http:, https:), a protocol-relative // URL, a mailto: or tel: scheme, or a path containing '..'. Links may only be '#', '/#', a '#anchor' or '/#anchor' in-page anchor, or one of the 6 real routes; asset paths may only be local absolute paths. This encodes the project's ZERO-EXTERNAL-LINKS build constraint: grep -rhoE '(href|src)=\"https?://\" src --include=*.jsx' returns ZERO matches, and formerly-external links became local routes (/start, /auth) or inert hashes on purpose. No exceptions on any template.",
       "exceptions": [],
       "evidence": "cit-constraint-no-external",
-            "onlyRemainingHttpStrings": "Two: the SVG xmlns namespace http://www.w3.org/2000/svg, and the commented-out cdnjs ScrambleTextPlugin URL in src/loadSite.js:5 which documents the original's 404ing script. Neither is a fetched reference."
+      "onlyRemainingHttpStrings": "Two: the SVG xmlns namespace http://www.w3.org/2000/svg, and the commented-out cdnjs ScrambleTextPlugin URL in src/loadSite.js:5 which documents the original's 404ing script. Neither is a fetched reference."
     },
     {
       "id": "NO_ADJACENT_SAME_SECTION",
       "severity": "error",
-      "description": "The same section id must not appear in two adjacent positions. Verified against all 5 real sequences: no section repeats anywhere, adjacent or not, so no named exception is needed. Note that the four step slides and the three .ai capability blocks are CONTENT INSIDE one section element each, not repeated section nodes.",
-      "exceptions": []
+      "description": "The same (section, variant) must not appear in two adjacent positions, except content.legal-chapter, which is one node per legal chapter. Verified against all 5 real sequences.",
+      "exceptions": [
+        {
+          "section": "content.legal-chapter",
+          "reason": "One node per real h2 chapter: the legal template repeats content.legal-chapter 12-16 times in a row by design (12 on /privacy-policy, 16 on /terms-of-service). Verified against templates.json, where it is the only repeatable node."
+        }
+      ]
     },
     {
       "id": "HOME_ONLY_SECTIONS",
@@ -199,11 +205,9 @@
     {
       "id": "TECH_VARIANT_MATCHES_ROUTE",
       "severity": "error",
-      "description": "content.tech's variant is pinned per route: legal-prose on /privacy-policy and /terms-of-service, onboarding-cta on /start, auth-form on /auth. Verified against templates.json's own node variants (legal -> legal-prose, app-onboarding -> onboarding-cta, app-auth -> auth-form).",
+      "description": "content.tech's variant is pinned per route: onboarding-cta on /start, auth-form on /auth. content.tech is not admitted on any other route (the legal pages use content.legal-header + content.legal-chapter). Verified against templates.json's own node variants.",
       "exceptions": [],
       "perRoute": {
-        "/privacy-policy": "legal-prose",
-        "/terms-of-service": "legal-prose",
         "/start": "onboarding-cta",
         "/auth": "auth-form"
       }
@@ -250,6 +254,108 @@
           "reason": "evidenceLevel measured."
         }
       ]
+    },
+    {
+      "id": "RETRIEVAL_PIN",
+      "severity": "error",
+      "description": "Runtime/utility UI (chrome.cookie-consent, chrome.preloader, chrome.menu, chrome.awards-badge) is pinned retrievalEligible:false in code (RETRIEVAL_INELIGIBLE in schema/semantic_validate.py and extraction/verify_all.py). A node may not flip one to eligible, may not mark a content section ineligible, and a contract that disagrees with the pin is rejected.",
+      "exceptions": []
+    },
+    {
+      "id": "ASSET_AVAILABILITY_PINNED",
+      "severity": "error",
+      "description": "Every role's availability in assets/asset-roles.json must equal PINNED_AVAILABILITY in schema/semantic_validate.py. A registry edited without the code pin rejects every PageSpec.",
+      "exceptions": []
+    },
+    {
+      "id": "GENERATION_MODE_BRAND",
+      "severity": "error",
+      "description": "No source brand name, abbreviation, product name or brand-bearing anchor id in any string (compact match catches spacing/hyphen variants). Applies ONLY when the PageSpec's mode is `generation`; clone-mode PageSpecs are exempt so a faithful reconstruction may still carry real content (the clone example and the adversarial clone controls prove it). Patterns are read from schema/generation-leakage.json, which extraction/build_leakage_patterns.py derives from the real source with file:line evidence. String-based detection on normalised text; it can be evaded by paraphrase and no human has reviewed the patterns.",
+      "exceptions": []
+    },
+    {
+      "id": "GENERATION_MODE_ASSET",
+      "severity": "error",
+      "description": "Only generation-safe asset roles, and no string may reuse a real file name from public/assets. Applies ONLY when the PageSpec's mode is `generation`; clone-mode PageSpecs are exempt so a faithful reconstruction may still carry real content (the clone example and the adversarial clone controls prove it). Patterns are read from schema/generation-leakage.json, which extraction/build_leakage_patterns.py derives from the real source with file:line evidence. String-based detection on normalised text; it can be evaded by paraphrase and no human has reviewed the patterns.",
+      "exceptions": []
+    },
+    {
+      "id": "GENERATION_MODE_PERSON",
+      "severity": "error",
+      "description": "No real-person photo role (hero-carousel-photo, preloader-photo) and no 5-word run of the source's descriptions of real people. Applies ONLY when the PageSpec's mode is `generation`; clone-mode PageSpecs are exempt so a faithful reconstruction may still carry real content (the clone example and the adversarial clone controls prove it). Patterns are read from schema/generation-leakage.json, which extraction/build_leakage_patterns.py derives from the real source with file:line evidence. String-based detection on normalised text; it can be evaded by paraphrase and no human has reviewed the patterns.",
+      "exceptions": []
+    },
+    {
+      "id": "GENERATION_MODE_CUSTOMER",
+      "severity": "error",
+      "description": "No customer/partner logo role (trusted-partner-logo) and no real third-party brand legible in the source. Applies ONLY when the PageSpec's mode is `generation`; clone-mode PageSpecs are exempt so a faithful reconstruction may still carry real content (the clone example and the adversarial clone controls prove it). Patterns are read from schema/generation-leakage.json, which extraction/build_leakage_patterns.py derives from the real source with file:line evidence. String-based detection on normalised text; it can be evaded by paraphrase and no human has reviewed the patterns.",
+      "exceptions": []
+    },
+    {
+      "id": "GENERATION_MODE_SCREENSHOT",
+      "severity": "error",
+      "description": "No real product-imagery role (product shots, step artwork, 404 artwork, banner) and no 5-word run of its descriptions. Applies ONLY when the PageSpec's mode is `generation`; clone-mode PageSpecs are exempt so a faithful reconstruction may still carry real content (the clone example and the adversarial clone controls prove it). Patterns are read from schema/generation-leakage.json, which extraction/build_leakage_patterns.py derives from the real source with file:line evidence. String-based detection on normalised text; it can be evaded by paraphrase and no human has reviewed the patterns.",
+      "exceptions": []
+    },
+    {
+      "id": "GENERATION_MODE_COPY",
+      "severity": "error",
+      "description": "No 5-word run of any source copy (hashed shingles) and no exact 3-4 word marketing line. Applies ONLY when the PageSpec's mode is `generation`; clone-mode PageSpecs are exempt so a faithful reconstruction may still carry real content (the clone example and the adversarial clone controls prove it). Patterns are read from schema/generation-leakage.json, which extraction/build_leakage_patterns.py derives from the real source with file:line evidence. String-based detection on normalised text; it can be evaded by paraphrase and no human has reviewed the patterns.",
+      "exceptions": []
+    },
+    {
+      "id": "GENERATION_MODE_CLAIM",
+      "severity": "error",
+      "description": "No real award (the Awwwards badge role or name), company registration, statistic or quantified claim from the source. Applies ONLY when the PageSpec's mode is `generation`; clone-mode PageSpecs are exempt so a faithful reconstruction may still carry real content (the clone example and the adversarial clone controls prove it). Patterns are read from schema/generation-leakage.json, which extraction/build_leakage_patterns.py derives from the real source with file:line evidence. String-based detection on normalised text; it can be evaded by paraphrase and no human has reviewed the patterns.",
+      "exceptions": []
+    },
+    {
+      "id": "GENERATION_MODE_URL",
+      "severity": "error",
+      "description": "No source host (fourmula.ai, app.fourmula.ai) in any string, and any host name shown as text must end in .example or .invalid. Schemes stay rejected in every mode by NO_EXTERNAL_LINKS. Applies ONLY when the PageSpec's mode is `generation`; clone-mode PageSpecs are exempt so a faithful reconstruction may still carry real content (the clone example and the adversarial clone controls prove it). Patterns are read from schema/generation-leakage.json, which extraction/build_leakage_patterns.py derives from the real source with file:line evidence. String-based detection on normalised text; it can be evaded by paraphrase and no human has reviewed the patterns.",
+      "exceptions": []
+    },
+    {
+      "id": "GENERATION_MODE_EMBED",
+      "severity": "error",
+      "description": "No raw markup or embed tag in any string, and no source media-embed role (the produced videos, the award badge). Applies ONLY when the PageSpec's mode is `generation`; clone-mode PageSpecs are exempt so a faithful reconstruction may still carry real content (the clone example and the adversarial clone controls prove it). Patterns are read from schema/generation-leakage.json, which extraction/build_leakage_patterns.py derives from the real source with file:line evidence. String-based detection on normalised text; it can be evaded by paraphrase and no human has reviewed the patterns.",
+      "exceptions": []
+    },
+    {
+      "id": "TOKEN_UNKNOWN",
+      "severity": "error",
+      "description": "Every styleTokens value that looks like a token id must exist in tokens/llm/token-catalog.json.",
+      "exceptions": []
+    },
+    {
+      "id": "TOKEN_RAW_COLOR",
+      "severity": "error",
+      "description": "No raw colour (hex, rgb/hsl/..., named colour) in styleTokens; reference a semantic colour role.",
+      "exceptions": []
+    },
+    {
+      "id": "TOKEN_ARBITRARY_SPACING",
+      "severity": "error",
+      "description": "No raw length (px, rem, %, vw, calc) in styleTokens; only the measured space.* and radius.* roles. Every length is a rem on a fluid root.",
+      "exceptions": []
+    },
+    {
+      "id": "TOKEN_UNSUPPORTED_FONT",
+      "severity": "error",
+      "description": "fontFamily may only be font.body; a raw family name in fontFamily or typography is rejected.",
+      "exceptions": []
+    },
+    {
+      "id": "TOKEN_THEME_MISMATCH",
+      "severity": "error",
+      "description": "A styleTokens id that only the OTHER palette resolves is invalid for the page theme (default light; .body.dark is the light palette). The theme itself must be schema-validated.",
+      "exceptions": []
+    },
+    {
+      "id": "TOKEN_CATEGORY_MISMATCH",
+      "severity": "error",
+      "description": "Each styleTokens slot takes one semantic family (surface./text./accent./border. colour roles, type roles, space./radius. roles). Foundation, component and layout tokens are never set by a PageSpec, and vendor.cookie-* colours are only valid on chrome.cookie-consent.",
+      "exceptions": []
     }
   ]
 }

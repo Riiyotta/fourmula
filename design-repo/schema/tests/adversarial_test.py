@@ -9,20 +9,26 @@ are needed:
 Layers
   1. CONTROLS - the shipped example, plus synthesize_control(t) for EVERY template in templates.json
      (auto-iterated, so a template added later is covered with no new code), plus hand-built controls for
-     each content.tech variant, must all produce ZERO errors. A validator that rejects everything is as
+     every mode=generation example (one per template) and the clone-mode controls, must all produce ZERO errors. A validator that rejects everything is as
      broken as one that rejects nothing.
   2. MUTATIONS - each mutated PageSpec must be REJECTED, and rejected BY THE RULE THE MUTATION TARGETS.
      A mutation that is rejected by the wrong rule is reported as WRONGRULE, not as a pass.
   3. BOTH DIRECTIONS - for each corrected rule this repository carries, the suite proves the old wrong
      structure is rejected AND the real, correct structure is accepted (see the CORRECTIONS block).
   4. CLI - unparseable and missing input give one clean error line and exit code 2, never a traceback.
-  5. CATALOG / POLICY DRIFT INJECTION - a PageSpec has NO per-instance token or style override field (the
+  5. CATALOG / POLICY DRIFT INJECTION - besides the PageSpec-level TOKEN_* mutations on the closed styleTokens
+     field, a free-form `tokens` key stays rejected (the
      schema rejects a `tokens` key; mutation "per-instance tokens field at page level" proves it), so
      there is nothing at the PageSpec layer to mutate for token misuse. Token safety is therefore tested
      one layer down, by injecting drift into a scratch copy and asserting verify_all.py fails.
   6. PINNED ASSET POLICY - a compliance-critical role's generationPolicy is changed to a
      DIFFERENT-BUT-STILL-VALID enum value in a scratch copy, and verify_all.py must fail. Membership in
-     the 5-value enum alone would not catch this (MASTER-GUIDE 3.23).
+     the policy enum alone would not catch this (MASTER-GUIDE 3.23).
+
+Also covered (revision 1.1): required closed mode; one GENERATION_MODE_* mutation family per category
+(brand, asset, person, customer, screenshot, copy, claim, url, embed) against the generation examples, with
+clone-mode controls; RETRIEVAL_PIN at node level and contract / allowlist level (drift); the wrapper gate on
+synthetic measurements; availability pins edited in the registry or in code.
 """
 import copy
 import json
@@ -86,7 +92,7 @@ def _(s):
 
 @mut("wrong pageSpecVersion", ["SCHEMA"])
 def _(s):
-    s["pageSpecVersion"] = "2.0.0"
+    s["pageSpecVersion"] = "1.0.0"   # the pre-mode version is no longer accepted
 
 
 @mut("route not served by the declared template (home template, legal route)", ["TEMPLATE_SERVES_ROUTE"])
@@ -254,7 +260,7 @@ def _(s):
 
 @mut("content.tech on the home route", ["ROUTE_RESTRICTED_SECTIONS", "TEMPLATE_NODE_MATCH"])
 def _(s):
-    s["nodes"].insert(5, node_of("legal", "content.tech"))
+    s["nodes"].insert(5, node_of("app-onboarding", "content.tech"))
 
 
 # --- the preloader correction, in the rejecting direction -------------------------------------
@@ -384,14 +390,39 @@ def _wrong_variant(s):
     s["nodes"][first(s, "content.tech")]["variant"] = "auth-form"
 
 
-extra("content.tech variant auth-form on /privacy-policy", ["TECH_VARIANT_MATCHES_ROUTE", "INERT_FORM_ONLY_ON_AUTH", "TEMPLATE_NODE_MATCH"], _legal, _wrong_variant)
+extra("content.tech variant auth-form on /start", ["SCHEMA", "TECH_VARIANT_MATCHES_ROUTE", "INERT_FORM_ONLY_ON_AUTH", "TEMPLATE_NODE_MATCH"], _start, _wrong_variant)
 
 
-def _onboarding_variant_on_legal(s):
+def _onboarding_variant_on_auth(s):
     s["nodes"][first(s, "content.tech")]["variant"] = "onboarding-cta"
 
 
-extra("content.tech variant onboarding-cta on /privacy-policy", ["TECH_VARIANT_MATCHES_ROUTE", "TEMPLATE_NODE_MATCH", "VARIANT_MATCHES_ROUTE"], _legal, _onboarding_variant_on_legal)
+extra("content.tech variant onboarding-cta on /auth", ["SCHEMA", "TECH_VARIANT_MATCHES_ROUTE", "TEMPLATE_NODE_MATCH", "VARIANT_MATCHES_ROUTE"], _auth, _onboarding_variant_on_auth)
+
+
+# --- R6: the legal document is decomposed, never one whole-document node ----------------------
+def _legal_whole_doc(s):
+    i = first(s, "content.legal-header")
+    s["nodes"] = s["nodes"][:i] + [node_of("app-onboarding", "content.tech")] + [
+        n for n in s["nodes"][i:] if n["type"] not in ("content.legal-header", "content.legal-chapter")]
+
+
+extra("R6: the legal body collapsed back into one content.tech node", ["TEMPLATE_NODE_MATCH", "ROUTE_RESTRICTED_SECTIONS", "TECH_VARIANT_MATCHES_ROUTE"], _legal, _legal_whole_doc)
+
+
+def _too_few_chapters(s):
+    for _ in range(3):
+        del s["nodes"][first(s, "content.legal-chapter")]
+
+
+extra("R6: a legal page with 9 chapters (template needs 12-16)", ["TEMPLATE_NODE_MATCH"], _legal, _too_few_chapters)
+
+
+def _chapter_on_home(s):
+    s["nodes"].insert(5, node_of("legal", "content.legal-chapter"))
+
+
+extra("a legal chapter on the home page", ["ROUTE_RESTRICTED_SECTIONS", "TEMPLATE_NODE_MATCH"], lambda: copy.deepcopy(EX), _chapter_on_home)
 
 
 # --- THE PINNED INERT FORM: a different-but-structurally-valid wiring ------------------------
@@ -445,6 +476,235 @@ def _hero_on_legal(s):
 
 
 extra("a hero added to a hero-less legal page", ["HOME_ONLY_SECTIONS", "TEMPLATE_NODE_MATCH"], _legal, _hero_on_legal)
+
+
+# ================================================================== R1-R5: mode, generation leakage
+GEN_EXAMPLES = sorted(os.path.join(ROOT, "schema", "examples", f)
+                      for f in os.listdir(os.path.join(ROOT, "schema", "examples")) if f.endswith(".pagespec.json"))
+
+
+def load(fp):
+    with open(fp, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _gen(template="home"):
+    return load(os.path.join(ROOT, "schema", "examples", "generated-%s.pagespec.json" % template))
+
+
+def _node(s, t):
+    return s["nodes"][first(s, t)]
+
+
+@mut("mode missing", ["SCHEMA"])
+def _(s):
+    del s["mode"]
+
+
+@mut("mode outside the closed enum (reference)", ["SCHEMA"])
+def _(s):
+    s["mode"] = "reference"
+
+
+def gmut(name, expect, fn, template="home"):
+    MUT_EXTRA.append((name, expect, lambda: _gen(template), fn))
+
+
+def _set(path_fn):
+    return path_fn
+
+
+# --- brand -----------------------------------------------------------------------------------
+gmut("GEN brand name in the hero heading", ["GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "hero.home")["content"].update({"heading": "Fourmula catalog,"}))
+gmut("GEN brand spelling variant (Four-mula) in body copy", ["GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "faq.accordion")["content"]["items"][0].update({"answer": "Four-mula makes every view for you."}))
+gmut("GEN brand-bearing anchor id (what-is-fourmula)", ["GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "content.what-intro")["content"].update({"anchorId": "what-is-fourmula"}))
+gmut("GEN source CTA ('Try Fourmula')", ["GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "chrome.header")["content"]["cta"].update({"label": "Try Fourmula"}))
+gmut("GEN source product name (4MLA Arkena) in alt text", ["GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "showcase.ai-capabilities")["content"]["blocks"][0]["collage"]["images"][0].update({"alt": "Bottle of 4MLA Arkena perfume."}))
+gmut("GEN brand hidden with a zero-width space and NFKC full-width letters", ["GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "hero.home")["content"].update({"heading": "Ｆour​mula now,"}))
+# --- assets / proprietary media ---------------------------------------------------------------
+gmut("GEN real wordmark role on the header logo", ["GENERATION_MODE_ASSET"],
+     lambda s: _node(s, "chrome.header")["content"]["logo"].update({"assetRole": "brand-wordmark"}))
+gmut("GEN real asset file name reused under a safe role", ["GENERATION_MODE_ASSET"],
+     lambda s: _node(s, "hero.home")["content"]["carouselImages"][0].update({"assetRef": "/assets/6939a23c78d0b447681dd9f5_hero-load-08.avif"}))
+gmut("GEN real produced video role", ["GENERATION_MODE_EMBED", "GENERATION_MODE_ASSET"],
+     lambda s: _node(s, "showcase.ai-capabilities")["content"]["blocks"][2]["collage"]["videos"][0].update({"assetRole": "showcase-video", "assetRef": "/assets/video/clip.mp4"}))
+# --- people ------------------------------------------------------------------------------------
+gmut("GEN real-person photo role in the hero ring", ["GENERATION_MODE_PERSON", "GENERATION_MODE_ASSET"],
+     lambda s: _node(s, "hero.home")["content"]["carouselImages"][0].update({"assetRole": "hero-carousel-photo"}))
+gmut("GEN real person's description reused as alt text", ["GENERATION_MODE_PERSON"],
+     lambda s: _node(s, "hero.home")["content"]["carouselImages"][1].update({"alt": "Smiling man wearing a navy blue zip-up jacket."}))
+# --- customers ---------------------------------------------------------------------------------
+gmut("GEN real third-party customer logo role", ["GENERATION_MODE_CUSTOMER", "GENERATION_MODE_ASSET"],
+     lambda s: _node(s, "marquee.how-trusted")["content"]["trustedLogos"][0].update({"assetRole": "trusted-partner-logo"}))
+gmut("GEN real third-party brand named in copy (AMILA)", ["GENERATION_MODE_CUSTOMER"],
+     lambda s: _node(s, "marquee.how-trusted")["content"].update({"trustedEyebrow": "Loved by AMILA"}))
+# --- product imagery / screenshots ------------------------------------------------------------
+gmut("GEN real product-shot role", ["GENERATION_MODE_SCREENSHOT", "GENERATION_MODE_ASSET"],
+     lambda s: _node(s, "showcase.ai-capabilities")["content"]["blocks"][0]["collage"]["images"][0].update({"assetRole": "product-shot-photo"}))
+gmut("GEN real product-image description reused", ["GENERATION_MODE_SCREENSHOT"],
+     lambda s: _node(s, "showcase.ai-capabilities")["content"]["blocks"][0]["collage"]["images"][1].update({"alt": "Amber glass bottle of Eye Contour Serum with a black cap on a sunlit wooden surface."}))
+# --- copy ----------------------------------------------------------------------------------------
+gmut("GEN real FAQ answer copied", ["GENERATION_MODE_COPY"],
+     lambda s: _node(s, "faq.accordion")["content"]["items"][1].update({"answer": "Just a store link or a product photo. We use it to generate visuals."}))
+gmut("GEN real heading split across two headingLines", ["GENERATION_MODE_COPY"],
+     lambda s: _node(s, "content.what-intro")["content"].update({"headingLines": ["On-brand visuals.", "Made by AI."]}))
+gmut("GEN real copy with curly quotes and an em dash (normalisation)", ["GENERATION_MODE_COPY"],
+     lambda s: _node(s, "faq.accordion")["content"]["items"][2].update({"answer": "Yes. We learn from your existing images — and keep colours, lighting and style consistent."}))
+gmut("GEN exact source line ('Upload or drop your assets') as the scroll cue", ["GENERATION_MODE_COPY"],
+     lambda s: _node(s, "hero.home")["content"].update({"scrollCue": "Upload or drop your assets"}))
+# --- claims ------------------------------------------------------------------------------------
+gmut("GEN real company registration claim", ["GENERATION_MODE_CLAIM"],
+     lambda s: _node(s, "chrome.footer")["content"].update({"registrationLine": "Registered in England & Wales No.: 13044361"}))
+gmut("GEN real quantified product claim (14+ model presets)", ["GENERATION_MODE_CLAIM"],
+     lambda s: _node(s, "steps.pinned-list")["content"]["slides"][0].update({"infoTags": ["14+ model presets", "Folder sync"]}))
+gmut("GEN real award badge role", ["GENERATION_MODE_CLAIM", "GENERATION_MODE_ASSET"],
+     lambda s: _node(s, "chrome.awards-badge")["content"]["artwork"].update({"assetRole": "third-party-award-badge"}))
+# --- URLs ----------------------------------------------------------------------------------------
+gmut("GEN source host named as text", ["GENERATION_MODE_URL", "GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "chrome.footer")["content"].update({"registrationLine": "Company details at fourmula.ai"}))
+gmut("GEN non-placeholder host (acme.com) named as text", ["GENERATION_MODE_URL"],
+     lambda s: _node(s, "chrome.footer")["content"].update({"registrationLine": "Company details at acme.com"}))
+# --- embeds ----------------------------------------------------------------------------------
+gmut("GEN raw <svg> markup smuggled into copy", ["GENERATION_MODE_EMBED"],
+     lambda s: _node(s, "faq.accordion")["content"]["items"][3].update({"answer": "<svg><path d='M0 0'/></svg> yours"}))
+# --- a generated page on the other families ------------------------------------------------------
+gmut("GEN legal page title names the source brand", ["GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "content.legal-header")["content"].update({"titleLines": ["FOURMULA AI", "privacy notice"]}), "legal")
+gmut("GEN 404 artwork reuses the real 404 art role", ["GENERATION_MODE_SCREENSHOT", "GENERATION_MODE_ASSET"],
+     lambda s: _node(s, "hero.not-found")["content"]["artwork"].update({"assetRole": "not-found-artwork"}), "not-found")
+gmut("GEN auth placeholder email on a real host", ["GENERATION_MODE_URL", "GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "content.tech")["content"]["form"]["fields"][0].update({"placeholder": "you@fourmula.ai"}), "app-auth")
+gmut("GEN onboarding title 'with Fourmula'", ["GENERATION_MODE_BRAND"],
+     lambda s: _node(s, "content.tech")["content"].update({"titleLines": ["Get started", "with Fourmula"]}), "app-onboarding")
+
+
+def _clone_relabelled():
+    s = copy.deepcopy(EX)
+    s["mode"] = "generation"
+    return s
+
+
+MUT_EXTRA.append(("GEN the real clone page relabelled mode=generation", ["GENERATION_MODE_"], _clone_relabelled, lambda s: None))
+
+# --- clone mode still validates real content (controls) -----------------------------------------
+def _clone_with_real_brand_copy():
+    s = copy.deepcopy(EX)
+    _node(s, "faq.accordion")["content"]["items"][0]["answer"] = "FOURMULA makes product images for fourmula.ai customers."
+    return s
+
+
+MODE_CONTROLS = [
+    ("CONTROL mode=clone keeps real brand, copy, people photos and partner logos (the shipped clone example)",
+     lambda: copy.deepcopy(EX)),
+    ("CONTROL mode=clone accepts extra real brand copy that mode=generation rejects", _clone_with_real_brand_copy),
+    ("CONTROL a generated page may show a reserved placeholder host (kestrelwave.example)", lambda: _gen("home")),
+    ("CONTROL a generated page with valid semantic styleTokens on theme light", lambda: _gen("home")),
+]
+
+# ================================================================== R8 retrieval
+@mut("RETRIEVAL: cookie banner node flipped to retrievalEligible true", ["RETRIEVAL_PIN"])
+def _(s):
+    s["nodes"][1]["retrievalEligible"] = True
+
+
+@mut("RETRIEVAL: a content section (hero) marked retrievalEligible false", ["RETRIEVAL_PIN"])
+def _(s):
+    s["nodes"][4]["retrievalEligible"] = False
+
+
+# ================================================================== R10 token policy (styleTokens)
+def tmut(name, expect, tokens, node="hero.home", theme=None):
+    def fn(s):
+        _node(s, node)["styleTokens"] = tokens
+        if theme:
+            s["theme"] = theme
+    MUT_EXTRA.append((name, expect, lambda: _gen("home"), fn))
+
+
+tmut("TOKEN raw hex colour", ["TOKEN_RAW_COLOR"], {"text": "#020108"})
+tmut("TOKEN raw rgb() colour", ["TOKEN_RAW_COLOR"], {"surface": "rgb(255, 255, 255)"})
+tmut("TOKEN unknown token id", ["TOKEN_UNKNOWN"], {"text": "text.brand-neon"})
+tmut("TOKEN arbitrary spacing (24px)", ["TOKEN_ARBITRARY_SPACING"], {"spacing": "24px"})
+tmut("TOKEN arbitrary radius (1.3rem)", ["TOKEN_ARBITRARY_SPACING"], {"radius": "1.3rem"})
+tmut("TOKEN unsupported font family (Inter)", ["TOKEN_UNSUPPORTED_FONT"], {"fontFamily": "Inter"})
+tmut("TOKEN raw font family in typography", ["TOKEN_UNSUPPORTED_FONT"], {"typography": "Helvetica Neue"})
+tmut("TOKEN dark-palette foundation id on the light theme", ["TOKEN_THEME_MISMATCH"], {"text": "color.fonts-100-dark"}, theme="light")
+tmut("TOKEN light-palette foundation id on the dark theme", ["TOKEN_THEME_MISMATCH"], {"surface": "color.mainbg-light"}, theme="dark")
+tmut("TOKEN colour role in the spacing slot", ["TOKEN_CATEGORY_MISMATCH"], {"spacing": "text.primary"})
+tmut("TOKEN component token set by a PageSpec", ["TOKEN_CATEGORY_MISMATCH"], {"surface": "component.button.primary.fill"})
+tmut("TOKEN vendor cookie colour outside the consent UI", ["TOKEN_CATEGORY_MISMATCH"], {"accent": "vendor.cookie-accent"})
+tmut("TOKEN theme outside the validated set", ["SCHEMA"], {"text": "text.primary"}, theme="sepia")
+tmut("TOKEN invented styleTokens slot (shadow)", ["SCHEMA"], {"shadow": "elevation.z-raised"})
+
+# ================================================================== R9 wrapper gate (synthetic measurements)
+sys.path.insert(0, os.path.join(ROOT, "extraction"))
+import wrapper_gate as WG  # noqa: E402
+
+
+def _gate(mutate):
+    with open(os.path.join(ROOT, "extraction", "measured-values.json"), encoding="utf-8") as f:
+        sh = copy.deepcopy(json.load(f)["sectionHeights"])
+    mutate(sh)
+    out = WG.gate(sh, [t for t in REPO["templates"].values()], REPO["contracts"])
+    return out[0], out[1]
+
+
+def _hero(px):
+    def f(sh):
+        sh["routes"]["/"]["sections"]["hero.home"]["heightPx"] = px
+    return f
+
+
+def _share(sh):
+    sh["routes"]["/"]["sections"]["steps.pinned-list"]["heightPx"] = int(sh["routes"]["/"]["pageHeightPx"] * 0.65)
+
+
+def _wl(entry):
+    def f(sh):
+        _hero(3100)(sh)
+        sh["whitelist"] = [entry]
+    return f
+
+
+GATE_CASES = [
+    ("GATE HERO 1900px warns but does not fail", _hero(1900), "warn"),
+    ("GATE HERO 3100px fails", _hero(3100), "HERO"),
+    ("GATE one section holding 65% of the page fails", _share, "SHARE"),
+    ("GATE missing measurement fails", lambda sh: sh["routes"]["/terms-of-service"]["sections"].pop("content.legal-header"), "MISSING"),
+    ("GATE measured at the wrong viewport fails", lambda sh: sh["viewport"].update({"width": 1280}), "VIEWPORT"),
+    ("GATE whitelist entry without a 30+ char justification fails",
+     _wl({"section": "hero.home", "route": "/", "reviewedBy": "agent (agent attestation, not a human sign-off)", "justification": "ok", "maxHeightPx": 3200}), "WHITELIST"),
+    ("GATE agent reviewer presented as a human sign-off fails",
+     _wl({"section": "hero.home", "route": "/", "reviewedBy": "review agent", "justification": "The hero holds the rotating ring and must stay tall.", "maxHeightPx": 3200}), "WHITELIST"),
+    ("GATE whitelist cap below the measured height fails",
+     _wl({"section": "hero.home", "route": "/", "reviewedBy": "agent (agent attestation, not a human sign-off)", "justification": "The hero holds the rotating ring and must stay tall.", "maxHeightPx": 3000}), "WHITELIST"),
+    ("GATE stale whitelist entry fails",
+     lambda sh: sh.update({"whitelist": [{"section": "faq.accordion", "route": "/", "reviewedBy": "agent (agent attestation, not a human sign-off)", "justification": "An entry for a section that does not trip the gate.", "maxHeightPx": 5000}]}), "WHITELIST"),
+]
+
+
+def _gate_case(fn, want):
+    def run():
+        errs, warns = _gate(fn)
+        if want == "warn":
+            return (not errs and any("HERO" in w for w in warns)), "errors=%d warnings=%s" % (len(errs), warns[:1])
+        hit = [e for e in errs if e.startswith(want)]
+        return bool(hit), (hit[0][:120] if hit else "NOT rejected: %s" % errs[:1])
+    return run
+
+
+GATE_CONTROLS = [("GATE the real measured heights pass", lambda: (not _gate(lambda sh: None)[0], "0 errors")),
+                 ("GATE a whitelisted 3100px hero only warns",
+                  lambda: (lambda r: (not r[0] and any("[whitelisted]" in w for w in r[1]), str(r[1][:1])))(
+                      _gate(_wl({"section": "hero.home", "route": "/", "reviewedBy": "agent (agent attestation, not a human sign-off)",
+                                 "justification": "The hero holds the rotating ring and must stay tall.", "maxHeightPx": 3200}))))]
+GATE_CONTROLS += [(n, _gate_case(f, w)) for n, f, w in GATE_CASES]
 
 
 # ------------------------------------------------------------------- BOTH-DIRECTION controls
@@ -504,12 +764,16 @@ def run_controls():
         errs = rejected_by(sv.synthesize_control(t, ROOT))
         report(not errs, "PASS" if not errs else "FAIL", "synthesize_control(%s)" % t,
                "; ".join(e[:110] for e in errs[:2]))
-    for branch, route in (("legal-prose", "/terms-of-service"),):
-        s = sv.synthesize_control("legal", ROOT, branch=branch)
-        s["route"] = route
-        errs = rejected_by(s)
-        report(not errs, "PASS" if not errs else "FAIL", "content.tech branch %s on %s" % (branch, route),
+    for fp in GEN_EXAMPLES:
+        errs = rejected_by(load(fp))
+        report(not errs, "PASS" if not errs else "FAIL", "generation example %s" % os.path.basename(fp),
                "; ".join(e[:110] for e in errs[:2]))
+    for name, fn in MODE_CONTROLS:
+        errs = rejected_by(fn())
+        report(not errs, "PASS" if not errs else "FAIL", name, "; ".join(e[:110] for e in errs[:2]))
+    for name, fn in GATE_CONTROLS:
+        ok, detail = fn()
+        report(ok, "PASS" if ok else "FAIL", name, detail)
     for name, fn in CORRECTIONS:
         errs = rejected_by(fn())
         report(not errs, "PASS" if not errs else "FAIL", name, "; ".join(e[:110] for e in errs[:2]))
@@ -587,7 +851,7 @@ def edit_json(path, fn):
 
 
 def run_drift_layer():
-    print("== catalog / policy / pinned-asset drift injection (scratch copies; a PageSpec has no token field) ==")
+    print("== catalog / policy / pinned-asset drift injection (scratch copies) ==")
 
     def policy_category(d):
         d["rawValueRestrictions"]["shadow"] = d["rawValueRestrictions"].pop("elevation")
@@ -628,7 +892,41 @@ def run_drift_layer():
         for t in d["templates"]:
             t["evidenceLevel"] = "measured"
 
+    def flip_availability(d):
+        r = next(x for x in d["roles"] if x["id"] == "trusted-partner-logo")
+        r["availability"] = "generation-safe"
+
+    def contract_retrieval(d):
+        d["retrievalEligible"] = True
+        d.pop("retrievalReason", None)
+
+    def allowlist_retrieval(d):
+        d["retrievalIneligible"] = [x for x in d["retrievalIneligible"] if x != "chrome.cookie-consent"]
+
+    def content_ineligible(d):
+        d["retrievalEligible"] = False
+        d["retrievalReason"] = "Marked ineligible by an adversarial drift injection test."
+
+    def drop_leak_category(d):
+        d["categories"].pop("GENERATION_MODE_CLAIM")
+
+    def drop_height(d):
+        d["sectionHeights"]["routes"]["/"]["sections"].pop("hero.home")
+
+    def graph_edit(d):
+        d["rules"][0]["description"] += " (edited)"
+
     cases = [
+        ("AVAILABILITY: registry flips trusted-partner-logo to generation-safe (code pin unchanged)",
+         "assets/asset-roles.json", flip_availability, "[u]"),
+        ("RETRIEVAL: the cookie contract flipped to eligible", "sections/chrome-cookie-consent.json", contract_retrieval, "[t]"),
+        ("RETRIEVAL: the cookie banner dropped from the allowlist's ineligible list",
+         "tokens/llm/component-allowlist.json", allowlist_retrieval, "[t]"),
+        ("RETRIEVAL: a content section (faq) marked ineligible", "sections/faq-accordion.json", content_ineligible, "[t]"),
+        ("LEAKAGE: a GENERATION_MODE_* category deleted from the registry", "schema/generation-leakage.json",
+         drop_leak_category, "[v]"),
+        ("GATE: a measured hero height deleted", "extraction/measured-values.json", drop_height, "[q]"),
+        ("POLICY: an enforcing file edited without re-hashing the binding", "compatibility/graph.json", graph_edit, "[r]"),
         ("a policy category renamed to a label that is no catalog key (elevation -> shadow)",
          "tokens/llm/token-policy.json", policy_category, "[k]"),
         ("a dangling $refDark in a semantic token", "tokens/10-semantic/color.json", dangling_ref, "[k]"),
@@ -653,6 +951,28 @@ def run_drift_layer():
             report(ok, "CAUGHT" if ok else "MISSED", name, line)
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
+    # the code pin itself removed from the validator: availability check must fail
+    tmp, dst = scratch_copy()
+    try:
+        sp = os.path.join(dst, "schema", "semantic_validate.py")
+        t = open(sp, encoding="utf-8").read().replace('"trusted-partner-logo": "blocked-for-generation", ', "", 1)
+        open(sp, "w", encoding="utf-8").write(t)
+        ok, line = verify_fails(dst, "[u]")
+        report(ok, "CAUGHT" if ok else "MISSED", "AVAILABILITY: one role removed from semantic_validate's PINNED_AVAILABILITY", line)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    # the registry edited WITHOUT the pin: the semantic validator itself rejects every PageSpec
+    tmp, dst = scratch_copy()
+    try:
+        edit_json(os.path.join(dst, "assets", "asset-roles.json"), flip_availability)
+        r = subprocess.run([sys.executable, os.path.join(dst, "schema", "semantic_validate.py"),
+                            os.path.join(dst, "schema", "examples", "generated-home.pagespec.json")],
+                           capture_output=True, text=True)
+        ok = r.returncode == 1 and "ASSET_AVAILABILITY_PINNED" in r.stdout
+        report(ok, "CAUGHT" if ok else "MISSED", "AVAILABILITY: registry flip rejected by the semantic validator itself",
+               next((l for l in r.stdout.splitlines() if "ASSET_AVAILABILITY_PINNED" in l), r.stdout[-120:])[:150])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
     tmp, dst = scratch_copy()  # sanity: an UNMODIFIED scratch copy must pass, so the failures above are the injections
     try:
         r = subprocess.run([sys.executable, os.path.join(dst, "extraction", "verify_all.py")],
@@ -671,8 +991,10 @@ def main():
     run_drift_layer()
     print("== summary ==")
     n_mut = len(MUTS) + len(MUT_EXTRA)
-    print("controls: %d templates + the example + %d correction controls + %d direct assertions; mutations: %d; "
-          "failures: %d" % (len(TEMPLATES), len(CORRECTIONS), len(ASSERTIONS), n_mut, len(FAILED)))
+    print("controls: %d templates + the example + %d generation examples + %d mode controls + %d gate cases + %d "
+          "correction controls + %d direct assertions; mutations: %d; failures: %d"
+          % (len(TEMPLATES), len(GEN_EXAMPLES), len(MODE_CONTROLS), len(GATE_CONTROLS), len(CORRECTIONS),
+             len(ASSERTIONS), n_mut, len(FAILED)))
     for f in FAILED:
         print("  FAILED:", f)
     return 1 if FAILED else 0

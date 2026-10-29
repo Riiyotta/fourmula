@@ -2,6 +2,16 @@
   "id": "faq.accordion",
   "kind": "section",
   "category": "faq",
+  "source": {
+    "id": "dom:Faq:faq",
+    "tag": "<section className=\"faq\">",
+    "file": "src/components/Faq.jsx",
+    "lines": "4-51"
+  },
+  "semantic": {
+    "id": "faq.accordion",
+    "category": "faq"
+  },
   "purpose": "The six-item FAQ accordion, the last body section on the home page.",
   "content": {
     "type": "object",
@@ -144,5 +154,7 @@
       "quote": "<Faq />"
     }
   ],
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 170, which was unreachable."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 170, which was unreachable.",
+  "generatedAssetRoles": [],
+  "retrievalEligible": true
 }

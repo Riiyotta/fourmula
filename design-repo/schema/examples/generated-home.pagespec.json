@@ -1,0 +1,780 @@
+{
+ "$schema": "../pagespec.schema.json",
+ "pageSpecVersion": "2.0.0",
+ "mode": "generation",
+ "theme": "light",
+ "template": "home",
+ "route": "/",
+ "nodes": [
+  {
+   "type": "chrome.preloader",
+   "content": {
+    "word": "Loading",
+    "logo": {
+     "assetRole": "placeholder-brand-mark"
+    },
+    "spinner": {
+     "assetRole": "ui-icon-glyph"
+    },
+    "images": [
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/preloader-avatar-01.avif",
+      "alt": ""
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/preloader-avatar-02.avif",
+      "alt": ""
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/preloader-avatar-03.avif",
+      "alt": ""
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/preloader-avatar-04.avif",
+      "alt": ""
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "preloader-reveal",
+    "reducedMotionFallback": "Show the final state at once with no blur, counter or image stagger, then remove the overlay.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.cookie-consent",
+   "content": {
+    "title": "Your privacy choices",
+    "body": "We use a few small files to keep this site working and, only if you agree, to learn which pages help visitors most. You can change your mind at any time.",
+    "inlineLinkLabel": "privacy notice",
+    "bannerActions": [
+     {
+      "label": "Allow all",
+      "style": "primary",
+      "fsCc": "allow",
+      "href": "/#"
+     },
+     {
+      "label": "Choose",
+      "style": "outline",
+      "fsCc": "open-preferences",
+      "href": "/#"
+     }
+    ],
+    "modalActions": [
+     {
+      "label": "Allow all",
+      "style": "primary",
+      "fsCc": "allow",
+      "href": "/#"
+     },
+     {
+      "label": "Keep my choices",
+      "style": "outline",
+      "fsCc": "submit",
+      "href": "/#"
+     }
+    ],
+    "categories": [
+     {
+      "label": "Essential (always on)",
+      "description": "Needed for pages to load and forms to work.",
+      "interactive": false,
+      "fsCcCheckbox": "necessary"
+     },
+     {
+      "label": "Advertising",
+      "description": "Lets partners show offers that fit what you looked at here.",
+      "interactive": true,
+      "fsCcCheckbox": "marketing",
+      "assetRole": "form-control-checkmark"
+     },
+     {
+      "label": "Preferences",
+      "description": "Remembers settings such as language between visits.",
+      "interactive": true,
+      "fsCcCheckbox": "personalization",
+      "assetRole": "form-control-checkmark"
+     },
+     {
+      "label": "Measurement",
+      "description": "Counts visits so the team can see which pages are useful.",
+      "interactive": true,
+      "fsCcCheckbox": "analytics",
+      "assetRole": "form-control-checkmark"
+     }
+    ],
+    "closeLabel": "Close privacy choices"
+   },
+   "motion": {
+    "pattern": "overlay-fade",
+    "reducedMotionFallback": "Show the banner in its final position at once, with no fade and no slide.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.header",
+   "content": {
+    "logo": {
+     "assetRole": "placeholder-brand-mark",
+     "accessibleLabel": "Kestrelwave",
+     "href": "/"
+    },
+    "menuLabel": "Menu",
+    "themeToggle": {
+     "ariaPressed": true,
+     "dataThemeState": "dark"
+    },
+    "progressInitial": "0%",
+    "signin": {
+     "assetRole": "ui-icon-glyph",
+     "accessibleLabel": "Your account",
+     "href": "/auth"
+    },
+    "cta": {
+     "label": "Try it free",
+     "href": "/start",
+     "hoverStagger": true
+    }
+   },
+   "motion": {
+    "pattern": "chrome-reveal",
+    "reducedMotionFallback": "Render the header in place with no reveal and keep the progress readout updating.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.menu",
+   "content": {
+    "groups": [
+     {
+      "label": "Explore",
+      "layout": "column",
+      "emphasis": "primary",
+      "links": [
+       {
+        "label": "Packshots",
+        "href": "/#pdp"
+       },
+       {
+        "label": "Scenes",
+        "href": "/#products"
+       },
+       {
+        "label": "Clips",
+        "href": "/#video"
+       },
+       {
+        "label": "How it works",
+        "href": "/#list"
+       }
+      ]
+     },
+     {
+      "label": "Legal",
+      "layout": "column",
+      "emphasis": "secondary",
+      "links": [
+       {
+        "label": "Privacy notice",
+        "href": "/privacy-policy"
+       },
+       {
+        "label": "Usage terms",
+        "href": "/terms-of-service"
+       },
+       {
+        "label": "Cookie choices",
+        "href": "/#"
+       }
+      ]
+     },
+     {
+      "label": "Follow",
+      "layout": "row",
+      "emphasis": "secondary",
+      "links": [
+       {
+        "label": "Newsletter",
+        "href": "#"
+       },
+       {
+        "label": "Community",
+        "href": "/#",
+        "hidden": true
+       },
+       {
+        "label": "Events",
+        "href": "/#",
+        "hidden": true
+       }
+      ]
+     }
+    ],
+    "cta": {
+     "label": "Try it free",
+     "href": "/start",
+     "hoverStagger": true
+    },
+    "signin": {
+     "assetRole": "ui-icon-glyph",
+     "accessibleLabel": "Your account",
+     "href": "/auth"
+    }
+   },
+   "motion": {
+    "pattern": "panel-expand",
+    "reducedMotionFallback": "Switch the panel between closed and open instantly with every link fully visible.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "hero.home",
+   "content": {
+    "heading": "Every product,",
+    "headingAccent": "every angle.",
+    "copyrightYear": "2026",
+    "scrollCue": "see more",
+    "scrollCueHref": "/#intro",
+    "sliderItems": [
+     "Packshots",
+     "Flat lays",
+     "Close-ups",
+     "Banners",
+     "Reels",
+     "Lookbooks"
+    ],
+    "uploadPrompt": "Drag product photos here",
+    "carouselImages": [
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/avatar-01.avif",
+      "alt": "Generated portrait of a fictional model, look 1 of eight."
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/avatar-02.avif",
+      "alt": "Generated portrait of a fictional model, look 2 of eight."
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/avatar-03.avif",
+      "alt": "Generated portrait of a fictional model, look 3 of eight."
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/avatar-04.avif",
+      "alt": "Generated portrait of a fictional model, look 4 of eight."
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/avatar-05.avif",
+      "alt": "Generated portrait of a fictional model, look 5 of eight."
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/avatar-06.avif",
+      "alt": "Generated portrait of a fictional model, look 6 of eight."
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/avatar-07.avif",
+      "alt": "Generated portrait of a fictional model, look 7 of eight."
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/avatar-08.avif",
+      "alt": "Generated portrait of a fictional model, look 8 of eight."
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "hero-reveal",
+    "reducedMotionFallback": "Show the heading and cue at final opacity; freeze the label strip and the image ring; keep the drop area usable.",
+    "reducedMotionFallbackKind": "design-rule"
+   },
+   "styleTokens": {
+    "text": "text.primary",
+    "surface": "surface.page",
+    "spacing": "space.section"
+   }
+  },
+  {
+   "type": "content.what-intro",
+   "content": {
+    "eyebrow": "Why teams switch",
+    "headingLines": [
+     "Consistent imagery.",
+     "Zero reshoots."
+    ],
+    "anchorId": "intro"
+   },
+   "motion": {
+    "pattern": "flash-word-reveal",
+    "reducedMotionFallback": "Render the heading as one block at full strength.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "showcase.ai-capabilities",
+   "content": {
+    "blocks": [
+     {
+      "anchorId": "pdp",
+      "pillHref": "/start",
+      "pillGlyph": {
+       "assetRole": "ui-icon-glyph",
+       "accessibleLabel": "Kestrelwave"
+      },
+      "tagLabel": "Packshot studio",
+      "heading": "Clean packshots,",
+      "headingSecondLine": "no lighting rig.",
+      "body": "Send one photo of an item and receive a full set of white-background views ready for your listing pages.",
+      "collage": {
+       "arrangement": "two-up-with-arrow",
+       "images": [
+        {
+         "assetRole": "placeholder-screenshot",
+         "assetRef": "/assets/generated/frame-01.avif",
+         "alt": "Placeholder frame for a packshot."
+        },
+        {
+         "assetRole": "placeholder-screenshot",
+         "assetRef": "/assets/generated/frame-02.avif",
+         "alt": "Placeholder frame for a second packshot."
+        }
+       ],
+       "videos": []
+      }
+     },
+     {
+      "anchorId": "products",
+      "pillHref": "/start",
+      "pillGlyph": {
+       "assetRole": "ui-icon-glyph",
+       "accessibleLabel": "Kestrelwave"
+      },
+      "tagLabel": "Scene builder",
+      "heading": "One item, many settings.",
+      "body": "Place any item on a kitchen counter, a beach towel or a city street without leaving your desk.",
+      "collage": {
+       "arrangement": "five-image-collage",
+       "images": [
+        {
+         "assetRole": "generated-illustration",
+         "assetRef": "/assets/generated/scene-01.avif",
+         "alt": "Generated scene illustration 1."
+        },
+        {
+         "assetRole": "generated-illustration",
+         "assetRef": "/assets/generated/scene-02.avif",
+         "alt": "Generated scene illustration 2."
+        },
+        {
+         "assetRole": "generated-illustration",
+         "assetRef": "/assets/generated/scene-03.avif",
+         "alt": "Generated scene illustration 3."
+        },
+        {
+         "assetRole": "generated-illustration",
+         "assetRef": "/assets/generated/scene-04.avif",
+         "alt": "Generated scene illustration 4."
+        },
+        {
+         "assetRole": "generated-illustration",
+         "assetRef": "/assets/generated/scene-05.avif",
+         "alt": "Generated scene illustration 5."
+        }
+       ],
+       "videos": []
+      }
+     },
+     {
+      "anchorId": "video",
+      "pillHref": "/start",
+      "pillGlyph": {
+       "assetRole": "ui-icon-glyph",
+       "accessibleLabel": "Kestrelwave"
+      },
+      "tagLabel": "Clip maker",
+      "heading": "Short clips",
+      "headingSecondLine": "from still photos.",
+      "body": "Turn approved stills into looping clips for social posts and banners.",
+      "collage": {
+       "arrangement": "three-video-collage",
+       "images": [],
+       "videos": [
+        {
+         "assetRole": "user-supplied-asset",
+         "assetRef": "/assets/user/clip-01.mp4"
+        },
+        {
+         "assetRole": "user-supplied-asset",
+         "assetRef": "/assets/user/clip-02.mp4"
+        },
+        {
+         "assetRole": "user-supplied-asset",
+         "assetRef": "/assets/user/clip-03.mp4"
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "flash-word-reveal",
+    "reducedMotionFallback": "Render the headings unsplit, hold images on their first frame and keep supplied clips paused.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "marquee.how-trusted",
+   "content": {
+    "eyebrow": "The process",
+    "headingLead": "Software that",
+    "capabilities": [
+     "Shoots stills",
+     "Cuts clips",
+     "Keeps your style"
+    ],
+    "cta": {
+     "label": "Try it free",
+     "href": "/start",
+     "hoverStagger": true
+    },
+    "trustedEyebrow": "Sample customers",
+    "trustedLogos": [
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     },
+     {
+      "assetRole": "placeholder-customer-logo"
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "marquee-scroll",
+    "reducedMotionFallback": "Freeze both strips on their first frame and render the heading unsplit.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "steps.pinned-list",
+   "content": {
+    "headingLines": [
+     "From upload to launch",
+     "in four moves."
+    ],
+    "subCopyLines": [
+     "Create an account and speed up",
+     "every product drop."
+    ],
+    "anchorId": "list",
+    "slides": [
+     {
+      "variant": "is-first",
+      "headingLines": [
+       "Upload your",
+       "catalogue."
+      ],
+      "stepTag": "(UP)",
+      "stepNumber": "01",
+      "infoTags": [
+       "Bulk upload",
+       "Folder sync"
+      ],
+      "infoCopyLines": [
+       "Bring every item,",
+       "photo and style guide",
+       "into one library."
+      ],
+      "cta": {
+       "label": "Try it free",
+       "href": "/start",
+       "hoverStagger": true
+      },
+      "artwork": {
+       "assetRole": "generated-illustration",
+       "assetRef": "/assets/generated/step-01.avif",
+       "alt": "Upload your catalogue."
+      },
+      "pinned": true
+     },
+     {
+      "variant": "is-second",
+      "headingLines": [
+       "Pick a",
+       "direction."
+      ],
+      "stepTag": "(PD)",
+      "stepNumber": "02",
+      "infoTags": [
+       "Mood boards",
+       "Saved styles"
+      ],
+      "infoCopyLines": [
+       "Choose a mood",
+       "or reuse a style",
+       "you saved earlier."
+      ],
+      "cta": {
+       "label": "Try it free",
+       "href": "/start",
+       "hoverStagger": true
+      },
+      "artwork": {
+       "assetRole": "generated-illustration",
+       "assetRef": "/assets/generated/step-02.avif",
+       "alt": "Pick a direction."
+      },
+      "pinned": true
+     },
+     {
+      "variant": "is-third",
+      "headingLines": [
+       "Review the",
+       "drafts."
+      ],
+      "stepTag": "(RD)",
+      "stepNumber": "03",
+      "infoTags": [
+       "Compare views",
+       "Team comments"
+      ],
+      "infoCopyLines": [
+       "Approve the drafts",
+       "your team likes",
+       "best of all."
+      ],
+      "cta": {
+       "label": "Try it free",
+       "href": "/start",
+       "hoverStagger": true
+      },
+      "artwork": {
+       "assetRole": "generated-illustration",
+       "assetRef": "/assets/generated/step-03.avif",
+       "alt": "Review the drafts."
+      },
+      "pinned": true
+     },
+     {
+      "variant": "is-fourth",
+      "headingLines": [
+       "Publish",
+       "everywhere."
+      ],
+      "stepTag": "(PE)",
+      "stepNumber": "04",
+      "infoTags": [
+       "Store sizes",
+       "Social sizes"
+      ],
+      "infoCopyLines": [
+       "Download each file",
+       "at the size",
+       "every channel needs."
+      ],
+      "cta": {
+       "label": "Try it free",
+       "href": "/start",
+       "hoverStagger": true
+      },
+      "artwork": {
+       "assetRole": "generated-illustration",
+       "assetRef": "/assets/generated/step-04.avif",
+       "alt": "Publish everywhere."
+      },
+      "pinned": false
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "pinned-3d-stack",
+    "reducedMotionFallback": "Render the four slides as a plain vertical stack with no pinning or rotation.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "faq.accordion",
+   "content": {
+    "eyebrow": "Questions",
+    "headingLines": [
+     "Straight answers.",
+     "No jargon."
+    ],
+    "items": [
+     {
+      "question": "What can I make with it?",
+      "answer": "Packshots, styled scenes and short looping clips for listings and social posts.",
+      "icon": "+"
+     },
+     {
+      "question": "What do I upload first?",
+      "answer": "A single clear photo of an item is enough to begin.",
+      "icon": "+"
+     },
+     {
+      "question": "Can it follow our style guide?",
+      "answer": "Yes. Save colours and backgrounds once and reuse them on every batch.",
+      "icon": "+"
+     },
+     {
+      "question": "Who owns the results?",
+      "answer": "You do, under the terms of your own plan.",
+      "icon": "+"
+     },
+     {
+      "question": "How long does a batch take?",
+      "answer": "Small batches are ready quickly; large ones run in the background.",
+      "icon": "+"
+     },
+     {
+      "question": "Will it replace photographers?",
+      "answer": "No. It handles repeat views so people can focus on creative shoots.",
+      "icon": "+"
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "flash-word-reveal",
+    "reducedMotionFallback": "Render the heading unsplit and open or close items instantly, all closed on load.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.footer",
+   "content": {
+    "logo": {
+     "assetRole": "placeholder-brand-mark",
+     "accessibleLabel": "Kestrelwave",
+     "href": "/"
+    },
+    "linkLists": [
+     {
+      "emphasis": "primary",
+      "layout": "column",
+      "links": [
+       {
+        "label": "Packshots",
+        "href": "/#pdp"
+       },
+       {
+        "label": "Clips",
+        "href": "/#video"
+       }
+      ]
+     },
+     {
+      "emphasis": "secondary",
+      "layout": "column",
+      "links": [
+       {
+        "label": "Privacy notice",
+        "href": "/privacy-policy"
+       },
+       {
+        "label": "Usage terms",
+        "href": "/terms-of-service"
+       },
+       {
+        "label": "Cookie choices",
+        "href": "/#"
+       }
+      ]
+     },
+     {
+      "emphasis": "primary",
+      "layout": "column",
+      "links": [
+       {
+        "label": "Scenes",
+        "href": "/#products"
+       },
+       {
+        "label": "How it works",
+        "href": "/#list"
+       }
+      ]
+     },
+     {
+      "emphasis": "secondary",
+      "layout": "row",
+      "links": [
+       {
+        "label": "Newsletter",
+        "href": "#"
+       },
+       {
+        "label": "Community",
+        "href": "/#",
+        "hidden": true
+       },
+       {
+        "label": "Events",
+        "href": "/#",
+        "hidden": true
+       }
+      ]
+     }
+    ],
+    "legalLine": "2026, Kestrelwave Studio (fictional). Sample address only.",
+    "registrationLine": "Company details at kestrelwave.example",
+    "dotsField": {
+     "rows": 14,
+     "colsDesktop": 52
+    }
+   },
+   "motion": {
+    "pattern": "dots-field-wave",
+    "reducedMotionFallback": "Render the footer and dot grid statically at resting opacity with no wave.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.awards-badge",
+   "content": {
+    "href": "#",
+    "artwork": {
+     "assetRole": "placeholder-brand-mark"
+    }
+   },
+   "motion": {
+    "pattern": "static",
+    "reducedMotionFallback": "Unchanged, because this section has no motion to reduce.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  }
+ ]
+}

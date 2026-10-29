@@ -1,6 +1,6 @@
 {
   "$description": "Token usage policy for generators. rawValueRestrictions keys are EXACTLY the category keys of tokens/llm/token-catalog.json, so extraction/verify_all.py check [k] can resolve one against the other and fails if either side is renamed.",
-  "policyVersion": "1.0.0",
+  "policyVersion": "1.1.0",
   "enforcementLegend": {
     "enforced": "A script fails the run if violated; `enforcedBy` names it. Every `enforced` entry below is implemented in extraction/verify_all.py check [k] and exercised by extraction/prove_drift.py.",
     "convention": "A documented rule that NO script checks. Never describe a convention rule as validated."
@@ -30,6 +30,41 @@
       "check": "colour provenance",
       "rule": "every foundation colour literal really appears in src/styles/fourmula-base.css, src/styles/fourmula-head.css, src/components/Footer.jsx or public/motion/*.js (WARN-skipped when the source project is not beside this package)",
       "enforcedBy": "extraction/verify_all.py [k]"
+    },
+    {
+      "check": "PageSpec styleTokens: TOKEN_UNKNOWN",
+      "rule": "every styleTokens id exists in tokens/llm/token-catalog.json",
+      "enforcedBy": "schema/semantic_validate.py TOKEN_UNKNOWN (graph rule), exercised by schema/tests/adversarial_test.py"
+    },
+    {
+      "check": "PageSpec styleTokens: TOKEN_RAW_COLOR",
+      "rule": "no raw hex / rgb / hsl / named colour in styleTokens",
+      "enforcedBy": "schema/semantic_validate.py TOKEN_RAW_COLOR (graph rule), exercised by schema/tests/adversarial_test.py"
+    },
+    {
+      "check": "PageSpec styleTokens: TOKEN_ARBITRARY_SPACING",
+      "rule": "no raw px / rem / % / vw / calc length in styleTokens; only space.* and radius.* roles",
+      "enforcedBy": "schema/semantic_validate.py TOKEN_ARBITRARY_SPACING (graph rule), exercised by schema/tests/adversarial_test.py"
+    },
+    {
+      "check": "PageSpec styleTokens: TOKEN_UNSUPPORTED_FONT",
+      "rule": "fontFamily is font.body only; no raw family name",
+      "enforcedBy": "schema/semantic_validate.py TOKEN_UNSUPPORTED_FONT (graph rule), exercised by schema/tests/adversarial_test.py"
+    },
+    {
+      "check": "PageSpec styleTokens: TOKEN_THEME_MISMATCH",
+      "rule": "no id that only the other palette resolves; the theme must be schema-validated",
+      "enforcedBy": "schema/semantic_validate.py TOKEN_THEME_MISMATCH (graph rule), exercised by schema/tests/adversarial_test.py"
+    },
+    {
+      "check": "PageSpec styleTokens: TOKEN_CATEGORY_MISMATCH",
+      "rule": "each slot takes its own semantic family; foundation / component / layout ids and vendor.cookie-* outside the consent UI are rejected",
+      "enforcedBy": "schema/semantic_validate.py TOKEN_CATEGORY_MISMATCH (graph rule), exercised by schema/tests/adversarial_test.py"
+    },
+    {
+      "check": "registration",
+      "rule": "token-catalog.json, token-policy.json and motion-patterns.json are registered in registry.manifest.json and every catalog category equals its sourceFile's ids",
+      "enforcedBy": "extraction/verify_all.py [w]"
     }
   ],
   "convention": [
@@ -43,19 +78,23 @@
   "rawValueRestrictions": {
     "color": {
       "rule": "Never write a raw colour. Reference a semantic role. Themed roles resolve per palette; literal roles are palette-independent. #3898ec, #ddd, #ccc, #222, #333, #fafafa, #c8c8c8, #999, #5d6c7b and #e2e2e2 are Webflow framework reset values and are NOT tokens.",
-      "enforcement": "convention"
+      "enforcement": "enforced",
+      "enforcedBy": "TOKEN_RAW_COLOR, TOKEN_THEME_MISMATCH, TOKEN_CATEGORY_MISMATCH in schema/semantic_validate.py, on PageSpec styleTokens"
     },
     "typography": {
       "rule": "Only the 16 type steps through their semantic roles. No raw font-size, line-height or font-family. The Webflow reset sizes 38/32/24/18/14/12px are NOT part of the scale.",
-      "enforcement": "convention"
+      "enforcement": "enforced",
+      "enforcedBy": "TOKEN_UNSUPPORTED_FONT, TOKEN_UNKNOWN, TOKEN_CATEGORY_MISMATCH in schema/semantic_validate.py, on PageSpec styleTokens"
     },
     "spacing": {
       "rule": "Only the 47 measured rem steps (35 positive, 12 negative) through their semantic roles. The scale is 0.25rem-based with documented hand-tuned outliers.",
-      "enforcement": "convention"
+      "enforcement": "enforced",
+      "enforcedBy": "TOKEN_ARBITRARY_SPACING, TOKEN_CATEGORY_MISMATCH in schema/semantic_validate.py, on PageSpec styleTokens"
     },
     "radius": {
       "rule": "Only the 17 measured radius values. radius.md (3rem) and radius.pill (99rem) dominate.",
-      "enforcement": "convention"
+      "enforcement": "enforced",
+      "enforcedBy": "TOKEN_ARBITRARY_SPACING, TOKEN_CATEGORY_MISMATCH in schema/semantic_validate.py, on PageSpec styleTokens"
     },
     "breakpoint": {
       "rule": "Only 991px, 767px and 479px switch layout, plus the single min-width:992px query that flips the hero marquee axis and the two min-width:768px uses. 2560px and 1728px are root-font-size stops ONLY - never use them for layout.",
@@ -98,8 +137,9 @@
     }
   },
   "overrides": {
-    "perInstanceOverrideField": "none",
-    "statement": "A PageSpec carries NO per-instance style or token-override field; schema/pagespec.schema.json rejects a `tokens` key at page level and at node level. Styling is owned entirely by the section and component contracts, so there is nothing in a PageSpec that could reference or override a token. No such field has been invented just to have something to validate, and no PageSpec-level token mutation exists in the adversarial suite (MASTER-GUIDE 3.21). Token-layer safety is tested one layer down instead, by injecting drift into a scratch copy of this repository and asserting verify_all.py fails."
+    "perInstanceOverrideField": "styleTokens (node level, optional, closed)",
+    "statement": "Revision 1.1 adds ONE optional, closed node-level field, styleTokens {surface, text, accent, border, typography, fontFamily, spacing, radius}, whose values are token REFERENCES only. It exists so that the token policy is machine-enforceable on a PageSpec (the approval requirement asks the validator to reject unknown tokens, raw colours, arbitrary spacing, unsupported fonts and invalid theme/token combinations). Styling is still owned by the section and component contracts; styleTokens can only select an existing semantic role, never a value. A free-form `tokens` key stays rejected by the schema at page and node level.",
+    "history": "Up to 1.0.0 a PageSpec carried no token field at all and token safety was tested only by drift injection; that layer is kept."
   },
   "themeModel": {
     "themes": [
@@ -113,6 +153,7 @@
       "cit-theme-body-dark-palette",
       "cit-theme-body-dark-light-palette",
       "cit-theme-index-html"
-    ]
+    ],
+    "pageField": "PageSpec `theme` (optional, enum light|dark, default light) - validated against styleTokens by TOKEN_THEME_MISMATCH."
   }
 }

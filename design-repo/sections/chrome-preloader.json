@@ -2,6 +2,16 @@
   "id": "chrome.preloader",
   "kind": "section",
   "category": "chrome",
+  "source": {
+    "id": "dom:Preloader:preloader",
+    "tag": "<section className=\"preloader\">",
+    "file": "src/components/Preloader.jsx",
+    "lines": "4-17"
+  },
+  "semantic": {
+    "id": "chrome.preloader",
+    "category": "chrome"
+  },
   "purpose": "The full-viewport loading overlay: a word, the brand mark, an 8-step spinner and four stacked photographs. Shown on / and on the 404 only.",
   "content": {
     "type": "object",
@@ -19,7 +29,9 @@
           "assetRole": {
             "type": "string",
             "enum": [
-              "brand-wordmark"
+              "brand-wordmark",
+              "placeholder-brand-mark",
+              "user-supplied-asset"
             ]
           }
         },
@@ -53,7 +65,10 @@
             "assetRole": {
               "type": "string",
               "enum": [
-                "preloader-photo"
+                "preloader-photo",
+                "fictional-person-avatar",
+                "generated-illustration",
+                "user-supplied-asset"
               ]
             },
             "assetRef": {
@@ -105,14 +120,23 @@
       "assetRole": [
         "brand-wordmark"
       ],
-      "policy": "must-reuse-exact"
+      "policy": "must-reuse-exact",
+      "generatedAssetRoles": [
+        "placeholder-brand-mark",
+        "user-supplied-asset"
+      ]
     },
     "images": {
       "assetRole": [
         "preloader-photo"
       ],
       "policy": "must-not-fabricate",
-      "count": 4
+      "count": 4,
+      "generatedAssetRoles": [
+        "fictional-person-avatar",
+        "generated-illustration",
+        "user-supplied-asset"
+      ]
     }
   },
   "motion": {
@@ -174,5 +198,14 @@
       "quote": "{preloader && <Preloader />}"
     }
   ],
-  "contentMaxWordsTotalNote": "The only text field is `word` (maxWords 2), so a section-wide total could never reject anything the per-field budget allows. Declaring one would be a check that can never fire, so none is declared."
+  "contentMaxWordsTotalNote": "The only text field is `word` (maxWords 2), so a section-wide total could never reject anything the per-field budget allows. Declaring one would be a check that can never fire, so none is declared.",
+  "generatedAssetRoles": [
+    "placeholder-brand-mark",
+    "user-supplied-asset",
+    "ui-icon-glyph",
+    "fictional-person-avatar",
+    "generated-illustration"
+  ],
+  "retrievalEligible": false,
+  "retrievalReason": "Runtime preloader overlay: a full-viewport fixed layer that counts up, reveals four images and then removes itself. It is a loading state, not page content, and must never be retrieved as a section example."
 }

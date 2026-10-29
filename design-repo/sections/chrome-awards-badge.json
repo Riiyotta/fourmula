@@ -2,6 +2,16 @@
   "id": "chrome.awards-badge",
   "kind": "section",
   "category": "chrome",
+  "source": {
+    "id": "dom:AwwwardsBadge:awwwards",
+    "tag": "<div id=\"awwwards\"",
+    "file": "src/components/AwwwardsBadge.jsx",
+    "lines": "4-6"
+  },
+  "semantic": {
+    "id": "chrome.awards-badge",
+    "category": "chrome"
+  },
   "purpose": "A fixed, vertically centred badge pinned to the right edge of the viewport. Rendered on EVERY route, and it is the only node that sits OUTSIDE the section.page shell.",
   "content": {
     "type": "object",
@@ -19,14 +29,16 @@
           "assetRole": {
             "type": "string",
             "enum": [
-              "ui-icon-glyph"
+              "third-party-award-badge",
+              "user-supplied-asset",
+              "placeholder-brand-mark"
             ]
           }
         },
         "required": [
           "assetRole"
         ],
-        "note": "A single inline SVG, 53.08 x 171.358, with a .js-color-bg black plate and .js-color-text white lettering. It carries NO text node, so this section has no copy at all."
+        "note": "A single inline SVG, 53.08 x 171.358, with a .js-color-bg black plate and .js-color-text white lettering: the REAL Awwwards badge (div#awwwards, src/components/AwwwardsBadge.jsx:4). It carries NO text node, so this section has no copy at all. Previously filed under ui-icon-glyph (may-generate-new); corrected to third-party-award-badge because it is a real third-party award mark and an award claim."
       }
     },
     "required": [
@@ -58,9 +70,13 @@
   "media": {
     "artwork": {
       "assetRole": [
-        "ui-icon-glyph"
+        "third-party-award-badge"
       ],
-      "policy": "may-generate-new"
+      "policy": "must-not-fabricate",
+      "generatedAssetRoles": [
+        "user-supplied-asset",
+        "placeholder-brand-mark"
+      ]
     }
   },
   "motion": {
@@ -105,5 +121,11 @@
       "quote": "in the original this sits OUTSIDE section.page"
     }
   ],
-  "contentMaxWordsTotalNote": "This section has NO text field at all - the badge is a single inline SVG with no text node - so a word total is meaningless. The schema enforces the absence directly by closing `content` to `href` and `artwork`."
+  "contentMaxWordsTotalNote": "This section has NO text field at all - the badge is a single inline SVG with no text node - so a word total is meaningless. The schema enforces the absence directly by closing `content` to `href` and `artwork`.",
+  "generatedAssetRoles": [
+    "user-supplied-asset",
+    "placeholder-brand-mark"
+  ],
+  "retrievalEligible": false,
+  "retrievalReason": "Runtime floating widget: a fixed, vertically centred third-party award tab pinned to the viewport edge on every route. It is an overlay outside the page shell, not page content, and must never be retrieved."
 }

@@ -2,173 +2,20 @@
   "id": "content.tech",
   "kind": "section",
   "category": "content",
-  "purpose": "The shared section.tech inner-page body. ONE real CSS section type serving four routes in three genuinely different shapes, so it is modelled as one section with three VARIANTS and a polymorphic content contract.",
+  "source": {
+    "id": "dom:Start:tech",
+    "tag": "<section className=\"tech\">",
+    "file": "src/pages/Start.jsx",
+    "lines": "16-44"
+  },
+  "semantic": {
+    "id": "content.tech",
+    "category": "content"
+  },
+  "purpose": "The section.tech body of the two composed app stand-ins (/start, /auth): one real CSS section type in two genuinely different shapes, modelled as one section with two VARIANTS and a polymorphic content contract. The legal pages, which share the same DOM wrapper, were decomposed into content.legal-header + content.legal-chapter (same DOM, different purpose - R6).",
   "content": {
     "type": "object",
     "oneOf": [
-      {
-        "type": "object",
-        "additionalProperties": false,
-        "title": "legal-prose",
-        "description": "The long-form legal page body. DOM scaffolding measured against the live original; the PROSE ITSELF IS DELIBERATE PLACEHOLDER FILLER. Paragraph slots therefore carry NO maxWords: a budget derived from filler would be a fabricated measurement dressed up as a measured one.",
-        "properties": {
-          "titleLines": {
-            "type": "array",
-            "minItems": 1,
-            "maxItems": 2,
-            "items": {
-              "type": "string",
-              "maxWords": 4
-            },
-            "note": "1-2 lines separated by a <br/>. Measured: /privacy-policy has 2 lines, \"FOURMULA AI\" (2) and \"PRIVACY & COOKIES POLICY\" (3); /terms-of-service has 1 line, \"TERMS OF USE\" (3)."
-          },
-          "introParagraph": {
-            "type": "string",
-            "note": "UNBUDGETED - placeholder filler. Measured as one short line on both pages."
-          },
-          "anchorIndexHeading": {
-            "type": "string",
-            "maxWords": 4,
-            "note": "Measured: 3 words, \"Table of Contents\", as an h3. Present on /privacy-policy; /terms-of-service has 1 h3 as well."
-          },
-          "anchorIndex": {
-            "type": "array",
-            "minItems": 12,
-            "maxItems": 16,
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "label": {
-                  "type": "string",
-                  "maxWords": 10
-                },
-                "slug": {
-                  "type": "string",
-                  "pattern": "^[a-z0-9][a-z0-9-]*$"
-                }
-              },
-              "required": [
-                "label",
-                "slug"
-              ]
-            },
-            "note": "Measured: 12 entries on /privacy-policy, 16 on /terms-of-service, one per h2."
-          },
-          "sections": {
-            "type": "array",
-            "minItems": 12,
-            "maxItems": 16,
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "heading": {
-                  "type": "string",
-                  "maxWords": 10,
-                  "note": "Measured: a numbered h2, 2-7 words including the leading number."
-                },
-                "slug": {
-                  "type": "string",
-                  "pattern": "^[a-z0-9][a-z0-9-]*$"
-                },
-                "anchorPattern": {
-                  "type": "string",
-                  "enum": [
-                    "div-embed-only",
-                    "div-embed-and-h2-id"
-                  ],
-                  "note": "REAL DIFFERENCE between the two legal pages: /terms-of-service uses 16 <div id> embed targets and puts NO id on its h2 elements (div-embed-only), while /privacy-policy duplicates each slug onto BOTH the <div id> embed AND the h2 (div-embed-and-h2-id). Both are valid Webflow rich-text anchor patterns and both are reproduced verbatim."
-                },
-                "paragraphs": {
-                  "type": "array",
-                  "minItems": 0,
-                  "maxItems": 12,
-                  "items": {
-                    "type": "string"
-                  },
-                  "note": "UNBUDGETED - placeholder filler."
-                },
-                "lists": {
-                  "type": "array",
-                  "minItems": 0,
-                  "maxItems": 6,
-                  "items": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "ordered": {
-                        "type": "boolean"
-                      },
-                      "items": {
-                        "type": "array",
-                        "minItems": 1,
-                        "maxItems": 20,
-                        "items": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "required": [
-                      "ordered",
-                      "items"
-                    ]
-                  }
-                },
-                "tables": {
-                  "type": "array",
-                  "minItems": 0,
-                  "maxItems": 2,
-                  "items": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                      "headerCells": {
-                        "type": "array",
-                        "minItems": 1,
-                        "maxItems": 6,
-                        "items": {
-                          "type": "string",
-                          "maxWords": 6
-                        }
-                      },
-                      "rowCount": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 30
-                      }
-                    },
-                    "required": [
-                      "headerCells",
-                      "rowCount"
-                    ]
-                  },
-                  "note": "Measured: 2 tables on /privacy-policy (25 tr, 105 td in total), 0 on /terms-of-service."
-                },
-                "subHeadings": {
-                  "type": "array",
-                  "minItems": 0,
-                  "maxItems": 4,
-                  "items": {
-                    "type": "string",
-                    "maxWords": 10
-                  }
-                }
-              },
-              "required": [
-                "heading",
-                "slug",
-                "anchorPattern"
-              ]
-            }
-          }
-        },
-        "required": [
-          "titleLines",
-          "anchorIndex",
-          "sections"
-        ]
-      },
       {
         "type": "object",
         "additionalProperties": false,
@@ -371,26 +218,21 @@
         ]
       }
     ],
-    "note": "POLYMORPHIC. Deliberately a oneOf of THREE FULLY INDEPENDENT schemas, each with its own complete properties / required / additionalProperties:false - NOT a shared base plus allOf patches. In JSON Schema draft-07 additionalProperties:false on a shared base is evaluated only against that base's own `properties` and cannot see properties a sibling allOf branch adds, so the shared-base shape would silently accept fields from the wrong variant."
+    "note": "POLYMORPHIC. Deliberately a oneOf of TWO FULLY INDEPENDENT schemas, each with its own complete properties / required / additionalProperties:false - NOT a shared base plus allOf patches. In JSON Schema draft-07 additionalProperties:false on a shared base is evaluated only against that base's own `properties` and cannot see properties a sibling allOf branch adds, so the shared-base shape would silently accept fields from the wrong variant."
   },
   "contentMaxWordsTotal": null,
-  "contentMaxWordsTotalNote": "No section-wide total is declared: the legal-prose variant's body is unbudgeted placeholder filler, so any total would be meaningless for it. Per-field maxWords still apply on every budgeted field in all three variants.",
+  "contentMaxWordsTotalNote": "No section-wide total is declared because the two variants have different shapes; per-field maxWords apply on every field of both.",
   "usedOn": [
-    "/privacy-policy",
-    "/terms-of-service",
     "/start",
     "/auth"
   ],
   "evidence": {
     "note": "EVIDENCE LEVEL DIFFERS PER VARIANT AND IS NEVER FLATTENED.",
     "perVariant": {
-      "legal-prose": "DOM SCAFFOLDING measured against the live original (independently re-counted from the real JSX: /privacy-policy h1:1 h2:12 h3:2 p:39 li:31 a:15 table:2 tr:25 td:105; /terms-of-service h1:1 h2:16 h3:1 p:63 li:30 a:21 - both match exactly). THE BODY PROSE IS DELIBERATE PLACEHOLDER FILLER, not the original's copy, because shipping another company's policy text is a liability. Any word budget derived from these pages measures the filler, NOT a measured copy budget.",
       "onboarding-cta": "COMPOSED, NOT MEASURED. There was no source to measure: app.fourmula.ai is a Next.js app that emits BAILOUT_TO_CLIENT_SIDE_RENDERING and an empty shell (11-18 characters of body text, zero forms, zero inputs). This page is an ORIGINAL COMPOSITION assembled from this project's own design system (section.tech, the u-* type scale, btn-primary / btn-outline). Its structure and copy are NOT evidence about fourmula.ai.",
       "auth-form": "COMPOSED, NOT MEASURED. There was no source to measure: app.fourmula.ai is a Next.js app that emits BAILOUT_TO_CLIENT_SIDE_RENDERING and an empty shell (11-18 characters of body text, zero forms, zero inputs). This page is an ORIGINAL COMPOSITION assembled from this project's own design system (section.tech, the u-* type scale, btn-primary / btn-outline). Its structure and copy are NOT evidence about fourmula.ai."
     },
     "perRoute": {
-      "/privacy-policy": "measured-scaffolding-placeholder-prose",
-      "/terms-of-service": "measured-scaffolding-placeholder-prose",
       "/start": "composed-not-measured",
       "/auth": "composed-not-measured"
     }
@@ -399,15 +241,6 @@
     "body"
   ],
   "variants": {
-    "legal-prose": {
-      "routes": [
-        "/privacy-policy",
-        "/terms-of-service"
-      ],
-      "traits": "h1 title, a short intro line, an h3 'Table of Contents' anchor index, then 12-16 numbered h2 sections of prose, lists and (privacy only) tables",
-      "evidenceLevel": "measured-scaffolding-placeholder-prose",
-      "contentBranch": "legal-prose"
-    },
     "onboarding-cta": {
       "routes": [
         "/start"
@@ -429,7 +262,7 @@
     "onePerPage": true,
     "maxPerPage": 1,
     "mustBeFirstInBody": true,
-    "verification": "Checked against all 5 real templates: content.tech is the single body node of `legal`, `app-onboarding` and `app-auth`, immediately after chrome.menu, and it appears in no other template. Derived by running extraction/classify_routes.py against the real JSX."
+    "verification": "Checked against all 5 real templates: content.tech is the single body node of `app-onboarding` and `app-auth`, immediately after chrome.menu, and it appears in no other template. Derived by running extraction/classify_routes.py against the real JSX."
   },
   "shapeDecision": {
     "question": "Do /privacy-policy, /terms-of-service, /start and /auth share one page shape?",
@@ -440,7 +273,8 @@
       "/auth": "slots {ctaRow, inertForm} -> its own template `app-auth`. NOT merged with /start: it carries a real <form> node that /start does not, which is a different content contract and a compliance-relevant one."
     },
     "conclusion": "6 routes -> 5 templates. Only /privacy-policy and /terms-of-service genuinely share one.",
-    "secondReasonNotToMerge": "Even if the slots had matched, /privacy-policy and /terms-of-service are measured-scaffolding while /start and /auth are composed-not-measured. Merging them would launder the composed pages' evidence level into the measured pages' (MASTER-GUIDE 3.17)."
+    "secondReasonNotToMerge": "Even if the slots had matched, /privacy-policy and /terms-of-service are measured-scaffolding while /start and /auth are composed-not-measured. Merging them would launder the composed pages' evidence level into the measured pages' (MASTER-GUIDE 3.17).",
+    "legalDecomposition": "Revision 1.1: /privacy-policy and /terms-of-service still render through <section className=\"tech\">, but measured at 1440px that one node was 6011px of a 6956px page (86%) and 6660px of 7605px (88%) - a whole legal document in one section. R6 requires a legal document to be decomposed by its own heading boundaries, so the legal template now uses content.legal-header + content.legal-chapter x12-16 instead of content.tech. Same DOM, different purpose."
   },
   "media": {
     "inertForm": {
@@ -451,6 +285,9 @@
       "pinned": true,
       "variants": [
         "auth-form"
+      ],
+      "generatedAssetRoles": [
+        "auth-inert-form"
       ]
     }
   },
@@ -497,26 +334,6 @@
   ],
   "measuredFrom": [
     {
-      "id": "cit-sec-tech-privacy",
-      "source": "src/pages/PrivacyContent.jsx:4-5",
-      "quote": "<section className=\"tech\">"
-    },
-    {
-      "id": "cit-sec-tech-privacy-title",
-      "source": "src/pages/PrivacyContent.jsx:5-5",
-      "quote": "FOURMULA AI <br />PRIVACY & COOKIES POLICY"
-    },
-    {
-      "id": "cit-sec-tech-privacy-anchor",
-      "source": "src/pages/PrivacyContent.jsx:36-36",
-      "quote": "className=\"tech__rich-anchor\""
-    },
-    {
-      "id": "cit-sec-tech-terms",
-      "source": "src/pages/TermsContent.jsx:5-5",
-      "quote": "TERMS OF USE"
-    },
-    {
       "id": "cit-sec-tech-start",
       "source": "src/pages/Start.jsx:16-21",
       "quote": "tech__title u-h3 u-fonts-100"
@@ -553,10 +370,10 @@
     }
   ],
   "notes": "/start and /auth pass NO preloader prop, so they inherit Layout's `preloader = false` default and have NO preloader. The docstring table in src/layout/Layout.jsx:14-18 lists only /, /privacy-policy, /terms-of-service and 404 - it omits /start and /auth entirely, which is why their preloader state had to be read from the real call sites (src/pages/Start.jsx:15, src/pages/Auth.jsx:17) rather than from the table. This corrects a claim in the build groundwork.",
-  "unbudgetedFields": [
-    "content.tech/oneOf[0].introParagraph",
-    "content.tech/oneOf[0].sections[].paragraphs[]",
-    "content.tech/oneOf[0].sections[].lists[].items[]"
+  "unbudgetedFields": [],
+  "unbudgetedFieldsNote": "None: every text field in both composed variants is budgeted. The legal body prose that used to be exempted here now lives in content.legal-header / content.legal-chapter.",
+  "generatedAssetRoles": [
+    "auth-inert-form"
   ],
-  "unbudgetedFieldsNote": "These three fields are DELIBERATELY unbudgeted and extraction/verify_all.py check [p] exempts them by name. They are the legal pages' body prose, which is deliberate PLACEHOLDER FILLER rather than the original's copy. A maxWords derived from filler would be a fabricated measurement presented as a measured one, so no budget is stated. Every other text field in all three variants IS budgeted, including the headings, the anchor-index labels and the table header cells."
+  "retrievalEligible": true
 }

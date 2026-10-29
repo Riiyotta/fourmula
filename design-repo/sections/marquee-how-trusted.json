@@ -2,6 +2,16 @@
   "id": "marquee.how-trusted",
   "kind": "section",
   "category": "marquee",
+  "source": {
+    "id": "dom:How:how",
+    "tag": "<section className=\"how\">",
+    "file": "src/components/How.jsx",
+    "lines": "4-96"
+  },
+  "semantic": {
+    "id": "marquee.how-trusted",
+    "category": "marquee"
+  },
   "purpose": "The capability statement plus the 'Trusted By' logo marquee. Two stacked blocks inside one section: a vertically looping capability column, and a horizontally looping band of 11 third-party logos.",
   "content": {
     "type": "object",
@@ -64,7 +74,8 @@
             "assetRole": {
               "type": "string",
               "enum": [
-                "trusted-partner-logo"
+                "trusted-partner-logo",
+                "placeholder-customer-logo"
               ]
             },
             "accessibleLabel": {
@@ -112,7 +123,10 @@
       ],
       "policy": "must-not-fabricate",
       "count": 11,
-      "warning": "THE HIGHEST-RISK ASSETS IN THIS REPOSITORY. These are other companies' real trademarks placed in a 'Trusted By' slot. Never reproduce, redraw, approximate or invent them, and never imply an endorsement."
+      "warning": "THE HIGHEST-RISK ASSETS IN THIS REPOSITORY. These are other companies' real trademarks placed in a 'Trusted By' slot. Never reproduce, redraw, approximate or invent them, and never imply an endorsement.",
+      "generatedAssetRoles": [
+        "placeholder-customer-logo"
+      ]
     }
   },
   "motion": {
@@ -192,5 +206,9 @@
       "quote": "<How />"
     }
   ],
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 60, which was unreachable."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 60, which was unreachable.",
+  "generatedAssetRoles": [
+    "placeholder-customer-logo"
+  ],
+  "retrievalEligible": true
 }

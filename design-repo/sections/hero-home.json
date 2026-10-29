@@ -2,6 +2,16 @@
   "id": "hero.home",
   "kind": "section",
   "category": "hero",
+  "source": {
+    "id": "dom:Hero:hero",
+    "tag": "<section id=\"hero\" className=\"hero\">",
+    "file": "src/components/Hero.jsx",
+    "lines": "4-80"
+  },
+  "semantic": {
+    "id": "hero.home",
+    "category": "hero"
+  },
   "purpose": "The home hero: a two-tone h1, a copyright stamp, a scroll cue, a two-row label marquee, a local-only upload dropzone and an 8-photograph rotating ring.",
   "content": {
     "type": "object",
@@ -57,7 +67,10 @@
             "assetRole": {
               "type": "string",
               "enum": [
-                "hero-carousel-photo"
+                "hero-carousel-photo",
+                "fictional-person-avatar",
+                "generated-illustration",
+                "user-supplied-asset"
               ]
             },
             "assetRef": {
@@ -112,7 +125,12 @@
         "hero-carousel-photo"
       ],
       "policy": "must-not-fabricate",
-      "count": 8
+      "count": 8,
+      "generatedAssetRoles": [
+        "fictional-person-avatar",
+        "generated-illustration",
+        "user-supplied-asset"
+      ]
     }
   },
   "motion": {
@@ -196,5 +214,11 @@
       "quote": "<Hero />"
     }
   ],
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 35, which was unreachable."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 35, which was unreachable.",
+  "generatedAssetRoles": [
+    "fictional-person-avatar",
+    "generated-illustration",
+    "user-supplied-asset"
+  ],
+  "retrievalEligible": true
 }

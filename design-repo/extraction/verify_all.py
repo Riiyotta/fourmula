@@ -37,6 +37,24 @@ standalone copy of the folder with no sibling directories. Checks:
                           per-field maxWords at maxItems), so no total cap is a check that can never fire;
                           every text-bearing field carries a maxWords; and the shipped example sits under
                           every cap with real headroom
+  [q] wrapper-gate        extraction/wrapper_gate.py over the MEASURED sectionHeights (HERO 1800/3000px,
+                          single-section share 50%/60%, missing measurement, whitelist hygiene)
+  [r] policy-binding      registry.manifest.json category + designPolicy binding, policy/design-policy.json
+                          present and consistent, contentHash == sha256 over the policy's enforcedBy files
+  [s] provenance          every section contract validates against the CLOSED schema/section-contract.schema.json;
+                          semantic.id == id, source.id != id; the source tag really sits on the first cited
+                          line of the real file (and build_provenance.py --check agrees) when the source is present
+  [t] retrieval-pin       RETRIEVAL_INELIGIBLE pinned here == semantic_validate's pin == contracts' false set ==
+                          the allowlist's retrievalIneligible list; runtime-UI-looking ids must be in the pin
+  [u] availability-pin    PINNED_AVAILABILITY here == semantic_validate's pin == assets/asset-roles.json; every
+                          non-generation-safe role has generation-safe substitutes; contracts' generatedAssetRoles
+                          are generation-safe and wired into their slots
+  [v] generation-mode     schema mode enum is closed {clone, generation} and required; one generation example
+                          per template passes with 0 errors; the clone example passes; the leakage registry has
+                          every GENERATION_MODE_* category with evidence, and rebuilds identically from source
+  [w] token-registration  token-catalog / token-policy / motion-patterns registered in the manifest; each
+                          catalog category equals its sourceFile's ids; motion-patterns == contracts == schema;
+                          the policy names every TOKEN_* rule the validator implements
 
 Drift proof for these checks: python3 extraction/prove_drift.py
 """
@@ -57,6 +75,43 @@ _ABS_PATTERNS = [re.compile(p) for p in (
 
 RESULTS = []
 CHECKS = []
+
+# Pinned in code, independently of the registries (R3 / R8). semantic_validate.py holds its own copy; both
+# must equal assets/asset-roles.json and the section contracts, or checks [t] / [u] fail.
+PINNED_AVAILABILITY = {
+    "hero-carousel-photo": "clone-only", "preloader-photo": "clone-only", "product-shot-photo": "clone-only",
+    "step-artwork": "clone-only", "showcase-video": "clone-only", "not-found-artwork": "clone-only",
+    "brand-wordmark": "clone-only", "favicon": "clone-only", "third-party-award-badge": "clone-only",
+    "trusted-partner-logo": "blocked-for-generation", "brand-typeface-file": "blocked-for-generation",
+    "og-banner": "blocked-for-generation",
+    "ui-icon-glyph": "generation-safe", "form-control-checkmark": "generation-safe",
+    "auth-inert-form": "generation-safe", "placeholder-brand-mark": "generation-safe",
+    "user-supplied-asset": "generation-safe", "generated-illustration": "generation-safe",
+    "placeholder-screenshot": "generation-safe", "fictional-person-avatar": "generation-safe",
+    "placeholder-customer-logo": "generation-safe", "placeholder-url": "generation-safe",
+    "original-copy": "generation-safe",
+}
+RETRIEVAL_INELIGIBLE = {"chrome.cookie-consent", "chrome.preloader", "chrome.menu", "chrome.awards-badge"}
+RUNTIME_UI_RE = re.compile(r"cookie|consent|modal|dialog|drawer|popup|preloader|loader|overlay|toast|menu|badge")
+GENERATION_CATEGORIES = ("GENERATION_MODE_BRAND", "GENERATION_MODE_ASSET", "GENERATION_MODE_PERSON",
+                         "GENERATION_MODE_CUSTOMER", "GENERATION_MODE_SCREENSHOT", "GENERATION_MODE_COPY",
+                         "GENERATION_MODE_CLAIM", "GENERATION_MODE_URL", "GENERATION_MODE_EMBED")
+TOKEN_RULES = ("TOKEN_UNKNOWN", "TOKEN_RAW_COLOR", "TOKEN_ARBITRARY_SPACING", "TOKEN_UNSUPPORTED_FONT",
+               "TOKEN_THEME_MISMATCH", "TOKEN_CATEGORY_MISMATCH")
+
+
+def policy_hash(root, files):
+    import hashlib
+    h = hashlib.sha256()
+    for f in sorted(files):
+        with open(os.path.join(root, f), "rb") as fh:
+            h.update(("%s\n%s\n" % (f, hashlib.sha256(fh.read()).hexdigest())).encode())
+    return "sha256:" + h.hexdigest()
+
+
+def example_files():
+    return [os.path.join(ROOT, "schema", "example.pagespec.json")] + sorted(
+        glob.glob(os.path.join(ROOT, "schema", "examples", "*.pagespec.json")))
 
 
 def rel(p):
@@ -130,6 +185,9 @@ def compute_counts():
         "citations": len(jload("extraction", "measured-values.json")["citations"]),
         "motionPatterns": len(jload("schema", "pagespec.schema.json")
                               ["definitions"]["motion"]["properties"]["pattern"]["enum"]),
+        "examplePageSpecs": len(example_files()),
+        "retrievalIneligibleSections": len(jload("tokens", "llm", "component-allowlist.json")
+                                           .get("retrievalIneligible", [])),
     }
 
 
@@ -138,10 +196,11 @@ def counts_block(c):
     return ("- Tokens: %d total (foundation %d, semantic %d, component %d, layout %d); catalog entries %d\n"
             "- Primitives %d, components %d, sections %d\n"
             "- Templates %d, routes %d (1:1), graph rules %d, motion patterns %d, asset roles %d, "
-            "ledger citations %d" % (
+            "ledger citations %d\n- Example PageSpecs %d, retrieval-ineligible sections %d" % (
                 t["total"], t["foundation"], t["semantic"], t["component"], t["layout"], c["catalogEntries"],
                 c["primitives"], c["components"], c["sections"], c["templates"], c["routes"],
-                c["graphRules"], c["motionPatterns"], c["assetRoles"], c["citations"]))
+                c["graphRules"], c["motionPatterns"], c["assetRoles"], c["citations"],
+                c["examplePageSpecs"], c["retrievalIneligibleSections"]))
 
 
 def check(name):
@@ -205,16 +264,19 @@ def c_b():
         fails.append("schema $schema is not draft-07: %r" % schema.get("$schema"))
     if schema["definitions"]["motion"].get("additionalProperties") is not False:
         fails.append("definitions.motion must be additionalProperties:false")
-    ex = jload("schema", "example.pagespec.json")
-    errs = list(Draft7Validator(schema).iter_errors(ex))
-    for e in errs[:5]:
-        fails.append("example schema error at %s: %s" % ("/".join(map(str, e.absolute_path)), e.message[:160]))
     sys.path.insert(0, os.path.join(ROOT, "schema"))
     import semantic_validate as sv
-    errors, warnings = sv.validate(ex, ROOT)
-    fails.extend("example semantic error: %s" % e for e in errors[:8])
-    return fails, [], ("Draft-07 schema valid, motion closed; the example has 0 schema errors and 0 semantic "
-                       "errors (%d warning(s))" % len(warnings))
+    nw = 0
+    for fp in example_files():
+        with open(fp, encoding="utf-8") as f:
+            ex = json.load(f)
+        for e in list(Draft7Validator(schema).iter_errors(ex))[:5]:
+            fails.append("%s schema error at %s: %s" % (rel(fp), "/".join(map(str, e.absolute_path)), e.message[:160]))
+        errors, warnings = sv.validate(ex, ROOT)
+        nw += len(warnings)
+        fails.extend("%s semantic error: %s" % (rel(fp), e) for e in errors[:8])
+    return fails, [], ("Draft-07 schema valid, motion closed; all %d example PageSpecs have 0 schema errors and 0 "
+                       "semantic errors (%d warning(s))" % (len(example_files()), nw))
 
 
 # ----------------------------------------------------------------------------------- [c]
@@ -1016,8 +1078,319 @@ def c_p():
                           "sits under every cap" % n_caps)
 
 
+# ----------------------------------------------------------------------------------- [q]
+@check("[q] wrapper-gate")
+def c_q():
+    script = os.path.join(ROOT, "extraction", "wrapper_gate.py")
+    if not os.path.isfile(script):
+        return ["extraction/wrapper_gate.py is missing"], [], ""
+    sys.path.insert(0, os.path.join(ROOT, "extraction"))
+    import importlib
+    import wrapper_gate as wg
+    importlib.reload(wg)
+    if (wg.HERO_WARN_PX, wg.HERO_ERROR_PX, wg.SHARE_WARN, wg.SHARE_ERROR, wg.MIN_IN_FLOW, wg.VIEWPORT_WIDTH) != (
+            1800, 3000, 0.50, 0.60, 3, 1440):
+        return ["wrapper_gate thresholds are not the pinned 1800/3000px, 50%/60%, 3 in-flow, 1440px"], [], ""
+    errors, warnings, n = wg.run(ROOT)
+    return errors, warnings, ("%d measured section heights gated at 1440px: 0 HERO > 3000px, 0 single-section "
+                              "share > 60%%, no missing measurement, whitelist clean" % n)
+
+
+# ----------------------------------------------------------------------------------- [r]
+@check("[r] policy-binding")
+def c_r():
+    fails = []
+    man = jload("registry.manifest.json")
+    dp = man.get("designPolicy")
+    if not man.get("category"):
+        fails.append("the manifest has no category")
+    if not isinstance(dp, dict):
+        return fails + ["the manifest has no designPolicy binding"], [], ""
+    for k in ("ref", "policyId", "policyVersion", "commonIrVersion", "enforcementMode", "contentHash"):
+        if not dp.get(k):
+            fails.append("designPolicy.%s is missing" % k)
+    if dp.get("commonIrVersion") != "0.5" or dp.get("enforcementMode") != "hard-and-soft":
+        fails.append("designPolicy must bind commonIrVersion 0.5 with enforcementMode hard-and-soft")
+    ref = os.path.join(ROOT, str(dp.get("ref", "")))
+    if not os.path.isfile(ref):
+        return fails + ["designPolicy.ref %r does not exist inside the package" % dp.get("ref")], [], ""
+    pol = jload(*dp["ref"].split("/"))
+    for k in ("policyId", "policyVersion", "commonIrVersion"):
+        if pol.get(k) != dp.get(k):
+            fails.append("designPolicy.%s %r != %s's %r" % (k, dp.get(k), dp["ref"], pol.get(k)))
+    cl = pol.get("classification", {})
+    saas = cl.get("isSaaS")
+    if saas is True and (dp.get("policyId") != "n0-saas-design-constraints-common" or dp.get("policyVersion") != "0.1.0"):
+        fails.append("a SaaS classification must bind n0-saas-design-constraints-common 0.1.0")
+    if saas is False and (dp.get("policyId") == "n0-saas-design-constraints-common"
+                          or "n0-saas-design-constraints-common" not in pol.get("notBoundTo", {})):
+        fails.append("a non-SaaS classification must NOT bind the SaaS policy and must say so in notBoundTo")
+    if saas is not None and cl.get("productCategory") != man.get("category"):
+        fails.append("manifest category %r != policy productCategory %r" % (man.get("category"), cl.get("productCategory")))
+    if len(cl.get("evidence", [])) < 3:
+        fails.append("the classification needs at least 3 pieces of cited evidence")
+    ap = pol.get("approval", {})
+    if ap.get("policyDecision") != "defined-pending-architecture-review" or ap.get("architectureDecisionRecorded") is not False:
+        fails.append("policy approval must stay defined-pending-architecture-review / architectureDecisionRecorded false")
+    eb = pol.get("enforcedBy", [])
+    missing = [f for f in eb if not os.path.isfile(os.path.join(ROOT, f))]
+    if missing or not eb:
+        fails.append("policy enforcedBy files missing: %s" % (missing or "none listed"))
+    elif policy_hash(ROOT, eb) != dp.get("contentHash"):
+        fails.append("designPolicy.contentHash %s != recomputed %s over %d enforcedBy files"
+                     % (dp.get("contentHash"), policy_hash(ROOT, eb), len(eb)))
+    return fails, [], ("category %s bound to %s %s (commonIr 0.5, hard-and-soft); %s present; contentHash matches %d "
+                       "enforcedBy files" % (man.get("category"), dp.get("policyId"), dp.get("policyVersion"),
+                                             dp.get("ref"), len(eb)))
+
+
+# ----------------------------------------------------------------------------------- [s]
+@check("[s] provenance")
+def c_s():
+    from jsonschema import Draft7Validator
+    fails, n = [], 0
+    sch = jload("schema", "section-contract.schema.json")
+    Draft7Validator.check_schema(sch)
+    if sch.get("additionalProperties") is not False:
+        fails.append("schema/section-contract.schema.json is not closed")
+    v = Draft7Validator(sch)
+    have_src = os.path.isfile(os.path.join(SRC_ROOT, "src", "App.jsx"))
+    for f in contract_files()["sections"]:
+        d = json.load(open(f, encoding="utf-8"))
+        for e in list(v.iter_errors(d))[:3]:
+            fails.append("%s: %s at %s" % (rel(f), e.message[:140], "/".join(map(str, e.absolute_path))))
+        src, sem = d.get("source") or {}, d.get("semantic") or {}
+        if sem.get("id") != d.get("id") or sem.get("category") != d.get("category"):
+            fails.append("%s: semantic {id, category} must equal the contract's id and category" % rel(f))
+        if src.get("id") == d.get("id"):
+            fails.append("%s: source.id must not equal the contract id (provenance is not taxonomy)" % rel(f))
+        if have_src and src.get("file"):
+            fp = os.path.join(SRC_ROOT, src["file"])
+            m = re.match(r"^(\d+)-(\d+)$", str(src.get("lines", "")))
+            if not os.path.isfile(fp) or not m:
+                fails.append("%s: source %s:%s does not resolve" % (rel(f), src.get("file"), src.get("lines")))
+                continue
+            lines = _read(fp).split("\n")
+            a, b = int(m.group(1)), int(m.group(2))
+            if not (1 <= a <= b <= len(lines)) or src.get("tag", "\0") not in lines[a - 1]:
+                fails.append("%s: tag %r is not on line %d of %s" % (rel(f), src.get("tag"), a, src["file"]))
+            n += 1
+    warns = []
+    if have_src:
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "extraction", "build_provenance.py"), "--check"],
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            fails.append("build_provenance.py --check: %s" % (r.stdout.strip().splitlines() or ["?"])[0][:200])
+    else:
+        warns.append("source ranges NOT re-read: the source project is not beside this package (self-contained mode)")
+    return fails, warns, ("%d section contracts valid against the closed section-contract schema; semantic.id == id, "
+                          "source.id != id; %d source tags found on their cited line" % (
+                              len(contract_files()["sections"]), n))
+
+
+# ----------------------------------------------------------------------------------- [t]
+@check("[t] retrieval-pin")
+def c_t():
+    fails = []
+    sys.path.insert(0, os.path.join(ROOT, "schema"))
+    import semantic_validate as sv
+    if set(sv.RETRIEVAL_INELIGIBLE) != RETRIEVAL_INELIGIBLE:
+        fails.append("semantic_validate.RETRIEVAL_INELIGIBLE %s != verify_all's pin %s"
+                     % (sorted(sv.RETRIEVAL_INELIGIBLE), sorted(RETRIEVAL_INELIGIBLE)))
+    false_set = set()
+    for f in contract_files()["sections"]:
+        d = json.load(open(f, encoding="utf-8"))
+        if not isinstance(d.get("retrievalEligible"), bool):
+            fails.append("%s: retrievalEligible is not a closed boolean" % rel(f))
+        if d.get("retrievalEligible") is False:
+            false_set.add(d["id"])
+            if len(str(d.get("retrievalReason", ""))) < 30:
+                fails.append("%s: retrievalEligible false needs a 30+ character retrievalReason" % rel(f))
+        if RUNTIME_UI_RE.search(d["id"]) and d["id"] not in RETRIEVAL_INELIGIBLE:
+            fails.append("%s looks like runtime UI but is not in the RETRIEVAL_INELIGIBLE pin" % d["id"])
+    if false_set != RETRIEVAL_INELIGIBLE:
+        fails.append("contracts' retrievalEligible:false set %s != the pin %s" % (sorted(false_set), sorted(RETRIEVAL_INELIGIBLE)))
+    al = set(jload("tokens", "llm", "component-allowlist.json").get("retrievalIneligible", []))
+    if al != RETRIEVAL_INELIGIBLE:
+        fails.append("allowlist retrievalIneligible %s != the pin %s" % (sorted(al), sorted(RETRIEVAL_INELIGIBLE)))
+    return fails, [], ("%d runtime-UI sections pinned retrievalEligible:false in both validators, every contract and "
+                       "the allowlist agree" % len(RETRIEVAL_INELIGIBLE))
+
+
+# ----------------------------------------------------------------------------------- [u]
+@check("[u] availability-pin")
+def c_u():
+    fails = []
+    sys.path.insert(0, os.path.join(ROOT, "schema"))
+    import semantic_validate as sv
+    ar = jload("assets", "asset-roles.json")
+    roles = {r["id"]: r for r in ar["roles"]}
+    if sv.PINNED_AVAILABILITY != PINNED_AVAILABILITY:
+        fails.append("semantic_validate.PINNED_AVAILABILITY differs from verify_all's pin")
+    if set(ar.get("availabilityEnum", [])) != {"clone-only", "generation-safe", "blocked-for-generation"}:
+        fails.append("availabilityEnum is not the closed {clone-only, generation-safe, blocked-for-generation}")
+    for rid in sorted(set(roles) | set(PINNED_AVAILABILITY)):
+        r = roles.get(rid, {})
+        if r.get("availability") != PINNED_AVAILABILITY.get(rid):
+            fails.append("role %s availability %r != pinned %r" % (rid, r.get("availability"), PINNED_AVAILABILITY.get(rid)))
+        if not r:
+            continue
+        if not r.get("generatedModeGuidance"):
+            fails.append("role %s has no generatedModeGuidance" % rid)
+        subs = r.get("generationSafeSubstitutes")
+        if not isinstance(subs, list):
+            fails.append("role %s has no generationSafeSubstitutes list" % rid)
+            continue
+        bad = [x for x in subs if PINNED_AVAILABILITY.get(x) != "generation-safe"]
+        if bad:
+            fails.append("role %s lists substitutes that are not generation-safe: %s" % (rid, bad))
+        if r.get("availability") != "generation-safe" and not subs and len(r.get("noSubstituteReason", "")) < 30:
+            fails.append("role %s is not generation-safe but has no substitute and no noSubstituteReason" % rid)
+        if r.get("availability") != "generation-safe" and r.get("generationPolicy") == "may-generate-new":
+            fails.append("role %s is %s but its policy is may-generate-new" % (rid, r.get("availability")))
+    for rid in ("brand-wordmark", "favicon", "trusted-partner-logo", "third-party-award-badge"):
+        if PINNED_AVAILABILITY.get(rid) == "generation-safe":
+            fails.append("a real logo/wordmark/award role (%s) can never be generation-safe" % rid)
+    need = {"placeholder-brand-mark", "user-supplied-asset", "generated-illustration", "placeholder-screenshot",
+            "fictional-person-avatar", "placeholder-customer-logo", "placeholder-url", "original-copy"}
+    if need - set(roles):
+        fails.append("missing generation-safe roles: %s" % sorted(need - set(roles)))
+
+    def slot_roles(o, acc):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                if k == "assetRole" and isinstance(v, dict) and "enum" in v:
+                    acc.update(v["enum"])
+                else:
+                    slot_roles(v, acc)
+        elif isinstance(o, list):
+            for v in o:
+                slot_roles(v, acc)
+    for f in contract_files()["sections"]:
+        d = json.load(open(f, encoding="utf-8"))
+        acc = set()
+        slot_roles(d["content"], acc)
+        g = d.get("generatedAssetRoles")
+        if not isinstance(g, list):
+            fails.append("%s has no generatedAssetRoles" % rel(f))
+            continue
+        if set(g) != {x for x in acc if PINNED_AVAILABILITY.get(x) == "generation-safe"}:
+            fails.append("%s generatedAssetRoles %s != the generation-safe roles its slots admit" % (rel(f), g))
+        for x in acc:
+            if PINNED_AVAILABILITY.get(x) != "generation-safe" and not (set(roles[x]["generationSafeSubstitutes"]) & acc) \
+                    and roles[x]["generationSafeSubstitutes"]:
+                fails.append("%s: slot admits %s but none of its generation-safe substitutes" % (rel(f), x))
+    return fails, [], ("%d roles: availability pinned in BOTH validators == registry; every clone-only / blocked role "
+                       "has generation-safe substitutes wired into its slots; no real mark is generation-safe"
+                       % len(roles))
+
+
+# ----------------------------------------------------------------------------------- [v]
+@check("[v] generation-mode")
+def c_v():
+    fails, warns = [], []
+    sch = jload("schema", "pagespec.schema.json")
+    if sch["properties"].get("mode", {}).get("enum") != ["clone", "generation"] or "mode" not in sch.get("required", []):
+        fails.append("the PageSpec schema must REQUIRE a closed mode enum [clone, generation]")
+    sys.path.insert(0, os.path.join(ROOT, "schema"))
+    import semantic_validate as sv
+    tpls = {t["id"] for t in jload("templates", "templates.json")["templates"]}
+    gen, clone = {}, 0
+    for fp in example_files():
+        d = json.load(open(fp, encoding="utf-8"))
+        if d.get("mode") == "generation":
+            gen[d.get("template")] = fp
+        elif d.get("mode") == "clone":
+            clone += 1
+    if set(gen) != tpls:
+        fails.append("generation examples cover %s, templates are %s" % (sorted(gen), sorted(tpls)))
+    if not clone:
+        fails.append("no clone-mode example PageSpec (clone mode must still validate real content)")
+    led = jload("schema", "generation-leakage.json")
+    cats = led.get("categories", {})
+    for c in GENERATION_CATEGORIES:
+        if c not in cats:
+            fails.append("leakage registry has no %s category" % c)
+        elif c not in sv.RULES:
+            fails.append("%s has no validator implementation" % c)
+    for c, d in cats.items():
+        for t in d.get("terms", []) + d.get("hosts", []):
+            if not t.get("evidence"):
+                fails.append("%s term %r carries no file:line evidence" % (c, t.get("term") or t.get("host")))
+    if not cats.get("GENERATION_MODE_COPY", {}).get("shingles"):
+        fails.append("GENERATION_MODE_COPY has no hashed shingles")
+    if fails:
+        return fails, warns, ""
+    # the clone example must FAIL in generation mode (the rules really fire on real content)
+    ex = jload("schema", "example.pagespec.json")
+    ex["mode"] = "generation"
+    errs, _ = sv.validate(ex, ROOT)
+    fired = {c for c in GENERATION_CATEGORIES if any("[%s]" % c in e for e in errs)}
+    if fired != set(GENERATION_CATEGORIES):
+        fails.append("the real clone content relabelled generation did not trip %s" % sorted(set(GENERATION_CATEGORIES) - fired))
+    if os.path.isfile(os.path.join(SRC_ROOT, "src", "App.jsx")):
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "extraction", "build_leakage_patterns.py"), "--check"],
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            fails.append("build_leakage_patterns.py --check: %s" % r.stdout.strip()[:200])
+    else:
+        warns.append("leakage registry NOT rebuilt: the source project is not beside this package (self-contained mode)")
+    return fails, warns, ("mode required and closed; %d generation examples (one per template) and %d clone example(s) "
+                          "pass; all 9 GENERATION_MODE_* categories carry evidence and fire on the real content; "
+                          "registry rebuilds identically from source" % (len(gen), clone))
+
+
+# ----------------------------------------------------------------------------------- [w]
+@check("[w] token-registration")
+def c_w():
+    fails = []
+    man = jload("registry.manifest.json")
+    eps = json.dumps(man.get("entryPoints", {}))
+    for f in ("tokens/llm/token-catalog.json", "tokens/llm/token-policy.json", "tokens/00-foundation/motion-patterns.json",
+              "tokens/llm/component-allowlist.json"):
+        if f not in eps:
+            fails.append("%s is not registered in registry.manifest.json entryPoints" % f)
+    reg = man.get("tokenRegistration", {})
+    cat = jload("tokens", "llm", "token-catalog.json")
+    if reg.get("catalogEntries") != sum(len(v["tokens"]) for v in cat["categories"].values()):
+        fails.append("manifest tokenRegistration.catalogEntries != the catalog")
+    for name, c in cat["categories"].items():
+        fp = os.path.join(ROOT, c.get("sourceFile", ""))
+        if not os.path.isfile(fp):
+            fails.append("catalog category %s sourceFile %r is missing" % (name, c.get("sourceFile")))
+            continue
+        ids = set(json.load(open(fp, encoding="utf-8")).get("tokens", {}))
+        mine = {t["id"] for t in c["tokens"]}
+        if not mine <= ids:
+            fails.append("catalog category %s lists ids not in %s: %s" % (name, c["sourceFile"], sorted(mine - ids)[:4]))
+    mp = jload("tokens", "00-foundation", "motion-patterns.json")["patterns"]
+    real = {}
+    for f in contract_files()["sections"]:
+        d = json.load(open(f, encoding="utf-8"))
+        real.setdefault(d["motion"]["pattern"], []).append(d["id"])
+    if {k: sorted(v["sections"]) for k, v in mp.items()} != {k: sorted(v) for k, v in real.items()}:
+        fails.append("motion-patterns.json drifted from the section contracts")
+    if set(mp) != set(jload("schema", "pagespec.schema.json")["definitions"]["motion"]["properties"]["pattern"]["enum"]):
+        fails.append("motion-patterns.json != the schema motion.pattern enum")
+    pol = json.dumps(jload("tokens", "llm", "token-policy.json"))
+    sys.path.insert(0, os.path.join(ROOT, "schema"))
+    import semantic_validate as sv
+    for rname in TOKEN_RULES:
+        if rname not in pol:
+            fails.append("token-policy.json does not name the enforced rule %s" % rname)
+        if rname not in sv.RULES:
+            fails.append("%s is not implemented in semantic_validate.py" % rname)
+    return fails, [], ("token catalog (%d entries), token policy, motion patterns (%d) and allowlist registered; every "
+                       "catalog category resolves in its sourceFile; %d TOKEN_* rules named in the policy and "
+                       "implemented" % (reg.get("catalogEntries", 0), len(mp), len(TOKEN_RULES)))
+
+
 # ----------------------------------------------------------------------------------- main
 def main(argv):
+    if "--emit-policy-hash" in argv:
+        pol = jload(*jload("registry.manifest.json")["designPolicy"]["ref"].split("/"))
+        print(policy_hash(ROOT, pol["enforcedBy"]))
+        return 0
     if "--emit-counts" in argv:
         c = compute_counts()
         print(json.dumps(c, indent=2))

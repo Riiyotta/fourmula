@@ -1,0 +1,337 @@
+{
+ "$schema": "../pagespec.schema.json",
+ "pageSpecVersion": "2.0.0",
+ "mode": "generation",
+ "theme": "light",
+ "template": "app-auth",
+ "route": "/auth",
+ "nodes": [
+  {
+   "type": "chrome.cookie-consent",
+   "content": {
+    "title": "Your privacy choices",
+    "body": "We use a few small files to keep this site working and, only if you agree, to learn which pages help visitors most. You can change your mind at any time.",
+    "inlineLinkLabel": "privacy notice",
+    "bannerActions": [
+     {
+      "label": "Allow all",
+      "style": "primary",
+      "fsCc": "allow",
+      "href": "/#"
+     },
+     {
+      "label": "Choose",
+      "style": "outline",
+      "fsCc": "open-preferences",
+      "href": "/#"
+     }
+    ],
+    "modalActions": [
+     {
+      "label": "Allow all",
+      "style": "primary",
+      "fsCc": "allow",
+      "href": "/#"
+     },
+     {
+      "label": "Keep my choices",
+      "style": "outline",
+      "fsCc": "submit",
+      "href": "/#"
+     }
+    ],
+    "categories": [
+     {
+      "label": "Essential (always on)",
+      "description": "Needed for pages to load and forms to work.",
+      "interactive": false,
+      "fsCcCheckbox": "necessary"
+     },
+     {
+      "label": "Advertising",
+      "description": "Lets partners show offers that fit what you looked at here.",
+      "interactive": true,
+      "fsCcCheckbox": "marketing",
+      "assetRole": "form-control-checkmark"
+     },
+     {
+      "label": "Preferences",
+      "description": "Remembers settings such as language between visits.",
+      "interactive": true,
+      "fsCcCheckbox": "personalization",
+      "assetRole": "form-control-checkmark"
+     },
+     {
+      "label": "Measurement",
+      "description": "Counts visits so the team can see which pages are useful.",
+      "interactive": true,
+      "fsCcCheckbox": "analytics",
+      "assetRole": "form-control-checkmark"
+     }
+    ],
+    "closeLabel": "Close privacy choices"
+   },
+   "motion": {
+    "pattern": "overlay-fade",
+    "reducedMotionFallback": "Show the banner in its final position at once, with no fade and no slide.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.header",
+   "content": {
+    "logo": {
+     "assetRole": "placeholder-brand-mark",
+     "accessibleLabel": "Kestrelwave",
+     "href": "/"
+    },
+    "menuLabel": "Menu",
+    "themeToggle": {
+     "ariaPressed": true,
+     "dataThemeState": "dark"
+    },
+    "progressInitial": "0%",
+    "signin": {
+     "assetRole": "ui-icon-glyph",
+     "accessibleLabel": "Your account",
+     "href": "/auth"
+    },
+    "cta": {
+     "label": "Try it free",
+     "href": "/start",
+     "hoverStagger": true
+    }
+   },
+   "motion": {
+    "pattern": "chrome-reveal",
+    "reducedMotionFallback": "Render the header in place with no reveal and keep the progress readout updating.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.menu",
+   "content": {
+    "groups": [
+     {
+      "label": "Explore",
+      "layout": "column",
+      "emphasis": "primary",
+      "links": [
+       {
+        "label": "Packshots",
+        "href": "/#pdp"
+       },
+       {
+        "label": "Scenes",
+        "href": "/#products"
+       },
+       {
+        "label": "Clips",
+        "href": "/#video"
+       },
+       {
+        "label": "How it works",
+        "href": "/#list"
+       }
+      ]
+     },
+     {
+      "label": "Legal",
+      "layout": "column",
+      "emphasis": "secondary",
+      "links": [
+       {
+        "label": "Privacy notice",
+        "href": "/privacy-policy"
+       },
+       {
+        "label": "Usage terms",
+        "href": "/terms-of-service"
+       },
+       {
+        "label": "Cookie choices",
+        "href": "/#"
+       }
+      ]
+     },
+     {
+      "label": "Follow",
+      "layout": "row",
+      "emphasis": "secondary",
+      "links": [
+       {
+        "label": "Newsletter",
+        "href": "#"
+       },
+       {
+        "label": "Community",
+        "href": "/#",
+        "hidden": true
+       },
+       {
+        "label": "Events",
+        "href": "/#",
+        "hidden": true
+       }
+      ]
+     }
+    ],
+    "cta": {
+     "label": "Try it free",
+     "href": "/start",
+     "hoverStagger": true
+    },
+    "signin": {
+     "assetRole": "ui-icon-glyph",
+     "accessibleLabel": "Your account",
+     "href": "/auth"
+    }
+   },
+   "motion": {
+    "pattern": "panel-expand",
+    "reducedMotionFallback": "Switch the panel between closed and open instantly with every link fully visible.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "content.tech",
+   "variant": "auth-form",
+   "content": {
+    "titleLines": [
+     "Welcome back",
+     "please sign in"
+    ],
+    "body": "Sample sign-in layout; this form stays inert and sends nothing.",
+    "form": {
+     "assetRole": "auth-inert-form",
+     "ariaLabel": "Sample sign-in form",
+     "fields": [
+      {
+       "label": "Email",
+       "inputType": "text",
+       "placeholder": "name@kestrelwave.example",
+       "id": "signin-email"
+      }
+     ],
+     "submitLabel": "Continue",
+     "inert": true
+    },
+    "ctas": [
+     {
+      "label": "Overview",
+      "style": "outline",
+      "href": "/"
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "static",
+    "reducedMotionFallback": "Render the final state immediately with no animation.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.footer",
+   "content": {
+    "logo": {
+     "assetRole": "placeholder-brand-mark",
+     "accessibleLabel": "Kestrelwave",
+     "href": "/"
+    },
+    "linkLists": [
+     {
+      "emphasis": "primary",
+      "layout": "column",
+      "links": [
+       {
+        "label": "Packshots",
+        "href": "/#pdp"
+       },
+       {
+        "label": "Clips",
+        "href": "/#video"
+       }
+      ]
+     },
+     {
+      "emphasis": "secondary",
+      "layout": "column",
+      "links": [
+       {
+        "label": "Privacy notice",
+        "href": "/privacy-policy"
+       },
+       {
+        "label": "Usage terms",
+        "href": "/terms-of-service"
+       },
+       {
+        "label": "Cookie choices",
+        "href": "/#"
+       }
+      ]
+     },
+     {
+      "emphasis": "primary",
+      "layout": "column",
+      "links": [
+       {
+        "label": "Scenes",
+        "href": "/#products"
+       },
+       {
+        "label": "How it works",
+        "href": "/#list"
+       }
+      ]
+     },
+     {
+      "emphasis": "secondary",
+      "layout": "row",
+      "links": [
+       {
+        "label": "Newsletter",
+        "href": "#"
+       },
+       {
+        "label": "Community",
+        "href": "/#",
+        "hidden": true
+       },
+       {
+        "label": "Events",
+        "href": "/#",
+        "hidden": true
+       }
+      ]
+     }
+    ],
+    "legalLine": "2026, Kestrelwave Studio (fictional). Sample address only.",
+    "registrationLine": "Company details at kestrelwave.example",
+    "dotsField": {
+     "rows": 14,
+     "colsDesktop": 52
+    }
+   },
+   "motion": {
+    "pattern": "dots-field-wave",
+    "reducedMotionFallback": "Render the footer and dot grid statically at resting opacity with no wave.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.awards-badge",
+   "content": {
+    "href": "#",
+    "artwork": {
+     "assetRole": "placeholder-brand-mark"
+    }
+   },
+   "motion": {
+    "pattern": "static",
+    "reducedMotionFallback": "Unchanged, because this section has no motion to reduce.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  }
+ ]
+}

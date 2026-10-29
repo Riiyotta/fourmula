@@ -2,6 +2,16 @@
   "id": "showcase.ai-capabilities",
   "kind": "section",
   "category": "showcase",
+  "source": {
+    "id": "dom:AiSection:ai",
+    "tag": "<section className=\"ai\">",
+    "file": "src/components/AiSection.jsx",
+    "lines": "4-102"
+  },
+  "semantic": {
+    "id": "showcase.ai-capabilities",
+    "category": "showcase"
+  },
   "purpose": "The three-capability product showcase. ONE section element holding three blocks, each with its own in-page anchor, pill link, dot tag, heading, body and media collage.",
   "content": {
     "type": "object",
@@ -91,7 +101,10 @@
                       "assetRole": {
                         "type": "string",
                         "enum": [
-                          "product-shot-photo"
+                          "product-shot-photo",
+                          "placeholder-screenshot",
+                          "generated-illustration",
+                          "user-supplied-asset"
                         ]
                       },
                       "assetRef": {
@@ -130,7 +143,8 @@
                       "assetRole": {
                         "type": "string",
                         "enum": [
-                          "showcase-video"
+                          "showcase-video",
+                          "user-supplied-asset"
                         ]
                       },
                       "assetRef": {
@@ -197,21 +211,32 @@
         "product-shot-photo"
       ],
       "policy": "must-not-fabricate",
-      "count": "20 files: 2 theme pairs (4), 6 mobile tiles, 5 collage images + their 5 -upd cross-fade twins"
+      "count": "20 files: 2 theme pairs (4), 6 mobile tiles, 5 collage images + their 5 -upd cross-fade twins",
+      "generatedAssetRoles": [
+        "placeholder-screenshot",
+        "generated-illustration",
+        "user-supplied-asset"
+      ]
     },
     "videos": {
       "assetRole": [
         "showcase-video"
       ],
       "policy": "must-not-fabricate",
-      "count": 3
+      "count": 3,
+      "generatedAssetRoles": [
+        "user-supplied-asset"
+      ]
     },
     "pillGlyph": {
       "assetRole": [
         "ui-icon-glyph"
       ],
       "policy": "may-generate-new",
-      "count": "1 design, 3 occurrences"
+      "count": "1 design, 3 occurrences",
+      "generatedAssetRoles": [
+        "ui-icon-glyph"
+      ]
     }
   },
   "motion": {
@@ -309,5 +334,12 @@
       "quote": "<AiSection />"
     }
   ],
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum)."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum).",
+  "generatedAssetRoles": [
+    "ui-icon-glyph",
+    "placeholder-screenshot",
+    "generated-illustration",
+    "user-supplied-asset"
+  ],
+  "retrievalEligible": true
 }

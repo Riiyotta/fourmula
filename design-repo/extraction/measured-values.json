@@ -2491,6 +2491,579 @@
    "quote": "<ListSection />",
    "kind": "declaration",
    "note": "Structural citation from sections/steps-pinned-list.json."
+  },
+  {
+   "id": "cit-sec-legal-toc-privacy",
+   "source": "src/pages/PrivacyContent.jsx:8-9",
+   "quote": "<h3>Table of Contents</h3>",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-legal-header.json."
+  },
+  {
+   "id": "cit-sec-legal-toc-terms",
+   "source": "src/pages/TermsContent.jsx:7-8",
+   "quote": "<h3>Table of Contents</h3>",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-legal-header.json."
+  },
+  {
+   "id": "cit-sec-legal-chapter-privacy",
+   "source": "src/pages/PrivacyContent.jsx:34-36",
+   "quote": "<div className=\"w-embed\">",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-legal-chapter.json."
+  },
+  {
+   "id": "cit-sec-legal-chapter-terms",
+   "source": "src/pages/TermsContent.jsx:41-43",
+   "quote": "<h2 className=\"tech__rich-anchor\">1. Introduction</h2>",
+   "kind": "declaration",
+   "note": "Structural citation from sections/content-legal-chapter.json."
+  },
+  {
+   "id": "cit-pol-signup",
+   "source": "src/components/ListSection.jsx:10-10",
+   "quote": "Sign up for free and supercharge",
+   "kind": "declaration",
+   "note": "Self-serve sign-up offer."
+  },
+  {
+   "id": "cit-pol-app-entry",
+   "source": "src/App.jsx:17-17",
+   "quote": "local stand-ins for app.fourmula.ai",
+   "kind": "declaration",
+   "note": "A hosted web application behind sign-in."
+  },
+  {
+   "id": "cit-pol-subscriptions",
+   "source": "src/pages/TermsContent.jsx:93-93",
+   "quote": "Fees, Subscriptions & Credits",
+   "kind": "declaration",
+   "note": "Measured legal scaffolding: a subscription/credits chapter heading (body prose is placeholder filler)."
+  },
+  {
+   "id": "cit-pol-trusted",
+   "source": "src/components/How.jsx:31-31",
+   "quote": "Trusted By",
+   "kind": "declaration",
+   "note": "B2B social proof: 11 real company logos."
+  },
+  {
+   "id": "cit-pol-store",
+   "source": "src/components/Faq.jsx:27-27",
+   "quote": "Just a store link or a product photo",
+   "kind": "declaration",
+   "note": "Addressed to an online store operator."
+  },
+  {
+   "id": "cit-pol-team",
+   "source": "src/components/Faq.jsx:48-48",
+   "quote": "Does this replace my creative team?",
+   "kind": "declaration",
+   "note": "Addressed to a business with a creative team."
   }
- ]
+ ],
+ "sectionHeights": {
+  "$description": "MEASURED, not estimated: every section of every route of the BUILT clone, in headless Chromium at a 1440x900 viewport, after the preloader settled and one full scroll pass (so scroll-built pin spacers exist). Read by extraction/wrapper_gate.py (verify_all check [q]). Fixed elements (header, menu, cookie banner, preloader, badge) are recorded with inFlow:false and take no page height. The legal body is ONE <section class=\"tech\"> in the DOM; its header and per-chapter heights are measured between the real <div class=\"w-embed\"> chapter anchors.",
+  "viewport": {
+   "width": 1440,
+   "height": 900
+  },
+  "measuredWith": "extraction/measure_sections.mjs (headless Chromium via Playwright)",
+  "measuredOn": "2026-10-29",
+  "buildCommand": "npm ci && npx vite build --outDir <scratch> && npx vite preview --outDir <scratch> --port 5737; then NODE_PATH=\"$(npm root -g)\" BASE_URL=http://localhost:5737 node design-repo/extraction/measure_sections.mjs",
+  "parityNote": "These are heights of the CLONE only. No live-original capture was taken in this revision, so no clone-vs-live visual parity number is claimed.",
+  "routes": {
+   "/": {
+    "pageHeightPx": 9893,
+    "sections": {
+     "chrome.preloader": {
+      "heightPx": 900,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.cookie-consent": {
+      "heightPx": 900,
+      "topPx": 10,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.header": {
+      "heightPx": 91,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.menu": {
+      "heightPx": 46,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "hero.home": {
+      "heightPx": 900,
+      "topPx": 0,
+      "position": "relative",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "content.what-intro": {
+      "heightPx": 347,
+      "topPx": 900,
+      "position": "static",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "showcase.ai-capabilities": {
+      "heightPx": 1870,
+      "topPx": 1247,
+      "position": "static",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "marquee.how-trusted": {
+      "heightPx": 1016,
+      "topPx": 3117,
+      "position": "relative",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "steps.pinned-list": {
+      "heightPx": 3845,
+      "topPx": 4266,
+      "position": "static",
+      "display": "block",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "faq.accordion": {
+      "heightPx": 704,
+      "topPx": 8244,
+      "position": "static",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "chrome.footer": {
+      "heightPx": 812,
+      "topPx": 9081,
+      "position": "static",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "chrome.awards-badge": {
+      "heightPx": 176,
+      "topPx": 362,
+      "position": "fixed",
+      "display": "block",
+      "inFlow": false,
+      "pinSpacer": false
+     }
+    }
+   },
+   "/privacy-policy": {
+    "pageHeightPx": 6956,
+    "sections": {
+     "chrome.cookie-consent": {
+      "heightPx": 900,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.header": {
+      "heightPx": 91,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.menu": {
+      "heightPx": 46,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.footer": {
+      "heightPx": 812,
+      "topPx": 6144,
+      "position": "static",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "chrome.awards-badge": {
+      "heightPx": 176,
+      "topPx": 362,
+      "position": "fixed",
+      "display": "block",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "content.legal-header": {
+      "heightPx": 704,
+      "topPx": 0,
+      "position": "static",
+      "display": "block",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "content.legal-chapter": {
+      "instances": [
+       {
+        "heightPx": 287,
+        "topPx": 704
+       },
+       {
+        "heightPx": 959,
+        "topPx": 991
+       },
+       {
+        "heightPx": 633,
+        "topPx": 1950
+       },
+       {
+        "heightPx": 1097,
+        "topPx": 2583
+       },
+       {
+        "heightPx": 398,
+        "topPx": 3680
+       },
+       {
+        "heightPx": 199,
+        "topPx": 4078
+       },
+       {
+        "heightPx": 352,
+        "topPx": 4278
+       },
+       {
+        "heightPx": 232,
+        "topPx": 4629
+       },
+       {
+        "heightPx": 232,
+        "topPx": 4861
+       },
+       {
+        "heightPx": 477,
+        "topPx": 5093
+       },
+       {
+        "heightPx": 232,
+        "topPx": 5569
+       },
+       {
+        "heightPx": 209,
+        "topPx": 5801
+       }
+      ],
+      "position": "static",
+      "display": "block",
+      "inFlow": true,
+      "pinSpacer": false,
+      "heightPx": 1097
+     }
+    }
+   },
+   "/terms-of-service": {
+    "pageHeightPx": 7605,
+    "sections": {
+     "chrome.cookie-consent": {
+      "heightPx": 900,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.header": {
+      "heightPx": 91,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.menu": {
+      "heightPx": 46,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.footer": {
+      "heightPx": 812,
+      "topPx": 6793,
+      "position": "static",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "chrome.awards-badge": {
+      "heightPx": 176,
+      "topPx": 362,
+      "position": "fixed",
+      "display": "block",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "content.legal-header": {
+      "heightPx": 693,
+      "topPx": 0,
+      "position": "static",
+      "display": "block",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "content.legal-chapter": {
+      "instances": [
+       {
+        "heightPx": 429,
+        "topPx": 693
+       },
+       {
+        "heightPx": 297,
+        "topPx": 1122
+       },
+       {
+        "heightPx": 319,
+        "topPx": 1419
+       },
+       {
+        "heightPx": 309,
+        "topPx": 1738
+       },
+       {
+        "heightPx": 441,
+        "topPx": 2047
+       },
+       {
+        "heightPx": 551,
+        "topPx": 2489
+       },
+       {
+        "heightPx": 587,
+        "topPx": 3039
+       },
+       {
+        "heightPx": 463,
+        "topPx": 3626
+       },
+       {
+        "heightPx": 287,
+        "topPx": 4090
+       },
+       {
+        "heightPx": 419,
+        "topPx": 4376
+       },
+       {
+        "heightPx": 342,
+        "topPx": 4795
+       },
+       {
+        "heightPx": 332,
+        "topPx": 5137
+       },
+       {
+        "heightPx": 254,
+        "topPx": 5468
+       },
+       {
+        "heightPx": 441,
+        "topPx": 5723
+       },
+       {
+        "heightPx": 342,
+        "topPx": 6164
+       },
+       {
+        "heightPx": 155,
+        "topPx": 6506
+       }
+      ],
+      "position": "static",
+      "display": "block",
+      "inFlow": true,
+      "pinSpacer": false,
+      "heightPx": 587
+     }
+    }
+   },
+   "/start": {
+    "pageHeightPx": 1331,
+    "sections": {
+     "chrome.cookie-consent": {
+      "heightPx": 900,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.header": {
+      "heightPx": 91,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.menu": {
+      "heightPx": 46,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "content.tech": {
+      "heightPx": 386,
+      "topPx": 0,
+      "position": "static",
+      "display": "block",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "chrome.footer": {
+      "heightPx": 812,
+      "topPx": 519,
+      "position": "static",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "chrome.awards-badge": {
+      "heightPx": 176,
+      "topPx": 362,
+      "position": "fixed",
+      "display": "block",
+      "inFlow": false,
+      "pinSpacer": false
+     }
+    }
+   },
+   "/auth": {
+    "pageHeightPx": 1473,
+    "sections": {
+     "chrome.cookie-consent": {
+      "heightPx": 900,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.header": {
+      "heightPx": 91,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.menu": {
+      "heightPx": 46,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "content.tech": {
+      "heightPx": 528,
+      "topPx": 0,
+      "position": "static",
+      "display": "block",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "chrome.footer": {
+      "heightPx": 812,
+      "topPx": 661,
+      "position": "static",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "chrome.awards-badge": {
+      "heightPx": 176,
+      "topPx": 362,
+      "position": "fixed",
+      "display": "block",
+      "inFlow": false,
+      "pinSpacer": false
+     }
+    }
+   },
+   "/404": {
+    "pageHeightPx": 900,
+    "sections": {
+     "chrome.preloader": {
+      "heightPx": 900,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.cookie-consent": {
+      "heightPx": 900,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "chrome.header": {
+      "heightPx": 91,
+      "topPx": 0,
+      "position": "fixed",
+      "display": "flex",
+      "inFlow": false,
+      "pinSpacer": false
+     },
+     "hero.not-found": {
+      "heightPx": 900,
+      "topPx": 0,
+      "position": "relative",
+      "display": "flex",
+      "inFlow": true,
+      "pinSpacer": false
+     },
+     "chrome.awards-badge": {
+      "heightPx": 176,
+      "topPx": 362,
+      "position": "fixed",
+      "display": "block",
+      "inFlow": false,
+      "pinSpacer": false
+     }
+    }
+   }
+  },
+  "whitelist": [],
+  "whitelistNote": "Empty: no section trips the gate at its measured height. An entry needs section, route, reviewedBy, justification (30+ chars) and maxHeightPx above the measured height; an agent reviewer must write \"agent attestation, not a human sign-off\"."
+ }
 }

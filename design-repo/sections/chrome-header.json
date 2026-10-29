@@ -2,6 +2,16 @@
   "id": "chrome.header",
   "kind": "section",
   "category": "chrome",
+  "source": {
+    "id": "dom:Header:header",
+    "tag": "<section className=\"header\">",
+    "file": "src/components/Header.jsx",
+    "lines": "5-31"
+  },
+  "semantic": {
+    "id": "chrome.header",
+    "category": "chrome"
+  },
   "purpose": "The fixed top bar: brand mark, burger + Menu word, theme toggle, live scroll-progress readout, sign-in glyph and the primary CTA. Rendered unconditionally on EVERY route.",
   "content": {
     "type": "object",
@@ -14,7 +24,9 @@
           "assetRole": {
             "type": "string",
             "enum": [
-              "brand-wordmark"
+              "brand-wordmark",
+              "placeholder-brand-mark",
+              "user-supplied-asset"
             ]
           },
           "accessibleLabel": {
@@ -145,13 +157,20 @@
       "assetRole": [
         "brand-wordmark"
       ],
-      "policy": "must-reuse-exact"
+      "policy": "must-reuse-exact",
+      "generatedAssetRoles": [
+        "placeholder-brand-mark",
+        "user-supplied-asset"
+      ]
     },
     "glyphs": {
       "assetRole": [
         "ui-icon-glyph"
       ],
-      "policy": "may-generate-new"
+      "policy": "may-generate-new",
+      "generatedAssetRoles": [
+        "ui-icon-glyph"
+      ]
     }
   },
   "motion": {
@@ -228,5 +247,11 @@
     }
   ],
   "notes": "#progress LIVES HERE, not in the footer. That means the scroll-progress readout IS present on the 404, even though the 404 has no footer. Only #dotsField (chrome.footer) is genuinely absent from the 404. This corrects a claim in the build groundwork.",
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 15, which was unreachable."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 15, which was unreachable.",
+  "generatedAssetRoles": [
+    "placeholder-brand-mark",
+    "user-supplied-asset",
+    "ui-icon-glyph"
+  ],
+  "retrievalEligible": true
 }

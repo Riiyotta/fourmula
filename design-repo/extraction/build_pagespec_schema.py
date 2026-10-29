@@ -17,8 +17,11 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOCAL_PATH = r"^/(?!/)(?!.*\.\.)[A-Za-z0-9._~@%+()/-]+$"
 MAX_FALLBACK_WORDS = 60
+PAGESPEC_VERSION = "2.0.0"
+MODES = ["clone", "generation"]
+STYLE_SLOTS = ["surface", "text", "accent", "border", "typography", "fontFamily", "spacing", "radius"]
 # The in-page anchors that really exist in the source, plus the inert hashes.
-INERT_HREFS = ["#", "/#", "/#what-is-fourmula", "/#pdp", "/#products", "/#video", "/#list"]
+INERT_HREFS = ["#", "/#", "/#what-is-fourmula", "/#intro", "/#pdp", "/#products", "/#video", "/#list"]
 # Annotation keys that are for humans / the semantic validator only. `title` and `description` are
 # NOT stripped: they are legal draft-07 annotations and `title` names each oneOf branch. Keys inside a
 # `properties` map are PROPERTY NAMES, never schema keywords, so they are never stripped - a content
@@ -105,6 +108,21 @@ def main():
         secs[d["id"]] = d
     sids = sorted(secs)
     patterns = sorted({d["motion"]["pattern"] for d in secs.values()})
+    themes = load("registry.manifest.json")["schemaValidatedThemes"]
+
+    def span(t):
+        lo = hi = 0
+        for n in t["nodes"]:
+            c = n.get("count") or {}
+            if n.get("repeatable"):
+                lo += c.get("min", 1) if n["required"] else 0
+                hi += c.get("max", 1)
+            else:
+                lo += 1 if n["required"] else 0
+                hi += 1
+        return lo, hi
+    min_nodes = min(span(t)[0] for t in tpl)
+    max_nodes = max(span(t)[1] for t in tpl)
 
     branches = []
     for sid in sids:
@@ -128,8 +146,9 @@ def main():
         "title": "Fourmula PageSpec",
         "description":
             "A generated page: one of the 5 closed templates, one of the 6 closed routes, and an ordered list of "
-            "section instances. There is deliberately NO per-instance token or style override field - styling is "
-            "owned entirely by the section and component contracts. The non-standard keywords maxWords and "
+            "section instances, with a REQUIRED closed mode (clone | generation). There is no free-form token or style "
+            "override: the only styling field is the optional, closed node-level styleTokens, which takes semantic "
+            "token REFERENCES only (TOKEN_* rules); styling is otherwise owned by the section and component contracts. The non-standard keywords maxWords and "
             "maxWordsTotal are annotations enforced by schema/semantic_validate.py, where a word count is always "
             "len(text.split()). Media use only local absolute paths and the closed assetRole enum from "
             "assets/asset-roles.json; remote, protocol-relative and '..' paths are rejected by pattern. "
@@ -138,15 +157,26 @@ def main():
             "Generated from the section contracts by extraction/build_pagespec_schema.py.",
         "type": "object",
         "additionalProperties": False,
-        "required": ["pageSpecVersion", "template", "route", "nodes"],
+        "required": ["pageSpecVersion", "mode", "template", "route", "nodes"],
         "properties": {
             "$schema": {"type": "string"},
-            "pageSpecVersion": {"const": "1.0.0"},
+            "pageSpecVersion": {"const": PAGESPEC_VERSION},
+            "mode": {"type": "string", "enum": MODES,
+                     "description": "REQUIRED and closed. clone = a faithful reconstruction of the source; real source "
+                                    "copy and clone-only assets may be reused for fidelity. generation = a NEW page for "
+                                    "someone else: schema/semantic_validate.py's GENERATION_MODE_* rules reject the "
+                                    "source brand, assets, people, customers, product imagery, copy, claims, hosts and "
+                                    "embeds, and only generation-safe asset roles are admitted."},
+            "theme": {"type": "string", "enum": themes,
+                      "description": "Optional; defaults to registry.manifest.json defaultTheme. Validated against "
+                                     "styleTokens by TOKEN_THEME_MISMATCH. NOTE the source's inverted class names: "
+                                     "the light palette is selected by .body.dark."},
             "template": {"type": "string", "enum": [t["id"] for t in tpl]},
             "route": {"type": "string", "enum": routes},
-            "nodes": {"type": "array", "minItems": 5, "maxItems": 12,
+            "nodes": {"type": "array", "minItems": min_nodes, "maxItems": max_nodes,
                       "items": {"$ref": "#/definitions/node"},
-                      "description": "The real templates range from 5 nodes (not-found) to 12 (home)."},
+                      "description": "Computed from templates/templates.json: the smallest real template needs %d "
+                                     "nodes, the largest (legal, with 16 chapters) %d." % (min_nodes, max_nodes)},
         },
         "allOf": [{"if": {"properties": {"template": {"const": t["id"]}}, "required": ["template"]},
                    "then": {"properties": {"route": {"enum": t["routes"]}}}} for t in tpl],
@@ -190,6 +220,17 @@ def main():
                     "variant": {"type": "string"},
                     "content": {"type": "object"},
                     "motion": {"$ref": "#/definitions/motion"},
+                    "retrievalEligible": {
+                        "type": "boolean",
+                        "description": "Optional echo of the section contract's retrievalEligible. RETRIEVAL_PIN "
+                                       "rejects true on pinned runtime UI and false on a content section."},
+                    "styleTokens": {
+                        "type": "object", "additionalProperties": False,
+                        "properties": {k: {"type": "string", "minLength": 1} for k in STYLE_SLOTS},
+                        "description": "Optional, closed set of token REFERENCES (never values). Each value must be a "
+                                       "semantic role id from tokens/llm/token-catalog.json for that slot; raw colours, "
+                                       "raw lengths, unknown ids, unsupported fonts and other-palette ids are rejected "
+                                       "by the TOKEN_* rules in schema/semantic_validate.py."},
                 },
                 "allOf": branches,
             },

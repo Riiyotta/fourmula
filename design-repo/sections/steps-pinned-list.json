@@ -2,6 +2,16 @@
   "id": "steps.pinned-list",
   "kind": "section",
   "category": "scroll-stage",
+  "source": {
+    "id": "dom:ListSection:list",
+    "tag": "<section className=\"list\">",
+    "file": "src/components/ListSection.jsx",
+    "lines": "4-143"
+  },
+  "semantic": {
+    "id": "steps.pinned-list",
+    "category": "scroll-stage"
+  },
   "purpose": "The four-step 'idea to assets' sequence as pinned, 3D-rotating gradient slides.",
   "content": {
     "type": "object",
@@ -123,7 +133,10 @@
                 "assetRole": {
                   "type": "string",
                   "enum": [
-                    "step-artwork"
+                    "step-artwork",
+                    "generated-illustration",
+                    "placeholder-screenshot",
+                    "user-supplied-asset"
                   ]
                 },
                 "assetRef": {
@@ -191,7 +204,12 @@
         "step-artwork"
       ],
       "policy": "must-not-fabricate",
-      "count": 4
+      "count": 4,
+      "generatedAssetRoles": [
+        "generated-illustration",
+        "placeholder-screenshot",
+        "user-supplied-asset"
+      ]
     }
   },
   "motion": {
@@ -278,5 +296,11 @@
     }
   ],
   "notes": "FOUR gradient variants, not three - see components/component-step-slide.json for the correction and the citations.",
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum)."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum).",
+  "generatedAssetRoles": [
+    "generated-illustration",
+    "placeholder-screenshot",
+    "user-supplied-asset"
+  ],
+  "retrievalEligible": true
 }

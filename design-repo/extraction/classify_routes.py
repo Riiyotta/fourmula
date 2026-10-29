@@ -104,7 +104,23 @@ def content_sections(page_component):
         return out
     f = PAGE_FILES[page_component]
     t = read("src", "pages", f + ".jsx")
-    return [CLASS_TO_SECTION[re.search(r'<section[^>]*className="([^"]+)"', t).group(1).split()[0]]]
+    sid = CLASS_TO_SECTION[re.search(r'<section[^>]*className="([^"]+)"', t).group(1).split()[0]]
+    if sid == "content.tech" and "longFormProse" in structural_slots(page_component):
+        # R6: a long-form legal document is decomposed by its own heading boundaries - one legal header
+        # (h1 + intro + anchor index) and one chapter per h2 - even though the DOM wraps it in one section.
+        return ["content.legal-header"] + ["content.legal-chapter"] * len(re.findall(r"<h2[\s>]", t))
+    return [sid]
+
+
+def collapse(nodes):
+    """[(section, count)] with consecutive repeats folded - the shape templates.json stores."""
+    out = []
+    for n in nodes:
+        if out and out[-1][0] == n:
+            out[-1][1] += 1
+        else:
+            out.append([n, 1])
+    return out
 
 
 def structural_slots(page_component):
@@ -166,19 +182,19 @@ def main(argv):
     print("=== per-route derivation (from the real JSX) ===")
     for r in rows:
         print("%-20s page=%-9s flags=%-46s" % (r["route"], r["page"], r["layoutFlags"]))
-        print("    nodes: %s" % " -> ".join(r["nodes"]))
+        print("    nodes: %s" % " -> ".join("%s x%d" % (a, b) if b > 1 else a for a, b in collapse(r["nodes"])))
         if r["structuralSlots"]:
             print("    structural slots: %s" % " ".join(r["structuralSlots"]))
     print("\n=== grouping by (node list) alone ===")
     by_nodes = {}
     for r in rows:
-        by_nodes.setdefault(tuple(r["nodes"]), []).append(r["route"])
+        by_nodes.setdefault(tuple(a for a, _ in collapse(r["nodes"])), []).append(r["route"])
     for k, v in by_nodes.items():
         print("  %-60s %s" % (" -> ".join(k)[:60], v))
     print("\n=== grouping by (node list + structural slots) == the real shape set ===")
     by_both = {}
     for r in rows:
-        key = (tuple(r["nodes"]), tuple(sorted(set(r["structuralSlots"]) - {"proseTable"})))
+        key = (tuple(a for a, _ in collapse(r["nodes"])), tuple(sorted(set(r["structuralSlots"]) - {"proseTable"})))
         by_both.setdefault(key, []).append(r["route"])
     for (n, fp), v in by_both.items():
         print("  slots=%-28s nodes=%d  %s" % (",".join(fp) or "-", len(n), v))
@@ -196,11 +212,20 @@ def main(argv):
         if tid is None:
             print("FAIL route %s is served by no template" % r["route"]); bad += 1; continue
         want = [n["section"] for n in tpl[tid]["nodes"]]
-        if want != r["nodes"]:
+        got = collapse(r["nodes"])
+        if want != [g[0] for g in got]:
             print("FAIL route %s: template %s nodes %s != derived %s" % (r["route"], tid, want, r["nodes"])); bad += 1
+        else:
+            for tn, (sec, cnt) in zip(tpl[tid]["nodes"], got):
+                if tn.get("repeatable"):
+                    lo, hi = tn.get("count", {}).get("min", 1), tn.get("count", {}).get("max", 10 ** 6)
+                    if not lo <= cnt <= hi:
+                        print("FAIL route %s: %s repeats %dx, template %s allows %d-%d" % (r["route"], sec, cnt, tid, lo, hi)); bad += 1
+                elif cnt != 1:
+                    print("FAIL route %s: %s repeats %dx but is not repeatable in %s" % (r["route"], sec, cnt, tid)); bad += 1
         stored = tpl[tid].get("derivedNodeList")
-        if stored is not None and stored != r["nodes"]:
-            print("FAIL template %s derivedNodeList is stale: %s != %s" % (tid, stored, r["nodes"])); bad += 1
+        if stored is not None and stored != [g[0] for g in got]:
+            print("FAIL template %s derivedNodeList is stale: %s != %s" % (tid, stored, [g[0] for g in got])); bad += 1
     print("--check: %s" % ("OK - every route's real node list matches its template" if not bad else "%d problem(s)" % bad))
     return 1 if bad else 0
 

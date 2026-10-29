@@ -3,15 +3,17 @@
 An AI-ready design repository extracted from a Vite + React clone of **fourmula.ai** (6 routes, 5 page shapes):
 design tokens, primitive / component / section contracts, page templates, a compatibility graph, a PageSpec JSON
 Schema with a semantic validator, and the scripts that keep all of it honest. Status: **design-review-pending**
-(`productionApproved: false`). It is a specification for generating pages in this site's style, not a component
+(`productionApproved: false`). Repository 1.1.0, PageSpec 2.0.0 (adds the required `mode`), allowlist 1.1.0.
+Bound to the N0 common policy `n0-saas-design-constraints-common` 0.1.0 as a **SaaS** site (see "Policy binding"). It is a specification for generating pages in this site's style, not a component
 library.
 
 ## Counts (recomputed from disk by `extraction/verify_all.py`; that script fails if this block or the manifest drifts)
 
 <!-- counts:begin -->
 - Tokens: 270 total (foundation 173, semantic 61, component 26, layout 10); catalog entries 270
-- Primitives 11, components 11, sections 14
-- Templates 5, routes 6 (1:1), graph rules 20, motion patterns 10, asset roles 14, ledger citations 334
+- Primitives 11, components 11, sections 16
+- Templates 5, routes 6 (1:1), graph rules 37, motion patterns 10, asset roles 23, ledger citations 344
+- Example PageSpecs 6, retrieval-ineligible sections 4
 <!-- counts:end -->
 
 Routes to templates, each route served by exactly one template: `/` -> home; `/privacy-policy` and
@@ -73,20 +75,26 @@ non-http scheme remains in `src/` either (the two filler-prose `mailto:` hrefs r
 | --- | --- |
 | `registry.manifest.json` | status, versions (and which are machine-checked), recomputed counts, route map, scope, constraints, entry points |
 | `tokens/00-foundation/`, `10-semantic/`, `20-component/`, `30-layout/`, `themes/` | the four token tiers and both theme resolutions; ids are dotted (`color.mainbg-light`, `text.primary`, `component.button.primary.fill`) |
-| `tokens/llm/` | `token-catalog.json`, `token-policy.json` (its category keys are exactly the catalog's), `component-allowlist.json` (versioned, closed id list) |
-| `assets/asset-roles.json` | the closed 14-role `assetRole` enum, the closed 5-value `generationPolicy` enum, and a pinned policy for each of the 12 compliance-critical roles |
+| `tokens/llm/` | `token-catalog.json`, `token-policy.json` (its category keys are exactly the catalog's; it names every enforced TOKEN_* rule), `component-allowlist.json` (versioned, closed id list, plus `retrievalIneligible`) — all registered in the manifest (`tokenRegistration`, check [w]) |
+| `tokens/00-foundation/motion-patterns.json` | the closed motion-pattern vocabulary, generated from the contracts and checked against them and the schema |
+| `assets/asset-roles.json` | the closed 23-role `assetRole` enum with a closed `availability` (clone-only / generation-safe / blocked-for-generation) pinned in code, `generationSafeSubstitutes`, `generatedModeGuidance`, the closed 6-value `generationPolicy` enum, and a pinned policy for each of the 13 compliance-critical roles |
+| `policy/design-policy.json` | the binding record for the N0 common SaaS policy: classification evidence, local application, `enforcedBy` files, approval state |
 | `primitives/`, `components/`, `sections/` | one contract per id (`hero.home` -> `sections/hero-home.json`) |
 | `templates/templates.json` | the 5 page shapes, as structured node sequences with per-template evidence levels |
-| `compatibility/graph.json` | 20 rhythm and position rules, each with a severity and named exceptions, plus the exact node sequences every rule was verified against |
-| `schema/` | `pagespec.schema.json` (Draft-07, generated), `example.pagespec.json`, `semantic_validate.py`, `schema/tests/adversarial_test.py` |
-| `extraction/` | `measured-values.json` (the citation ledger), `verify_all.py`, `prove_drift.py`, `build_pagespec_schema.py`, `classify_routes.py` |
+| `compatibility/graph.json` | 37 rules (rhythm, position, retrieval pin, availability pin, 9 GENERATION_MODE_* and 6 TOKEN_* rules), each with a severity and named exceptions, plus the exact node sequences every rule was verified against |
+| `schema/` | `pagespec.schema.json` (Draft-07, generated), `section-contract.schema.json` (closed contract shape), `example.pagespec.json` (mode=clone), `examples/generated-*.pagespec.json` (one mode=generation example per template), `generation-leakage.json` (generated leakage registry), `semantic_validate.py`, `schema/tests/adversarial_test.py` |
+| `extraction/` | `measured-values.json` (the citation ledger and the measured `sectionHeights`), `verify_all.py`, `prove_drift.py`, `wrapper_gate.py`, `measure_sections.mjs`, `build_pagespec_schema.py`, `build_leakage_patterns.py`, `build_provenance.py`, `classify_routes.py` |
 
 ## How to run (Python 3 with the `jsonschema` package, from the repository root)
 
 ```
-python3 extraction/verify_all.py                                   # 16 checks, PASS/FAIL/WARN each, non-zero exit on any failure
+python3 extraction/verify_all.py                                   # 23 checks, PASS/FAIL/WARN each, non-zero exit on any failure
 python3 schema/tests/adversarial_test.py                           # controls + mutations + CLI + drift-injection layers
-python3 extraction/prove_drift.py                                  # injects drift into scratch copies; verify_all.py must fail on each
+python3 extraction/prove_drift.py [--scratch DIR]                  # injects drift into scratch copies; verify_all.py must fail on each
+python3 extraction/wrapper_gate.py                                 # the whole-page-wrapper gate over the measured heights
+python3 extraction/build_leakage_patterns.py [--check]             # rebuild the generation-mode leakage registry from the real source
+python3 extraction/build_provenance.py [--check]                   # rebuild each contract's source/semantic objects from the real files
+python3 extraction/verify_all.py --emit-policy-hash                # print the designPolicy contentHash
 python3 schema/semantic_validate.py schema/example.pagespec.json   # validate one PageSpec (0 valid, 1 errors, 2 unreadable)
 python3 schema/semantic_validate.py --parity                       # graph rule ids <-> validator RULES, both directions
 python3 extraction/build_pagespec_schema.py [--check]              # regenerate / drift-check the shipped schema
@@ -139,7 +147,9 @@ By running a real first-party classifier, `extraction/classify_routes.py`, again
 not by inspecting a grouping or trusting a description. Grouping on the **node list alone** collapses 6 routes into
 3 shapes, because `/privacy-policy`, `/terms-of-service`, `/start` and `/auth` all produce the identical list
 `[chrome.cookie-consent, chrome.header, chrome.menu, content.tech, chrome.footer, chrome.awards-badge]`. That
-grouping would be wrong. The classifier therefore also compares **structural slots**, which is what actually
+grouping would be wrong. (Revision 1.1: the legal pages now decompose into `content.legal-header` + 12-16
+`content.legal-chapter` nodes at their real h2 boundaries, so their node list differs from /start and /auth
+even before slots are compared; the slot comparison below still separates /start from /auth.) The classifier therefore also compares **structural slots**, which is what actually
 decides shape:
 
 | Route(s) | Structural slots | Template |
@@ -178,9 +188,10 @@ would launder one evidence level into the other.
   source; it is recorded, not silently inherited, and the primitives say so.
 - **No text alternative on the 11 trusted logos.** They are bare inline SVG with no `.u-hidden-copy` sibling and no
   `aria-label`. The contract exposes an `accessibleLabel` field so generated output can do better.
-- **A PageSpec has no per-instance token or style override field.** A `tokens` key is rejected at page level and at
-  node level. No such field was invented just to have something to validate; token safety is tested one layer down,
-  at the catalog/policy layer, by drift injection.
+- **Styling in a PageSpec is token references only.** A free-form `tokens` key is still rejected. Revision 1.1 adds
+  the optional closed `styleTokens` node field (semantic role ids only) so the token policy is machine-enforceable:
+  unknown ids, raw colours, raw lengths, unsupported fonts, other-palette ids and wrong-family ids are rejected by
+  the TOKEN_* rules. Token-file drift is still also tested at the catalog/policy layer.
 - **No motion budget rule.** The home page genuinely runs many concurrent animations (three 24s CSS marquees, a 32s
   carousel ring plus counter-rotation, a 728-dot wave with cursor proximity, five image cross-fades, three
   background videos, four pinned 3D slides), so there is no evidence of a cap to encode. See `notEvidenced` in
@@ -191,6 +202,42 @@ would launder one evidence level into the other.
   `/terms-of-service` uses only the `<div id>` pattern. All four are documented in the relevant contracts.
 - `repositoryVersion` and `pageSpecVersion` are **documentation-only**. Only `allowlistVersion` is machine-checked —
   and the `counts` block is too. See `versionFieldNote` in the manifest.
+
+## Revision 1.1 — modes, generation safety, retrieval, height gate, policy binding
+
+- **`mode` is required** (`clone` | `generation`). Clone mode may reuse real copy and clone-only assets for fidelity
+  (`schema/example.pagespec.json` is the clone control). Generation mode is for a new page for someone else; one
+  generation example per template lives in `schema/examples/` (fictional brand "Kestrelwave", placeholder assets,
+  `.example` host only).
+- **Generation-mode rules** `GENERATION_MODE_BRAND / _ASSET / _PERSON / _CUSTOMER / _SCREENSHOT / _COPY / _CLAIM /
+  _URL / _EMBED` read `schema/generation-leakage.json`, which `extraction/build_leakage_patterns.py` derives from
+  `src/`, `index.html`, `CLONE_SPEC.md` and `public/assets/` with file:line evidence. Copy is stored only as hashed
+  5-word shingles; text is normalised (NFKC, zero-width removal, curly quotes, dashes) before matching. **Detection is
+  string-based and can be evaded by paraphrase. No human has reviewed these patterns.**
+- **Asset availability** is closed and pinned in code in both validators; every clone-only / blocked role names
+  generation-safe substitutes, and eight generation-safe roles were added. The Awwwards badge was misfiled as a
+  generic `ui-icon-glyph` (may-generate-new); it is now `third-party-award-badge` (clone-only, must-not-fabricate).
+- **Legal pages decomposed (R6).** Measured at 1440px, the single `content.tech` node held 86% (/privacy-policy) and
+  88% (/terms-of-service) of the page. The legal template now composes `content.legal-header` + 12-16
+  `content.legal-chapter` nodes, split at the documents' own h2 boundaries; `content.tech` keeps only the two
+  composed stand-ins. Same DOM, different purpose.
+- **Provenance vs taxonomy (R7)**: every section contract carries closed `source` {id, tag, file, lines} and
+  `semantic` {id, category}, generated by `build_provenance.py` and re-read against the real files by check [s].
+- **Retrieval eligibility (R8)**: the consent UI, preloader, menu drawer and floating badge are pinned
+  `retrievalEligible: false` in both validators, the contracts and the allowlist.
+- **Wrapper gate (R9)**: `extraction/wrapper_gate.py` gates heights MEASURED from the built clone (headless
+  Chromium, 1440px, every route). No section trips it; the whitelist is empty. Any future agent whitelist entry must
+  say "agent attestation, not a human sign-off". **No clone-vs-live visual parity was measured in this revision.**
+
+## Policy binding
+
+`registry.manifest.json` carries `category: "saas"` and `designPolicy` bound to `n0-saas-design-constraints-common`
+0.1.0 (commonIrVersion 0.5, enforcementMode hard-and-soft). The classification is recorded with cited evidence in
+`policy/design-policy.json` (self-serve sign-up, a hosted app behind sign-in, a fees/subscriptions/credits terms
+chapter, a B2B trusted-by row, copy addressed to a store and a creative team). The clone has no pricing page and no
+dashboard. The decision is an **agent attestation, not a human sign-off**; approval stays
+`defined-pending-architecture-review`. `contentHash` is the sha256 over the policy's `enforcedBy` files and is
+recomputed by check [r].
 
 ## Snapshot warning
 

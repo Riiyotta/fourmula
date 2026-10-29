@@ -5,7 +5,9 @@ A check that has never been seen to fail on bad input might not be checking anyt
 verify_all.py claims to perform is exercised here by injecting ONE real drift into a scratch copy of
 this package and requiring a FAIL line from the intended check.
 
-    python3 extraction/prove_drift.py
+    python3 extraction/prove_drift.py [--scratch DIR]
+
+--scratch DIR puts every scratch copy under DIR (created if missing) instead of the OS temp directory.
 
 Exit code 0 only if (1) a baseline scratch copy passes, (2) EVERY injected drift is caught by the check
 it targets, and (3) the real repository still passes verify_all.py afterwards.
@@ -25,6 +27,7 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SCRATCH_BASE = None
 REAL_SRC_ROOT = os.path.dirname(ROOT)
 # Built by concatenation so this file itself holds no absolute path for check [l] to find.
 ABS_PROBE = "/" + "Users" + "/someone/project/file.txt"
@@ -67,7 +70,9 @@ def resync_counts(dst):
     va = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(va)
     c = va.compute_counts()
-    jedit(dst, "registry.manifest.json", lambda d: d.update({"counts": c}))
+    pol = json.load(open(os.path.join(dst, "policy", "design-policy.json"), encoding="utf-8"))
+    h = va.policy_hash(dst, pol["enforcedBy"])
+    jedit(dst, "registry.manifest.json", lambda d: (d.update({"counts": c}), d["designPolicy"].update({"contentHash": h})))
     block = va.counts_block(c)
     tedit(dst, "README.md", lambda t: re.sub(
         r"(<!-- counts:begin -->\n).*?(\n<!-- counts:end -->)",
@@ -107,7 +112,7 @@ def neutralize(dst):
 
 
 def scratch(real_sibling=False):
-    tmp = tempfile.mkdtemp()
+    tmp = tempfile.mkdtemp(dir=SCRATCH_BASE)
     dst = os.path.join(tmp, "design-repo")
     shutil.copytree(ROOT, dst, ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".DS_Store"))
     with open(os.path.join(tmp, "package.json"), "w") as f:
@@ -321,10 +326,121 @@ def cases():
               lambda d: d["tokens"]["color.accent-hover"].update({"$value": "#ff6b03"}))
     out.append(("(xvii-real) a foundation colour that does not appear in the real source", "[k]", True, colour))
 
+    # ---- R3 / R8 / R9 / R10 / requirement 10 ------------------------------------------------------
+    def avail(dst):
+        def f(d):
+            next(x for x in d["roles"] if x["id"] == "brand-wordmark")["availability"] = "generation-safe"
+        jedit(dst, "assets/asset-roles.json", f)
+    out.append(("(xviii) registry availability edited (brand-wordmark -> generation-safe), code pin unchanged", "[u]", False, avail))
+
+    def unpin_code(dst):
+        tedit(dst, "extraction/verify_all.py", lambda t: t.replace('"og-banner": "blocked-for-generation",', "", 1))
+    out.append(("(xviii-b) one role removed from verify_all's PINNED_AVAILABILITY", "[u]", False, unpin_code))
+
+    def unpin_validator(dst):
+        tedit(dst, "schema/semantic_validate.py", lambda t: t.replace('"og-banner": "blocked-for-generation",', "", 1))
+    out.append(("(xviii-c) one role removed from semantic_validate's PINNED_AVAILABILITY", "[u]", False, unpin_validator))
+
+    def subs(dst):
+        def f(d):
+            next(x for x in d["roles"] if x["id"] == "hero-carousel-photo")["generationSafeSubstitutes"] = ["brand-wordmark"]
+        jedit(dst, "assets/asset-roles.json", f)
+    out.append(("(xviii-d) a substitute that is not generation-safe", "[u]", False, subs))
+
+    def retr_both(dst):
+        jedit(dst, "sections/chrome-menu.json", lambda d: (d.update({"retrievalEligible": True}), d.pop("retrievalReason", None)))
+        jedit(dst, "tokens/llm/component-allowlist.json",
+              lambda d: d.update({"retrievalIneligible": [x for x in d["retrievalIneligible"] if x != "chrome.menu"]}))
+    out.append(("(xix) contract AND allowlist flipped to retrieval-eligible together (pin unchanged)", "[t]", False, retr_both))
+
+    def retr_pin(dst):
+        tedit(dst, "schema/semantic_validate.py", lambda t: t.replace('"chrome.menu", "chrome.awards-badge"}', '"chrome.awards-badge"}', 1))
+    out.append(("(xix-b) a runtime-UI id removed from semantic_validate's RETRIEVAL_INELIGIBLE", "[t]", False, retr_pin))
+
+    def prov(dst):
+        jedit(dst, "sections/faq-accordion.json", lambda d: d["semantic"].update({"id": "content.generic"}))
+    out.append(("(xx) semantic.id no longer equals the contract id", "[s]", False, prov))
+
+    def prov_open(dst):
+        jedit(dst, "sections/faq-accordion.json", lambda d: d.update({"inventedKey": 1}))
+    out.append(("(xx-b) an unlisted key added to a contract (closed contract schema)", "[s]", False, prov_open))
+
+    def prov_real(dst):
+        jedit(dst, "sections/faq-accordion.json", lambda d: d["source"].update({"lines": "6-51"}))
+    out.append(("(xx-real) source range moved off the line that holds the tag", "[s]", True, prov_real))
+
+    def hero_tall(dst):
+        jedit(dst, "extraction/measured-values.json",
+              lambda d: d["sectionHeights"]["routes"]["/"]["sections"]["hero.home"].update({"heightPx": 3100}))
+    out.append(("(xxi) HERO measured at 3100px", "[q]", False, hero_tall))
+
+    def share(dst):
+        def f(d):
+            r = d["sectionHeights"]["routes"]["/privacy-policy"]
+            r["sections"]["content.legal-chapter"]["instances"][0]["heightPx"] = int(r["pageHeightPx"] * 0.7)
+        jedit(dst, "extraction/measured-values.json", f)
+    out.append(("(xxi-b) one legal chapter holding 70% of its page", "[q]", False, share))
+
+    def no_meas(dst):
+        jedit(dst, "extraction/measured-values.json", lambda d: d["sectionHeights"]["routes"].pop("/auth"))
+    out.append(("(xxi-c) a route's measurement removed", "[q]", False, no_meas))
+
+    def gate_thr(dst):
+        tedit(dst, "extraction/wrapper_gate.py", lambda t: t.replace("HERO_ERROR_PX = 3000", "HERO_ERROR_PX = 9000", 1))
+    out.append(("(xxi-d) the pinned HERO error threshold loosened in code", "[q]", False, gate_thr))
+
+    def wl(dst):
+        jedit(dst, "extraction/measured-values.json", lambda d: d["sectionHeights"].update({"whitelist": [
+            {"section": "hero.home", "route": "/", "reviewedBy": "agent", "justification": "short", "maxHeightPx": 1}]}))
+    out.append(("(xxi-e) whitelist entry with an agent reviewer, short justification and stale cap", "[q]", False, wl))
+
+    def pol_hash(dst):
+        jedit(dst, "assets/asset-roles.json", lambda d: d.update({"probe": "edited without re-hashing"}))
+    out.append(("(xxii) an enforcedBy file edited without re-hashing designPolicy.contentHash", "[r]", False, pol_hash))
+
+    def pol_saas(dst):
+        jedit(dst, "policy/design-policy.json", lambda d: d["classification"].update({"isSaaS": False}))
+    out.append(("(xxii-b) classification flipped to non-SaaS while the SaaS policy stays bound", "[r]", False, pol_saas))
+
+    def pol_ref(dst):
+        jedit(dst, "registry.manifest.json", lambda d: d["designPolicy"].update({"ref": "policy/missing.json"}))
+    out.append(("(xxii-c) designPolicy.ref points at a missing file", "[r]", False, pol_ref))
+
+    def mode_open(dst):
+        jedit(dst, "schema/pagespec.schema.json", lambda d: d["required"].remove("mode"))
+    out.append(("(xxiii) mode no longer required by the schema", "[v]", False, mode_open))
+
+    def gen_missing(dst):
+        os.remove(os.path.join(dst, "schema", "examples", "generated-legal.pagespec.json"))
+    out.append(("(xxiii-b) the legal family's generation example removed", "[v]", False, gen_missing))
+
+    def leak_real(dst):
+        jedit(dst, "schema/generation-leakage.json",
+              lambda d: d["categories"]["GENERATION_MODE_BRAND"]["terms"].pop())
+    out.append(("(xxiii-real) leakage registry edited by hand (no longer rebuilds from source)", "[v]", True, leak_real))
+
+    def cat_unreg(dst):
+        jedit(dst, "registry.manifest.json", lambda d: d["entryPoints"].update({"tokens": [
+            x for x in d["entryPoints"]["tokens"] if "token-catalog" not in x]}))
+    out.append(("(xxiv) token-catalog.json unregistered from entryPoints", "[w]", False, cat_unreg))
+
+    def cat_src(dst):
+        jedit(dst, "tokens/llm/token-catalog.json",
+              lambda d: d["categories"]["radius"]["tokens"][0].update({"id": "radius.invented"}))
+    out.append(("(xxiv-b) a catalog id that is not in its sourceFile", "[w]", False, cat_src))
+
+    def motion_drift(dst):
+        jedit(dst, "tokens/00-foundation/motion-patterns.json", lambda d: d["patterns"].pop("static"))
+    out.append(("(xxiv-c) motion-patterns.json drifted from the contracts", "[w]", False, motion_drift))
+
     return out
 
 
 def main():
+    global SCRATCH_BASE
+    if "--scratch" in sys.argv:
+        SCRATCH_BASE = os.path.abspath(sys.argv[sys.argv.index("--scratch") + 1])
+        os.makedirs(SCRATCH_BASE, exist_ok=True)
     bad, results = 0, []
     tmp, dst = scratch()
     try:

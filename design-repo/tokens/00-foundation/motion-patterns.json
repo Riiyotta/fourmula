@@ -1,0 +1,61 @@
+{
+  "$description": "The closed motion-pattern vocabulary, one entry per motion.pattern used by a section contract. GENERATED from sections/*.json; extraction/verify_all.py check [w] fails if it drifts from the contracts or from the PageSpec schema's motion.pattern enum. Detailed timings live in tokens/00-foundation/motion.json and in each contract's motion.detail.",
+  "patterns": {
+    "chrome-reveal": {
+      "sections": [
+        "chrome.header"
+      ]
+    },
+    "dots-field-wave": {
+      "sections": [
+        "chrome.footer"
+      ]
+    },
+    "flash-word-reveal": {
+      "sections": [
+        "content.what-intro",
+        "faq.accordion",
+        "showcase.ai-capabilities"
+      ]
+    },
+    "hero-reveal": {
+      "sections": [
+        "hero.home",
+        "hero.not-found"
+      ]
+    },
+    "marquee-scroll": {
+      "sections": [
+        "marquee.how-trusted"
+      ]
+    },
+    "overlay-fade": {
+      "sections": [
+        "chrome.cookie-consent"
+      ]
+    },
+    "panel-expand": {
+      "sections": [
+        "chrome.menu"
+      ]
+    },
+    "pinned-3d-stack": {
+      "sections": [
+        "steps.pinned-list"
+      ]
+    },
+    "preloader-reveal": {
+      "sections": [
+        "chrome.preloader"
+      ]
+    },
+    "static": {
+      "sections": [
+        "chrome.awards-badge",
+        "content.legal-chapter",
+        "content.legal-header",
+        "content.tech"
+      ]
+    }
+  }
+}

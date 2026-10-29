@@ -2,6 +2,16 @@
   "id": "chrome.cookie-consent",
   "kind": "section",
   "category": "chrome",
+  "source": {
+    "id": "dom:Cookies:cookies",
+    "tag": "<section className=\"cookies\">",
+    "file": "src/components/Cookies.jsx",
+    "lines": "4-54"
+  },
+  "semantic": {
+    "id": "chrome.cookie-consent",
+    "category": "chrome"
+  },
   "purpose": "The vendored Finsweet Cookie Consent banner and preference modal. Rendered unconditionally on EVERY route.",
   "content": {
     "type": "object",
@@ -195,7 +205,10 @@
       "assetRole": [
         "form-control-checkmark"
       ],
-      "policy": "must-reuse-exact"
+      "policy": "must-reuse-exact",
+      "generatedAssetRoles": [
+        "form-control-checkmark"
+      ]
     }
   },
   "motion": {
@@ -260,5 +273,10 @@
     }
   ],
   "notes": "The embedded <form id=\"ck-form\" method=\"get\"> carries a data-turnstile-sitekey attribute but neither the Finsweet runtime nor the Cloudflare Turnstile script is loaded, so the whole panel is inert in this clone.",
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 170, which was unreachable."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 170, which was unreachable.",
+  "generatedAssetRoles": [
+    "form-control-checkmark"
+  ],
+  "retrievalEligible": false,
+  "retrievalReason": "Runtime consent UI: a fixed cookie banner plus a preferences modal driven by the Finsweet consent script. It is page furniture that appears on every route, not page content, so it is never retrieved as a section example."
 }

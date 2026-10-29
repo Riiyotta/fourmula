@@ -1,0 +1,186 @@
+{
+ "$schema": "../pagespec.schema.json",
+ "pageSpecVersion": "2.0.0",
+ "mode": "generation",
+ "theme": "light",
+ "template": "not-found",
+ "route": "/404",
+ "nodes": [
+  {
+   "type": "chrome.preloader",
+   "content": {
+    "word": "Loading",
+    "logo": {
+     "assetRole": "placeholder-brand-mark"
+    },
+    "spinner": {
+     "assetRole": "ui-icon-glyph"
+    },
+    "images": [
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/preloader-avatar-01.avif",
+      "alt": ""
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/preloader-avatar-02.avif",
+      "alt": ""
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/preloader-avatar-03.avif",
+      "alt": ""
+     },
+     {
+      "assetRole": "fictional-person-avatar",
+      "assetRef": "/assets/generated/preloader-avatar-04.avif",
+      "alt": ""
+     }
+    ]
+   },
+   "motion": {
+    "pattern": "preloader-reveal",
+    "reducedMotionFallback": "Show the final state at once with no blur, counter or image stagger, then remove the overlay.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.cookie-consent",
+   "content": {
+    "title": "Your privacy choices",
+    "body": "We use a few small files to keep this site working and, only if you agree, to learn which pages help visitors most. You can change your mind at any time.",
+    "inlineLinkLabel": "privacy notice",
+    "bannerActions": [
+     {
+      "label": "Allow all",
+      "style": "primary",
+      "fsCc": "allow",
+      "href": "/#"
+     },
+     {
+      "label": "Choose",
+      "style": "outline",
+      "fsCc": "open-preferences",
+      "href": "/#"
+     }
+    ],
+    "modalActions": [
+     {
+      "label": "Allow all",
+      "style": "primary",
+      "fsCc": "allow",
+      "href": "/#"
+     },
+     {
+      "label": "Keep my choices",
+      "style": "outline",
+      "fsCc": "submit",
+      "href": "/#"
+     }
+    ],
+    "categories": [
+     {
+      "label": "Essential (always on)",
+      "description": "Needed for pages to load and forms to work.",
+      "interactive": false,
+      "fsCcCheckbox": "necessary"
+     },
+     {
+      "label": "Advertising",
+      "description": "Lets partners show offers that fit what you looked at here.",
+      "interactive": true,
+      "fsCcCheckbox": "marketing",
+      "assetRole": "form-control-checkmark"
+     },
+     {
+      "label": "Preferences",
+      "description": "Remembers settings such as language between visits.",
+      "interactive": true,
+      "fsCcCheckbox": "personalization",
+      "assetRole": "form-control-checkmark"
+     },
+     {
+      "label": "Measurement",
+      "description": "Counts visits so the team can see which pages are useful.",
+      "interactive": true,
+      "fsCcCheckbox": "analytics",
+      "assetRole": "form-control-checkmark"
+     }
+    ],
+    "closeLabel": "Close privacy choices"
+   },
+   "motion": {
+    "pattern": "overlay-fade",
+    "reducedMotionFallback": "Show the banner in its final position at once, with no fade and no slide.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.header",
+   "content": {
+    "logo": {
+     "assetRole": "placeholder-brand-mark",
+     "accessibleLabel": "Kestrelwave",
+     "href": "/"
+    },
+    "menuLabel": "Menu",
+    "themeToggle": {
+     "ariaPressed": true,
+     "dataThemeState": "dark"
+    },
+    "progressInitial": "0%",
+    "signin": {
+     "assetRole": "ui-icon-glyph",
+     "accessibleLabel": "Your account",
+     "href": "/auth"
+    },
+    "cta": {
+     "label": "Try it free",
+     "href": "/start",
+     "hoverStagger": true
+    }
+   },
+   "motion": {
+    "pattern": "chrome-reveal",
+    "reducedMotionFallback": "Render the header in place with no reveal and keep the progress readout updating.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "hero.not-found",
+   "content": {
+    "heading": "Page not",
+    "headingAccent": "on file",
+    "cta": {
+     "label": "Go home",
+     "href": "/"
+    },
+    "artwork": {
+     "assetRole": "generated-illustration",
+     "assetRef": "/assets/generated/lost-page.avif",
+     "alt": "Generated illustration of an empty picture frame."
+    }
+   },
+   "motion": {
+    "pattern": "hero-reveal",
+    "reducedMotionFallback": "Show the heading and artwork in their final state with no reveal.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  },
+  {
+   "type": "chrome.awards-badge",
+   "content": {
+    "href": "#",
+    "artwork": {
+     "assetRole": "placeholder-brand-mark"
+    }
+   },
+   "motion": {
+    "pattern": "static",
+    "reducedMotionFallback": "Unchanged, because this section has no motion to reduce.",
+    "reducedMotionFallbackKind": "design-rule"
+   }
+  }
+ ]
+}

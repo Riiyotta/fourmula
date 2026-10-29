@@ -2,6 +2,16 @@
   "id": "hero.not-found",
   "kind": "section",
   "category": "hero",
+  "source": {
+    "id": "dom:NotFoundContent:hero",
+    "tag": "<section id=\"hero\" className=\"hero__404__wrap\">",
+    "file": "src/pages/NotFoundContent.jsx",
+    "lines": "4-14"
+  },
+  "semantic": {
+    "id": "hero.not-found",
+    "category": "hero"
+  },
   "purpose": "The 404 page's only content section: a two-tone h1, one outline CTA and a looping theme-paired artwork.",
   "content": {
     "type": "object",
@@ -46,7 +56,9 @@
           "assetRole": {
             "type": "string",
             "enum": [
-              "not-found-artwork"
+              "not-found-artwork",
+              "generated-illustration",
+              "user-supplied-asset"
             ]
           },
           "assetRef": {
@@ -102,7 +114,11 @@
       ],
       "policy": "must-not-fabricate",
       "count": 2,
-      "note": "The only two .webp files in the whole project."
+      "note": "The only two .webp files in the whole project.",
+      "generatedAssetRoles": [
+        "generated-illustration",
+        "user-supplied-asset"
+      ]
     }
   },
   "motion": {
@@ -165,5 +181,10 @@
     }
   ],
   "notes": "The section reuses id=\"hero\" (the same DOM id the home hero uses) but a different class, hero__404__wrap. The two never co-occur, because no template contains both hero.home and hero.not-found, so the duplicate id is not a conflict in practice.",
-  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 35, which was unreachable."
+  "contentMaxWordsTotalNote": "Set BETWEEN the measured real total and the maximum the per-field budgets allow, so the cap can actually reject an over-long instance instead of being unreachable. extraction/verify_all.py check [p] fails if any declared contentMaxWordsTotal becomes vacuous (>= the per-field maximum). Previously 35, which was unreachable.",
+  "generatedAssetRoles": [
+    "generated-illustration",
+    "user-supplied-asset"
+  ],
+  "retrievalEligible": true
 }

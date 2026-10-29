@@ -1,0 +1,149 @@
+{
+  "id": "content.legal-header",
+  "kind": "section",
+  "category": "content",
+  "source": {
+    "id": "dom:PrivacyContent:tech:header",
+    "tag": "<section className=\"tech\">",
+    "file": "src/pages/PrivacyContent.jsx",
+    "lines": "4-33"
+  },
+  "semantic": {
+    "id": "content.legal-header",
+    "category": "content"
+  },
+  "usedOn": [
+    "/privacy-policy",
+    "/terms-of-service"
+  ],
+  "evidence": {
+    "structure": "DOM SCAFFOLDING measured against the live original (independently re-counted from the real JSX: /privacy-policy h1:1 h2:12 h3:2 p:39 li:31 a:15 table:2 tr:25 td:105; /terms-of-service h1:1 h2:16 h3:1 p:63 li:30 a:21 - both match exactly). THE BODY PROSE IS DELIBERATE PLACEHOLDER FILLER, not the original's copy, because shipping another company's policy text is a liability. Any word budget derived from these pages measures the filler, NOT a measured copy budget.",
+    "copy": "placeholder-filler (headings and anchor labels are the measured scaffolding; body prose is deliberate filler)"
+  },
+  "bodyCopyFields": [],
+  "variants": {},
+  "motion": {
+    "pattern": "static",
+    "detail": "section.tech has no motion hook of its own: no data-flash, no data-hero-text, no ScrollTrigger. The only motion on the legal routes is the global chrome.",
+    "reducedMotionFallback": "Unchanged - this section has no motion of its own.",
+    "reducedMotionFallbackKind": "design-rule (the source ships NO prefers-reduced-motion handling for this section, so the fallback is prescribed by this repository, not mirrored)"
+  },
+  "responsive": {
+    "structured": true,
+    "breakpoint": "991px / 767px",
+    "base": "single column, 8rem top offset, 2rem side gutters; the .tech__title override renders the .u-h3 element at type.h1 (5.5rem)",
+    "max-991px": "the overridden title drops 5.5rem -> 4.5rem and body.lead stays 1.125rem",
+    "max-767px": "the overridden title drops to 2.5rem and body.lead to 1rem"
+  },
+  "composes": [
+    "component.rich-text-block",
+    "primitive.text-link"
+  ],
+  "retrievalEligible": true,
+  "generatedAssetRoles": [],
+  "media": {},
+  "purpose": "The opening of a legal document: the h1 title (1-2 lines), a one-line intro, and the 'Table of Contents' anchor index that links to every chapter. Decomposed out of the former whole-document content.tech legal-prose body (R6): the measured legal pages held 86-88% of their height in that one node.",
+  "content": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "titleLines": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 2,
+        "items": {
+          "type": "string",
+          "maxWords": 4
+        },
+        "note": "1-2 lines separated by a <br/>. Measured: /privacy-policy has 2 lines, \"FOURMULA AI\" (2) and \"PRIVACY & COOKIES POLICY\" (3); /terms-of-service has 1 line, \"TERMS OF USE\" (3)."
+      },
+      "introParagraph": {
+        "type": "string",
+        "note": "UNBUDGETED - placeholder filler. Measured as one short line on both pages."
+      },
+      "anchorIndexHeading": {
+        "type": "string",
+        "maxWords": 4,
+        "note": "Measured: 3 words, \"Table of Contents\", as an h3. Present on /privacy-policy; /terms-of-service has 1 h3 as well."
+      },
+      "anchorIndex": {
+        "type": "array",
+        "minItems": 12,
+        "maxItems": 16,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxWords": 10
+            },
+            "slug": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*$"
+            }
+          },
+          "required": [
+            "label",
+            "slug"
+          ]
+        },
+        "note": "Measured: 12 entries on /privacy-policy, 16 on /terms-of-service, one per h2."
+      }
+    },
+    "required": [
+      "titleLines",
+      "anchorIndex"
+    ]
+  },
+  "contentMaxWordsTotal": null,
+  "contentMaxWordsTotalNote": "No section-wide total: introParagraph is unbudgeted placeholder filler. titleLines, anchorIndexHeading and every anchorIndex label carry their own measured maxWords.",
+  "unbudgetedFields": [
+    "content.legal-header.introParagraph"
+  ],
+  "unbudgetedFieldsNote": "introParagraph is the legal pages' placeholder filler line, so a word budget derived from it would be a fabricated measurement. extraction/verify_all.py check [p] exempts it by name.",
+  "constraints": {
+    "onePerPage": true,
+    "maxPerPage": 1,
+    "mustBeFirstInBody": true,
+    "verification": "The legal template's first body node, immediately after chrome.menu; src/pages/PrivacyContent.jsx:5-33 and src/pages/TermsContent.jsx:5-40 hold the h1, the intro line, the h3 and the anchor <ol> before the first chapter's <div className=\"w-embed\">."
+  },
+  "tokens": [
+    "heading.page",
+    "heading.sub",
+    "body.lead",
+    "text.primary",
+    "text.secondary",
+    "label.secondary",
+    "layout.tech.padding-top",
+    "layout.tech.padding-x"
+  ],
+  "measuredFrom": [
+    {
+      "id": "cit-sec-tech-privacy",
+      "source": "src/pages/PrivacyContent.jsx:4-5",
+      "quote": "<section className=\"tech\">"
+    },
+    {
+      "id": "cit-sec-tech-privacy-title",
+      "source": "src/pages/PrivacyContent.jsx:5-5",
+      "quote": "FOURMULA AI <br />PRIVACY & COOKIES POLICY"
+    },
+    {
+      "id": "cit-sec-legal-toc-privacy",
+      "source": "src/pages/PrivacyContent.jsx:8-9",
+      "quote": "<h3>Table of Contents</h3>"
+    },
+    {
+      "id": "cit-sec-tech-terms",
+      "source": "src/pages/TermsContent.jsx:5-5",
+      "quote": "TERMS OF USE"
+    },
+    {
+      "id": "cit-sec-legal-toc-terms",
+      "source": "src/pages/TermsContent.jsx:7-8",
+      "quote": "<h3>Table of Contents</h3>"
+    }
+  ],
+  "notes": "Semantic unit, not a DOM wrapper: in the DOM the header and every chapter share ONE <section className=\"tech\"> and one .tech__rich div. The split follows the document's own heading boundaries (h1 + toc, then one chapter per h2), which is what R6 asks for; source.lines records the DOM range this unit occupies."
+}

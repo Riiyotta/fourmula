@@ -3,18 +3,58 @@
   "name": "Fourmula.ai clone design repository",
   "status": "design-review-pending",
   "productionApproved": false,
-  "repositoryVersion": "1.0.0",
-  "pageSpecVersion": "1.0.0",
-  "allowlistVersion": "1.0.0",
+  "repositoryVersion": "1.1.0",
+  "pageSpecVersion": "2.0.0",
+  "allowlistVersion": "1.1.0",
   "versionFieldNote": "allowlistVersion is MACHINE-CHECKED: extraction/verify_all.py check [e] fails the run if it differs between tokens/llm/component-allowlist.json and this manifest, and extraction/prove_drift.py proves that check actually fails on bad input. repositoryVersion and pageSpecVersion are DOCUMENTATION-ONLY, hand-maintained markers: nothing checks them automatically, so they imply no enforcement guarantee. The `counts` block below IS machine-checked - check [f] recomputes every number in it from the real files.",
   "defaultTheme": "light",
   "schemaValidatedThemes": [
     "light",
     "dark"
   ],
+  "category": "saas",
+  "designPolicy": {
+    "ref": "policy/design-policy.json",
+    "policyId": "n0-saas-design-constraints-common",
+    "policyVersion": "0.1.0",
+    "commonIrVersion": "0.5",
+    "enforcementMode": "hard-and-soft",
+    "contentHash": "sha256:a63d0e9f04f2499493ef9e1420a7f0f9e28431f74e97fcbcb4743be2e18cec53",
+    "contentHashNote": "sha256 over the files listed in policy/design-policy.json enforcedBy (each as path + its own sha256, sorted). Recomputed and compared by extraction/verify_all.py check [r]; print the current value with `python3 extraction/verify_all.py --emit-policy-hash`.",
+    "classificationNote": "B2B SaaS, decided from cited evidence in the clone (policy/design-policy.json classification.evidence). Agent attestation, not a human sign-off; approval is defined-pending-architecture-review."
+  },
+  "modes": {
+    "enum": [
+      "clone",
+      "generation"
+    ],
+    "required": true,
+    "clone": "Faithful reconstruction; real copy and clone-only assets may be reused for fidelity.",
+    "generation": "A new page for someone else: GENERATION_MODE_* rules reject source brand, assets, people, customers, product imagery, copy, claims, hosts and embeds; only generation-safe asset roles are admitted.",
+    "examples": {
+      "clone": [
+        "schema/example.pagespec.json"
+      ],
+      "generation": [
+        "schema/examples/generated-home.pagespec.json",
+        "schema/examples/generated-legal.pagespec.json",
+        "schema/examples/generated-app-onboarding.pagespec.json",
+        "schema/examples/generated-app-auth.pagespec.json",
+        "schema/examples/generated-not-found.pagespec.json"
+      ]
+    }
+  },
+  "tokenRegistration": {
+    "tokenCatalog": "tokens/llm/token-catalog.json",
+    "tokenPolicy": "tokens/llm/token-policy.json",
+    "motionPatterns": "tokens/00-foundation/motion-patterns.json",
+    "componentAllowlist": "tokens/llm/component-allowlist.json",
+    "catalogEntries": 270,
+    "note": "Checked by extraction/verify_all.py check [w]: registered here and in entryPoints, each catalog category equals the ids in its sourceFile (the real token files), and the token policy names every TOKEN_* rule schema/semantic_validate.py implements."
+  },
   "themeNote": "TWO themes, and THE CLASS NAMES ARE INVERTED - this is load-bearing. .body carries the DARK palette (src/styles/fourmula-base.css:2248-2265) and .body.dark carries the LIGHT palette (2273-2286), and the app ships <body class=\"body dark\"> (index.html:16). So the class literally named \"dark\" selects the LIGHT palette and THE DEFAULT RENDERED THEME IS LIGHT (white canvas). public/motion/m10.js reinforces it: it toggles the class 'dark', defaults to true, persists localStorage['isDarkMode'] and sets data-theme-state=\"dark\" - all while the page renders light. The inversion repeats at two more layers: .theme-dark images ship visible, and the asset shown in the default light rendering is the one named -dark.avif. A generator that reads '.body.dark' as 'the dark theme' inverts the entire palette. Do not normalise this.",
   "sourceProject": {
-    "description": "Vite + React clone of fourmula.ai, 6 routes, 5 page shapes",
+    "description": "Vite + React clone of fourmula.ai, 6 routes served by App.jsx, 9 page components in src/pages, 5 page shapes",
     "frameworks": {
       "react": "^18.3.1",
       "react-dom": "^18.3.1",
@@ -40,13 +80,15 @@
     "catalogEntries": 270,
     "primitives": 11,
     "components": 11,
-    "sections": 14,
+    "sections": 16,
     "templates": 5,
     "routes": 6,
-    "graphRules": 20,
-    "assetRoles": 14,
-    "citations": 334,
-    "motionPatterns": 10
+    "graphRules": 37,
+    "assetRoles": 23,
+    "citations": 344,
+    "motionPatterns": 10,
+    "examplePageSpecs": 6,
+    "retrievalIneligibleSections": 4
   },
   "countsNote": "Every number here is recomputed from the real files by extraction/verify_all.py check [f], which fails the run on any mismatch. extraction/prove_drift.py proves that by injecting wrong counts into a scratch copy.",
   "routeTemplateMap": {
@@ -57,7 +99,7 @@
     "/auth": "app-auth",
     "/404": "not-found"
   },
-  "routeTemplateNote": "6 routes, 5 page shapes, 1:1 with no gaps and no double-assignment. Derived by running a real first-party classifier (extraction/classify_routes.py) against the source project's own JSX rather than by inspecting a grouping. Only /privacy-policy and /terms-of-service genuinely share a shape; /start and /auth were deliberately NOT merged because /auth carries a real <form> node that /start does not. '/404' is this repository's name for App.jsx's path=\"*\" catch-all.",
+  "routeTemplateNote": "6 routes, 5 page shapes, 1:1 with no gaps and no double-assignment. Derived by running a real first-party classifier (extraction/classify_routes.py) against the source project's own JSX rather than by inspecting a grouping. Only /privacy-policy and /terms-of-service genuinely share a shape; /start and /auth were deliberately NOT merged because /auth carries a real <form> node that /start does not. '/404' is this repository's name for App.jsx's path=\"*\" catch-all. Revision 1.1: the legal template now composes content.legal-header + content.legal-chapter x12-16 instead of one whole-document content.tech node (R6, exposed by the measured heights).",
   "evidenceLevels": {
     "measured": [
       "/",
@@ -81,14 +123,15 @@
   "constraints": {
     "noExternalRequests": "All images, video, fonts and SVGs are local; 51 local references, all resolving, zero remote. grep -rhoE '(href|src)=\"https?://' src --include='*.jsx' returns ZERO matches. A generated PageSpec must never reference a remote URL, a protocol-relative // URL, a scheme, or a path containing '..'; the schema pattern, the semantic validator and the NO_EXTERNAL_LINKS graph rule all reject them, and the adversarial suite proves it.",
     "knownMailtoResidue": "None. Two filler-prose mailto: hrefs were recorded at the initial build but are gone from src/ (grep -rn mailto src public returns zero); the zero-external-links claim now holds for every URL scheme, and NO_EXTERNAL_LINKS still rejects them.",
-    "realCompany": "The source is a REAL, LIVE COMPANY. Real people appear in 8 hero photographs and 4 preloader images; 11 REAL THIRD-PARTY COMPANY LOGOS appear in a 'Trusted By' marquee; 20 real product images and 3 real produced videos appear in the showcase. Generated output must NEVER reproduce, redraw, approximate or fabricate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's likeness, any third-party mark, or its real copy. See assets/asset-roles.json, where 12 of the 14 roles carry a PINNED generationPolicy that check [j] enforces by value.",
+    "realCompany": "The source is a REAL, LIVE COMPANY. Real people appear in 8 hero photographs and 4 preloader images; 11 REAL THIRD-PARTY COMPANY LOGOS appear in a 'Trusted By' marquee; 20 real product images and 3 real produced videos appear in the showcase. Generated output must NEVER reproduce, redraw, approximate or fabricate fourmula.ai's real logo or wordmark, its real brand marks, its real product imagery, any real person's likeness, any third-party mark, or its real copy. See assets/asset-roles.json, where 13 of the 23 roles carry a PINNED generationPolicy, and ALL 23 carry an availability pinned in code (PINNED_AVAILABILITY) that check [j] enforces by value.",
     "licensing": "Do not publish or make this repository public without the owner's licence review. SF Pro Display (public/assets/fonts/*.otf) is APPLE-LICENSED and may not be redistributed or served publicly. GSAP SplitText (public/vendor/SplitText.min.js) is a PAID Club GreenSock plugin under the same restriction. Both are role brand-typeface-file, pinned must-not-redistribute.",
     "inertAuthForm": "/auth carries the project's only <form> and it is DELIBERATELY INERT: no action, no handler beyond preventDefault, no state, no network call, nothing read or stored. The asset-role registry pins its role auth-inert-form to must-not-wire-up and check [j] compares that exact VALUE, not just membership in the policy enum - because may-generate-new is a valid enum member that would be wrong here. The adversarial suite mutates it to a different-but-valid value to prove the check catches it.",
     "preservedUpstreamBugs": "Two of the original's own defects are deliberately preserved and must NOT be 'fixed'. (1) src/styles/fourmula-head.css:150-159 keeps `transform-style: preserve-3d` and `transform-origin: 50% 10%` COMMENTED OUT, because the original ships the first without a semicolon so browsers discard both; uncommenting them creates a visible divergence. (2) The original loads a ScrambleTextPlugin from a cdnjs path that 404s and never uses it - public/motion/m19.js has its own hand-rolled scrambleText(). A third, smaller asymmetry is recorded rather than fixed: public/motion/m11.js:20 initialises from a class ('light') that m10.js never sets, so which member of a theme image pair is visible differs between first paint and a toggle round trip.",
     "noShadows": "The site-authored stylesheet contains ZERO box-shadow declarations. Do not generate shadows.",
     "partialReducedMotion": "Reduced-motion handling is PARTIAL, not absent. public/motion/m27.js is the ONLY script that reads prefers-reduced-motion (it gates background-video autoplay, and also honours navigator.connection.saveData), and no stylesheet contains a prefers-reduced-motion rule. So for the background-video slot reducedMotionFallback MIRRORS real behaviour; for every other section it is a design rule this repository prescribes. Each contract states which, and the validator rejects a dishonest 'mirrored' claim.",
-    "noPerInstanceTokenOverride": "A PageSpec has NO per-instance token or style override field; a `tokens` key is rejected at page level and at node level. Styling belongs to the contracts. No such field was invented just to have something to validate - see tokens/llm/token-policy.json `overrides`.",
-    "packaging": "The source project is NOT a git repository: `git rev-parse --git-dir` fails and `git ls-files` cannot run, so no build artifact can currently be tracked. design-repo.zip is nonetheless listed by name in the project's .gitignore so that it stays untracked if the project is ever put under git. The zip is regenerated fresh and LAST, with the CLI zip tool, after every check passes."
+    "packaging": "The source project is NOT a git repository: `git rev-parse --git-dir` fails and `git ls-files` cannot run, so no build artifact can currently be tracked. design-repo.zip is nonetheless listed by name in the project's .gitignore so that it stays untracked if the project is ever put under git. The zip is regenerated fresh and LAST, with the CLI zip tool, after every check passes.",
+    "styleTokensOnly": "A PageSpec has no free-form token or style override; a `tokens` key is rejected at page and node level. Revision 1.1 adds the optional, closed node-level styleTokens field, which takes semantic token REFERENCES only and is checked by the TOKEN_* rules - see tokens/llm/token-policy.json `overrides`.",
+    "generationMode": "mode is required on every PageSpec. In mode=generation the GENERATION_MODE_* rules (schema/semantic_validate.py, patterns in schema/generation-leakage.json derived from the real source by extraction/build_leakage_patterns.py) reject the source brand and product names, real assets, real people, customer/partner marks, product imagery, copy (hashed 5-word shingles), claims, source hosts and embeds; only generation-safe asset roles are admitted. Detection is string-based on normalised text; no human has reviewed the patterns."
   },
   "entryPoints": {
     "docs": [
@@ -98,11 +141,15 @@
     ],
     "tokens": [
       "tokens/00-foundation",
+      "tokens/00-foundation/motion-patterns.json",
       "tokens/10-semantic",
       "tokens/20-component",
       "tokens/30-layout",
       "tokens/themes",
-      "tokens/llm"
+      "tokens/llm",
+      "tokens/llm/token-catalog.json",
+      "tokens/llm/token-policy.json",
+      "tokens/llm/component-allowlist.json"
     ],
     "assets": [
       "assets/asset-roles.json"
@@ -120,7 +167,10 @@
     ],
     "schema": [
       "schema/pagespec.schema.json",
+      "schema/section-contract.schema.json",
       "schema/example.pagespec.json",
+      "schema/examples",
+      "schema/generation-leakage.json",
       "schema/semantic_validate.py",
       "schema/tests/adversarial_test.py"
     ],
@@ -129,7 +179,14 @@
       "extraction/verify_all.py",
       "extraction/prove_drift.py",
       "extraction/build_pagespec_schema.py",
-      "extraction/classify_routes.py"
+      "extraction/build_leakage_patterns.py",
+      "extraction/build_provenance.py",
+      "extraction/classify_routes.py",
+      "extraction/wrapper_gate.py",
+      "extraction/measure_sections.mjs"
+    ],
+    "policy": [
+      "policy/design-policy.json"
     ]
   },
   "entryPointsNote": "Every entry point is a path INSIDE this package: no `..`, nothing absolute, and check [m] fails on either. An entry point is a promise about this package's own contents, so the build-time evidence that lives in the source project is cited in extraction/measured-values.json instead - which degrades gracefully (a WARN, not a failure) when no sibling source tree is present."

@@ -1,13 +1,13 @@
 {
   "$description": "Closed, versioned list of every primitive / component / section id a generator may use - one entry per contract file, no more and no fewer. extraction/verify_all.py check [d] fails on any phantom entry (an id with no contract file) or any orphan contract (a file with no entry), in BOTH directions, and also checks that each file name matches its id and sits in the right folder. Check [e] fails if allowlistVersion differs from registry.manifest.json's.",
-  "allowlistVersion": "1.0.0",
+  "allowlistVersion": "1.1.0",
   "versionFieldNote": "allowlistVersion is MACHINE-CHECKED: extraction/verify_all.py fails the run if it differs from allowlistVersion in registry.manifest.json. Bump it by hand whenever the id list below changes.",
-  "settablePropertiesNote": "Every settable property of a section node is defined by that section's own `content` schema in sections/*.json, which is generated into schema/pagespec.schema.json with additionalProperties:false at every level. There is deliberately NO per-instance token or style override field, so this allowlist is a list of IDS, not of style properties - see tokens/llm/token-policy.json `overrides`. Check [h] cross-checks these ids against the schema's own section enum rather than relying on a hand-copied list.",
+  "settablePropertiesNote": "Every settable property of a section node is defined by that section's own `content` schema in sections/*.json, which is generated into schema/pagespec.schema.json with additionalProperties:false at every level. The only styling field is the optional closed styleTokens (semantic token references only), so this allowlist is a list of IDS, not of style properties - see tokens/llm/token-policy.json `overrides`. Check [h] cross-checks these ids against the schema's own section enum rather than relying on a hand-copied list.",
   "counts": {
     "primitives": 11,
     "components": 11,
-    "sections": 14,
-    "total": 36
+    "sections": 16,
+    "total": 38
   },
   "components": [
     "chrome.awards-badge",
@@ -27,6 +27,8 @@
     "component.rich-text-block",
     "component.step-slide",
     "component.upload-dropzone",
+    "content.legal-chapter",
+    "content.legal-header",
     "content.tech",
     "content.what-intro",
     "faq.accordion",
@@ -46,5 +48,12 @@
     "primitive.theme-toggle",
     "showcase.ai-capabilities",
     "steps.pinned-list"
-  ]
+  ],
+  "retrievalIneligible": [
+    "chrome.awards-badge",
+    "chrome.cookie-consent",
+    "chrome.menu",
+    "chrome.preloader"
+  ],
+  "retrievalIneligibleNote": "Runtime/utility UI that is NEVER retrieved as a section example (R8). Must equal the contracts' retrievalEligible:false set and RETRIEVAL_INELIGIBLE pinned in schema/semantic_validate.py and extraction/verify_all.py (check [t])."
 }
